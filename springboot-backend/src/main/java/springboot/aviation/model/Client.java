@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import springboot.aviation.exception.BusinessException;
+import springboot.aviation.messages.ClientMessages;
 
 
 @Entity
@@ -49,34 +50,34 @@ public class Client {
 
     public void validateCreationRules(String cpf, String clientFirstName, String clientLastName) {
         if (cpf == null || cpf.isBlank()) {
-            throw new BusinessException("CPF is required");
+            throw new BusinessException(ClientMessages.CPF_REQUIRED);
         }
         if (cpf.length() != 11) {
-            throw new BusinessException("CPF must have 11 digits");
+            throw new BusinessException(ClientMessages.CPF_11_DIGITS);
         }
         if (!cpf.matches("\\d+")) {
-            throw new BusinessException("CPF must contain only digits");
+            throw new BusinessException(ClientMessages.CPF_ONLY_DIGITS);
         }
         if (clientFirstName == null || clientFirstName.isBlank()) {
-            throw new BusinessException("Client first name is required");
+            throw new BusinessException(ClientMessages.FIRST_NAME_REQUIRED);
         }
         if (clientLastName == null || clientLastName.isBlank()) {
-            throw new BusinessException("Client last name is required");
+            throw new BusinessException(ClientMessages.LAST_NAME_REQUIRED);
         }
         if (!clientFirstName.matches(ONLY_LETTERS) || !clientLastName.matches(ONLY_LETTERS)) {
-            throw new BusinessException("Client names must contain only letters");
+            throw new BusinessException(ClientMessages.NAME_ONLY_LETTERS);
         }
     }
 
     public void changeName(String clientFirstName, String clientLastName) {
         if (clientFirstName == null || clientFirstName.isBlank()) {
-            throw new BusinessException("Client first name is required");
+            throw new BusinessException(ClientMessages.FIRST_NAME_REQUIRED);
         }
         if (clientLastName == null || clientLastName.isBlank()) {
-            throw new BusinessException("Client last name is required");
+            throw new BusinessException(ClientMessages.LAST_NAME_REQUIRED);
         }
         if (!clientFirstName.matches(ONLY_LETTERS) || !clientLastName.matches(ONLY_LETTERS)) {
-            throw new BusinessException("Client names must contain only letters");
+            throw new BusinessException(ClientMessages.NAME_ONLY_LETTERS);
         }
 
         this.clientFirstName = clientFirstName;
@@ -97,14 +98,14 @@ public class Client {
 
     public void activate() {
         if (this.active) {
-            throw new BusinessException("Client is already active");
+            throw new BusinessException(ClientMessages.CLIENT_ALREADY_ACTIVE);
         }
         this.active = true;
     }
 
     public void deactivate() {
         if (!this.active) {
-            throw new BusinessException("Client is already inactive");
+            throw new BusinessException(ClientMessages.CLIENT_ALREADY_INACTIVE);
         }
         this.active = false;
     }
