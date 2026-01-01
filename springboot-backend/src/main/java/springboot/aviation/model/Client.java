@@ -83,6 +83,18 @@ public class Client {
         this.clientLastName = clientLastName;
     }
 
+    public boolean hasCpf(String cpf){
+        return this.cpf.equals(cpf);
+    }
+
+    public boolean hasFirstName(String clientFirstName){
+        return this.clientFirstName.equals(clientFirstName);
+    }
+    
+    public boolean hasLastName(String clientLastName){
+        return this.clientLastName.equals(clientLastName);
+    }
+
     public void activate() {
         if (this.active) {
             throw new BusinessException("Client is already active");

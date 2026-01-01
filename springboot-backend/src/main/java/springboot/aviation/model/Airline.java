@@ -71,6 +71,14 @@ public class Airline {
         this.airlineName = airlineName;
     }
 
+    public boolean hasIataCode(String iataCode){
+        return this.iataCode.equals(iataCode);
+    }
+
+    public boolean hasName(String airlineName){
+        return this.airlineName.equals(airlineName);
+    }
+
     public void activate() {
         if (isActive()) {
             throw new BusinessException("Airline is already active");

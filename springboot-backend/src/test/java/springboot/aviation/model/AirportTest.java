@@ -93,8 +93,8 @@ public class AirportTest {
 
         airport.changeName("Guarulhos National Airport");
 
-        assertTrue(airport.isOperational());
         assertTrue(airport.hasName("Guarulhos National Airport"));
+        assertTrue(airport.isOperational());
     }
 
     @Test

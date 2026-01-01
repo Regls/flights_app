@@ -23,6 +23,8 @@ public class AirlineTest {
     void shouldCreateAirlineSucessfully() {
         Airline airline = validAirline();
 
+        assertTrue(airline.hasIataCode("G3"));
+        assertTrue(airline.hasName("Gol Airlines"));
         assertTrue(airline.isActive());
     }
 
@@ -67,6 +69,7 @@ public class AirlineTest {
 
         airline.changeName("Azul Airlines");
 
+        assertTrue(airline.hasName("Azul Airlines"));
         assertTrue(airline.isActive());
     }
 

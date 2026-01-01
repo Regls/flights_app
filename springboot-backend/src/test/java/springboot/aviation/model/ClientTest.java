@@ -23,6 +23,9 @@ public class ClientTest {
     void shouldCreateClientSucessfully(){
         Client client = validClient();
 
+        assertTrue(client.hasCpf("12345678900"));
+        assertTrue(client.hasFirstName("New"));
+        assertTrue(client.hasLastName("Client"));
         assertTrue(client.isActive());
     }
 
@@ -82,6 +85,8 @@ public class ClientTest {
 
         client.changeName("ChangeNew", "ChangeClient");
 
+        assertTrue(client.hasFirstName("ChangeNew"));
+        assertTrue(client.hasLastName("ChangeClient"));
         assertTrue(client.isActive());
     }
 
