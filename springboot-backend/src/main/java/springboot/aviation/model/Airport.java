@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import springboot.aviation.exception.BusinessException;
+import springboot.aviation.messages.AirportMessages;
 
 
 @Entity
@@ -53,34 +54,34 @@ public class Airport {
 
     public void validateCreationRules(String iataCode, String airportName, String city){
         if (iataCode == null || iataCode.isBlank()) {
-            throw new BusinessException("IATA code is required");
+            throw new BusinessException(AirportMessages.IATA_CODE_REQUIRED);
         }
         if (iataCode.length() != 3) {
-            throw new BusinessException("IATA code must have 3 digits");
+            throw new BusinessException(AirportMessages.IATA_CODE_3_DIGITS);
         }
         if (!iataCode.matches(ONLY_LETTERS)) {
-            throw new BusinessException("IATA code must contain only letters");
+            throw new BusinessException(AirportMessages.IATA_CODE_ONLY_LETTERS);
         }
         if (airportName == null || airportName.isBlank()) {
-            throw new BusinessException("Airport name is required");
+            throw new BusinessException(AirportMessages.NAME_REQUIRED);
         }
         if (!airportName.matches(ONLY_LETTERS_AND_SINGLE_SPACES)) {
-            throw new BusinessException("Airport name must contain only letters an spaces");
+            throw new BusinessException(AirportMessages.NAME_ONLY_LETTERS_AND_SPACES);
         }
         if (city == null || city.isBlank()) {
-            throw new BusinessException("City is required");
+            throw new BusinessException(AirportMessages.CITY_REQUIRED);
         }
         if (!city.matches(ONLY_LETTERS_AND_SINGLE_SPACES)) {
-            throw new BusinessException("City must contain only letters and spaces");
+            throw new BusinessException(AirportMessages.CITY_ONLY_LETTERS_AND_SPACES);
         }
     }
 
     public void changeName(String airportName) {
         if (airportName == null || airportName.isBlank()) {
-            throw new BusinessException("Airport name is required");
+            throw new BusinessException(AirportMessages.NAME_REQUIRED);
         }
         if (!airportName.matches(ONLY_LETTERS_AND_SINGLE_SPACES)) {
-            throw new BusinessException("Airport name must contain only letters");
+            throw new BusinessException(AirportMessages.NAME_ONLY_LETTERS_AND_SPACES);
         }
 
         this.airportName = airportName;
@@ -100,14 +101,14 @@ public class Airport {
 
     public void openAirport() {
         if (this.operational){
-            throw new BusinessException("Airport is already open");
+            throw new BusinessException(AirportMessages.AIRPORT_ALREADY_OPEN);
         }
         this.operational = true;
     }
 
     public void closeAirport() {
         if (!this.operational){
-            throw new BusinessException("Airport is already closed");
+            throw new BusinessException(AirportMessages.AIRPORT_ALREADY_CLOSED);
         }
         this.operational = false;
     }

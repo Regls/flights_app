@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import springboot.aviation.exception.BusinessException;
+import springboot.aviation.messages.AirportMessages;
 
 @ExtendWith(MockitoExtension.class)
 public class AirportTest {
@@ -17,8 +18,6 @@ public class AirportTest {
     private Airport validAirport() {
         return Airport.createAirport("GRU", "Guarulhos International Airport", "São Paulo");
     }
-
-    private static final String REQUIRED = " is required";
 
     //tests
     @Test
@@ -36,55 +35,79 @@ public class AirportTest {
         BusinessException exception = assertThrows(BusinessException.class,
             () -> Airport.createAirport(null, "Guarulhos International Airport", "São Paulo"));
 
-        assertEquals("IATA code"+REQUIRED, exception.getMessage());
+        assertEquals(AirportMessages.IATA_CODE_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirportIfIataCodeIsMissing(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Airport.createAirport(null, "Guarulhos International Airport", "São Paulo"));
+            () -> Airport.createAirport("", "Guarulhos International Airport", "São Paulo"));
 
-        assertEquals("IATA code"+REQUIRED, exception.getMessage());
+        assertEquals(AirportMessages.IATA_CODE_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirportIfIataCodeIsNotThreeDigits(){
-        assertThrows(BusinessException.class, () -> Airport.createAirport("GR", "Guarulhos International Airport", "São Paulo"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airport.createAirport("GR", "Guarulhos International Airport", "São Paulo"));
+
+        assertEquals(AirportMessages.IATA_CODE_3_DIGITS, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirportIfIataCodeIsNotLetters(){
-        assertThrows(BusinessException.class, () -> Airport.createAirport("GR1", "Guarulhos International Airport", "São Paulo"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airport.createAirport("GR1", "Guarulhos International Airport", "São Paulo"));
+        
+        assertEquals(AirportMessages.IATA_CODE_ONLY_LETTERS, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirportIfAirportNameIsNull(){
-        assertThrows(BusinessException.class, () -> Airport.createAirport("GRU", null, "São Paulo"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airport.createAirport("GRU", null, "São Paulo"));
+        
+        assertEquals(AirportMessages.NAME_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirportIfAirportNameIsMissing(){
-        assertThrows(BusinessException.class, () -> Airport.createAirport("GRU", "", "São Paulo"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airport.createAirport("GRU", "", "São Paulo"));
+        
+        assertEquals(AirportMessages.NAME_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirportIfAirportNameIsNotLetters(){
-        assertThrows(BusinessException.class, () -> Airport.createAirport("GRU", "Guarulhos International Airport 1", "São Paulo"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airport.createAirport("GRU", "Guarulhos International Airport 1", "São Paulo"));
+        
+        assertEquals(AirportMessages.NAME_ONLY_LETTERS_AND_SPACES, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirportIfCityIsNull(){
-        assertThrows(BusinessException.class, () -> Airport.createAirport("GRU", "Guarulhos International Airport", null));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airport.createAirport("GRU", "Guarulhos International Airport", null));
+
+        assertEquals(AirportMessages.CITY_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirportIfCityIsMissing(){
-        assertThrows(BusinessException.class, () -> Airport.createAirport("GRU", "Guarulhos International Airport", ""));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airport.createAirport("GRU", "Guarulhos International Airport", ""));
+
+        assertEquals(AirportMessages.CITY_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirportIfCityIsNotLetters(){
-        assertThrows(BusinessException.class, () -> Airport.createAirport("GRU", "Guarulhos International Airport", "São Paulo 1"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airport.createAirport("GRU", "Guarulhos International Airport", "São Paulo 1"));
+
+        assertEquals(AirportMessages.CITY_ONLY_LETTERS_AND_SPACES, exception.getMessage());
     }
 
     @Test
@@ -101,21 +124,30 @@ public class AirportTest {
     void shouldNotChangeAirportNameIfAirportNameIsNull(){
         Airport airport = validAirport();
 
-        assertThrows(BusinessException.class, () -> airport.changeName(null));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airport.changeName(null));
+
+        assertEquals(AirportMessages.NAME_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotChangeAirportNameIfAirportNameIsMissing(){
         Airport airport = validAirport();
 
-        assertThrows(BusinessException.class, () -> airport.changeName(""));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airport.changeName(""));
+
+        assertEquals(AirportMessages.NAME_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotChangeAirportNameIfAirportNameIsNotLetters(){
         Airport airport = validAirport();
 
-        assertThrows(BusinessException.class, () -> airport.changeName("Guarulhos International Airport 1"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airport.changeName("Guarulhos International Airport 1"));
+
+        assertEquals(AirportMessages.NAME_ONLY_LETTERS_AND_SPACES, exception.getMessage());
     }
 
     @Test
@@ -141,7 +173,10 @@ public class AirportTest {
     void shouldNotOpenAirportIfAirportIsAlreadyOpen(){
         Airport airport = validAirport();
 
-        assertThrows(BusinessException.class, () -> airport.openAirport());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airport.openAirport());
+
+        assertEquals(AirportMessages.AIRPORT_ALREADY_OPEN, exception.getMessage());
     }
 
     @Test
@@ -150,6 +185,9 @@ public class AirportTest {
 
         airport.closeAirport();
 
-        assertThrows(BusinessException.class, () -> airport.closeAirport());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airport.closeAirport());
+
+        assertEquals(AirportMessages.AIRPORT_ALREADY_CLOSED, exception.getMessage());
     }
 }
