@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import springboot.aviation.exception.BusinessException;
+import springboot.aviation.messages.AirlineMessages;
 
 
 @Entity
@@ -47,25 +48,25 @@ public class Airline {
 
     public void validateCreationRules(String iataCode, String airlineName) {
         if (iataCode == null || iataCode.isBlank()) {
-            throw new BusinessException("IATA code is required");
+            throw new BusinessException(AirlineMessages.IATA_CODE_REQUIRED);
         }
         if (iataCode.length() != 2){
-            throw new BusinessException("IATA code must have two digits");
+            throw new BusinessException(AirlineMessages.IATA_CODE_2_DIGITS);
         }
         if (airlineName == null || airlineName.isBlank()) {
-            throw new BusinessException("Airline name is required");
+            throw new BusinessException(AirlineMessages.NAME_REQUIRED);
         }
         if (!airlineName.matches(ONLY_LETTERS_AND_SINGLE_SPACES)) {
-            throw new BusinessException("Airline name must contain only letters and spaces");
+            throw new BusinessException(AirlineMessages.NAME_ONLY_LETTERS_AND_SINGLE_SPACES);
         }
     }
 
     public void changeName(String airlineName) {
         if (airlineName == null || airlineName.isBlank()) {
-            throw new BusinessException("Airline name is required");
+            throw new BusinessException(AirlineMessages.NAME_REQUIRED);
         }
         if (!airlineName.matches(ONLY_LETTERS_AND_SINGLE_SPACES)) {
-            throw new BusinessException("Airline name must contain only letters and spaces");
+            throw new BusinessException(AirlineMessages.NAME_ONLY_LETTERS_AND_SINGLE_SPACES);
         }
 
         this.airlineName = airlineName;
@@ -81,14 +82,14 @@ public class Airline {
 
     public void activate() {
         if (isActive()) {
-            throw new BusinessException("Airline is already active");
+            throw new BusinessException(AirlineMessages.AIRLINE_ALREADY_ACTIVE);
         }
         this.status = AirlineStatus.ACTIVE;
     }
 
     public void suspend() {
         if (!isActive()) {
-            throw new BusinessException("Airline is already suspended");
+            throw new BusinessException(AirlineMessages.AIRLINE_ALREADY_SUSPENDED);
         }
         this.status = AirlineStatus.SUSPENDED;
     }

@@ -1,6 +1,7 @@
 package springboot.aviation.model;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import springboot.aviation.exception.BusinessException;
+import springboot.aviation.messages.AirlineMessages;
 
 @ExtendWith(MockitoExtension.class)
 public class AirlineTest {
@@ -30,37 +32,58 @@ public class AirlineTest {
 
     @Test
     void shouldNotCreateAirlineIfIataCodeIsNull(){
-        assertThrows(BusinessException.class, () -> Airline.createAirline(null, "Gol Airlines"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airline.createAirline(null, "Gol Airlines"));
+
+        assertEquals(AirlineMessages.IATA_CODE_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirlineIfIataCodeIsMissing(){
-        assertThrows(BusinessException.class, () -> Airline.createAirline("", "Gol Airlines"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airline.createAirline("", "Gol Airlines"));
+
+        assertEquals(AirlineMessages.IATA_CODE_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirlineIfIataCodeIsNotTwoDigits(){
-        assertThrows(BusinessException.class, () -> Airline.createAirline("G", "Gol Airlines"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airline.createAirline("G", "Gol Airlines"));
+
+        assertEquals(AirlineMessages.IATA_CODE_2_DIGITS, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirlineIfAirlineNameIsNull(){
-        assertThrows(BusinessException.class, () -> Airline.createAirline("G3", null));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airline.createAirline("G3", null));
+
+        assertEquals(AirlineMessages.NAME_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirlineIfAirlineNameIsMissing(){
-        assertThrows(BusinessException.class, () -> Airline.createAirline("G3", ""));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airline.createAirline("G3", ""));
+
+        assertEquals(AirlineMessages.NAME_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirlineIfAirlineNameIsNotLetters(){
-        assertThrows(BusinessException.class, () -> Airline.createAirline("G3", "Gol Airlines 123"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airline.createAirline("G3", "Gol Airlines 123"));
+            
+        assertEquals(AirlineMessages.NAME_ONLY_LETTERS_AND_SINGLE_SPACES, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateAirlineIfAirlineNameHasDoubleSpaces(){
-        assertThrows(BusinessException.class, () -> Airline.createAirline("G3", "Gol  Airlines"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Airline.createAirline("G3", "Gol  Airlines"));
+
+        assertEquals(AirlineMessages.NAME_ONLY_LETTERS_AND_SINGLE_SPACES, exception.getMessage());
     }
 
     @Test
@@ -77,28 +100,40 @@ public class AirlineTest {
     void shouldNotChangeAirlineNameIfAirlineNameIsNull(){
         Airline airline = validAirline();
 
-        assertThrows(BusinessException.class, () -> airline.changeName(null));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airline.changeName(null));
+
+        assertEquals(AirlineMessages.NAME_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotChangeAirlineNameIfAirlineNameIsMissing(){
         Airline airline = validAirline();
 
-        assertThrows(BusinessException.class, () -> airline.changeName(""));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airline.changeName(""));
+
+        assertEquals(AirlineMessages.NAME_REQUIRED, exception.getMessage());
     }
 
     @Test
     void shouldNotChangeAirlineNameIfAirlineNameIsNotLetters(){
         Airline airline = validAirline();
 
-        assertThrows(BusinessException.class, () -> airline.changeName("Azul Airlines 123"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airline.changeName("Azul Airlines 123"));
+
+        assertEquals(AirlineMessages.NAME_ONLY_LETTERS_AND_SINGLE_SPACES, exception.getMessage());
     }
 
     @Test
     void shouldNotChangeAirlineNameIfAirlineNameHasDoubleSpaces(){
         Airline airline = validAirline();
 
-        assertThrows(BusinessException.class, () -> airline.changeName("Azul  Airlines"));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airline.changeName("Azul  Airlines"));
+
+        assertEquals(AirlineMessages.NAME_ONLY_LETTERS_AND_SINGLE_SPACES, exception.getMessage());
     }
 
     @Test
@@ -124,7 +159,10 @@ public class AirlineTest {
     void shouldNotActivateAirlineIfAlreadyActive(){
         Airline airline = validAirline();
 
-        assertThrows(BusinessException.class, () -> airline.activate());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airline.activate());
+
+        assertEquals(AirlineMessages.AIRLINE_ALREADY_ACTIVE, exception.getMessage());
     }
 
     @Test
@@ -132,6 +170,9 @@ public class AirlineTest {
         Airline airline = validAirline();
         airline.suspend();
 
-        assertThrows(BusinessException.class, () -> airline.suspend());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airline.suspend());
+
+        assertEquals(AirlineMessages.AIRLINE_ALREADY_SUSPENDED, exception.getMessage());
     }
 }
