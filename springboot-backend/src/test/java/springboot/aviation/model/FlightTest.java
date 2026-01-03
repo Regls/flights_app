@@ -25,7 +25,7 @@ public class FlightTest {
     }
 
     private Flight validFlight() {
-        Airline airline = Airline.createAirline("G3", "Gol Airlines");
+        Airline airline = activateAirline();
         Airport departure = Airport.createAirport("DPT", "Dep Airport", "Departure City");
         Airport arrival = Airport.createAirport("ARR", "Arr Airport", "Arrival City");
         return Flight.createFlight(
@@ -43,6 +43,12 @@ public class FlightTest {
     void shouldCreateFlightSuccessfully() {
         Flight flight = validFlight();
         
+        assertTrue(flight.hasFlightNumber("G39206"));
+        assertTrue(flight.hasAirline(activateAirline()));
+        assertTrue(flight.hasDepartureAirport(openAirport("DPT", "Dep Airport", "Departure City")));
+        assertTrue(flight.hasArrivalAirport(openAirport("ARR", "Arr Airport", "Arrival City")));
+        assertTrue(flight.hasDepartureTime(LocalDateTime.of(2024, 7, 1, 10, 0)));
+        assertTrue(flight.hasArrivalTime(LocalDateTime.of(2024, 7, 1, 12, 0)));
         assertTrue(flight.isScheduled());
     }
 
@@ -61,7 +67,7 @@ public class FlightTest {
                 LocalDateTime.of(2024, 7, 2, 12, 0)
         ));
     }
-/*
+
     @Test
     void shouldNotCreateFlightIfFlightNumberIsMissing() {
         Airline airline = activateAirline();
@@ -95,7 +101,7 @@ public class FlightTest {
                 LocalDateTime.of(2024, 7, 2, 12, 0)
         ));
     }
-
+/*
     @Test
     void shouldNotCreateFlightIfDepartureTimeIsAfterArrivalTime() {
         Airline airline = activateAirline();

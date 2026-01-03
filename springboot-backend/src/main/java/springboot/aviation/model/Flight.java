@@ -90,6 +90,30 @@ public class Flight {
         }
     }
 
+    public boolean hasFlightNumber(String flightNumber) {
+        return this.flightNumber.equals(flightNumber);
+    }
+
+    public boolean hasAirline(Airline airline) {
+        return this.airline.equals(airline);
+    }
+
+    public boolean hasDepartureAirport(Airport airport) {
+        return this.departureAirport.equals(airport);
+    }
+
+    public boolean hasArrivalAirport(Airport airport) {
+        return this.arrivalAirport.equals(airport);
+    }
+
+    public boolean hasDepartureTime(LocalDateTime departureTime) {
+        return this.departureTime.equals(departureTime);
+    }
+
+    public boolean hasArrivalTime(LocalDateTime arrivalTime) {
+        return this.arrivalTime.equals(arrivalTime);
+    }
+
     public void depart() {
         if (!isScheduled()) {
             throw new BusinessException(FlightMessages.DEPART_ONLY_SCHEDULED);

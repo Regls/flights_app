@@ -106,4 +106,20 @@ public class Airline {
     public boolean isActive() {
         return this.status == AirlineStatus.ACTIVE;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Airline airline = (Airline) o;
+
+        return iataCode.equals(airline.iataCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return iataCode.hashCode();
+    }
+
 }

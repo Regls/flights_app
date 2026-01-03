@@ -51,7 +51,7 @@ public class AirlineTest {
         BusinessException exception = assertThrows(BusinessException.class,
             () -> Airline.createAirline("G", "Gol Airlines"));
 
-        assertEquals(AirlineMessages.IATA_CODE_2_DIGITS, exception.getMessage());
+        assertEquals(AirlineMessages.IATA_CODE_INVALID, exception.getMessage());
     }
 
     @Test
