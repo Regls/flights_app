@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import springboot.aviation.exception.BusinessException;
+import springboot.aviation.messages.FlightMessages;
 
 
 @Entity
@@ -39,6 +40,8 @@ public class Flight {
     @Column(name = "status", nullable = false)
     private FlightStatus status = FlightStatus.SCHEDULED;
 
+    private static final String FLIGHT_NUMBER_PATTERN = "^[A-Z0-9]{2}\\d{1,4}$";
+
     protected Flight() {
     }
 
@@ -62,42 +65,48 @@ public class Flight {
 
     private void validateCreationRules(String flightNumber, Airline airline, Airport departure, Airport arrival, LocalDateTime departureTime, LocalDateTime arrivalTime) {
         if (flightNumber == null || flightNumber.isBlank()) {
-            throw new BusinessException("Flight number is required");
+            throw new BusinessException(FlightMessages.FLIGHT_NUMBER_REQUIRED);
+        }
+        if(!flightNumber.matches(FLIGHT_NUMBER_PATTERN)) {
+            throw new BusinessException(FlightMessages.FLIGHT_NUMBER_INVALID_FORMAT);
+        }
+        if(!airline.matchesFlightNumber(flightNumber)) {
+            throw new BusinessException(FlightMessages.FLIGHT_NUMBER_MUST_MATCH_AIRLINE);
         }
         if (!airline.isActive()) {
-            throw new BusinessException("Cannot schedule flight for an suspended airline.");
+            throw new BusinessException(FlightMessages.AIRLINE_ACTIVE);
         }
         if (departureTime.isAfter(arrivalTime)) {
-            throw new BusinessException("Departure time must be before arrival time.");
+            throw new BusinessException(FlightMessages.TIME_DEPARTURE_BEFORE);
         }
         if (departureTime.isEqual(arrivalTime)) {
-            throw new BusinessException("Departure and arrival times cannot be the same.");
+            throw new BusinessException(FlightMessages.TIME_NOT_EQUALS);
         }
         if (departure.equals(arrival)) {
-            throw new BusinessException("Departure and arrival airports must be different.");
+            throw new BusinessException(FlightMessages.AIRPORT_NOT_EQUALS);
         }
         if (!departure.isOperational() || !arrival.isOperational()) {
-            throw new BusinessException("Cannot use closed airport.");
+            throw new BusinessException(FlightMessages.AIRPORT_ACTIVE);
         }
     }
 
     public void depart() {
         if (!isScheduled()) {
-            throw new BusinessException("Only scheduled flights can depart.");
+            throw new BusinessException(FlightMessages.DEPART_ONLY_SCHEDULED);
         }
         this.status = FlightStatus.IN_FLIGHT;
     }
 
     public void arrive() {
         if (!isInFlight()) {
-            throw new BusinessException("Only in-flight flights can arrive.");
+            throw new BusinessException(FlightMessages.ARRIVE_ONLY_IN_FLIGHT);
         }
         this.status = FlightStatus.ARRIVED;
     }
 
     public void cancel() {
         if (!isScheduled()) {
-            throw new BusinessException("Only scheduled flights can be cancelled.");
+            throw new BusinessException(FlightMessages.CANCEL_ONLY_SCHEDULED);
         }
         this.status = FlightStatus.CANCELLED;
     }

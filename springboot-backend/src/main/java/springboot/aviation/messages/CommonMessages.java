@@ -1,5 +1,6 @@
 package springboot.aviation.messages;
 
+
 public final class CommonMessages {
     
     public static final String REQUIRED = " is required";

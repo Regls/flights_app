@@ -3,8 +3,6 @@ package springboot.aviation.messages;
 import static springboot.aviation.messages.CommonMessages.*;
 
 
-
-
 public final class AirportMessages {
     
     public static final String IATA_CODE_REQUIRED = "Airport IATA code" + REQUIRED;

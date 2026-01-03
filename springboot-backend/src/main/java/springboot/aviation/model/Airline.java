@@ -29,6 +29,8 @@ public class Airline {
 
     private static final String ONLY_LETTERS_AND_SINGLE_SPACES = "^[A-Za-zÀ-ÖØ-öø-ÿ]+( [A-Za-zÀ-ÖØ-öø-ÿ]+)*$";
 
+    private static final String IATA_CODE_PATTERN = "^[A-Z0-9]{2}$";
+
     protected Airline() {
     }
 
@@ -36,7 +38,7 @@ public class Airline {
 
         validateCreationRules(iataCode, airlineName);
 
-        this.iataCode = iataCode;
+        this.iataCode = iataCode.trim().toUpperCase();
         this.airlineName = airlineName;
         this.status = AirlineStatus.ACTIVE;
     }
@@ -50,8 +52,8 @@ public class Airline {
         if (iataCode == null || iataCode.isBlank()) {
             throw new BusinessException(AirlineMessages.IATA_CODE_REQUIRED);
         }
-        if (iataCode.length() != 2){
-            throw new BusinessException(AirlineMessages.IATA_CODE_2_DIGITS);
+        if (!iataCode.matches(IATA_CODE_PATTERN)){
+            throw new BusinessException(AirlineMessages.IATA_CODE_INVALID);
         }
         if (airlineName == null || airlineName.isBlank()) {
             throw new BusinessException(AirlineMessages.NAME_REQUIRED);
@@ -72,12 +74,19 @@ public class Airline {
         this.airlineName = airlineName;
     }
 
-    public boolean hasIataCode(String iataCode){
+    public boolean hasIataCode(String iataCode) {
         return this.iataCode.equals(iataCode);
     }
 
-    public boolean hasName(String airlineName){
+    public boolean hasName(String airlineName) {
         return this.airlineName.equals(airlineName);
+    }
+
+    public boolean matchesFlightNumber(String flightNumber) {
+        if (flightNumber == null || flightNumber.length() < 2) {
+            return false;
+        }
+        return flightNumber.startsWith(this.iataCode);
     }
 
     public void activate() {
