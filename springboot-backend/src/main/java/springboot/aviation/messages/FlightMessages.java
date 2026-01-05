@@ -6,6 +6,9 @@ import static springboot.aviation.messages.CommonMessages.*;
 public final class FlightMessages {
     
     public static final String FLIGHT_NUMBER_REQUIRED = "Flight number" + REQUIRED;
+    public static final String AIRLINE_REQUIRED = "Airline" + REQUIRED;
+    public static final String DEPARTURE_AIRPORT_REQUIRED = "Departure airport" + REQUIRED;
+    public static final String ARRIVAL_AIRPORT_REQUIRED = "Arrival airport" + REQUIRED;
     public static final String FLIGHT_NUMBER_INVALID_FORMAT = "Flight number must follow airline IATA code + 1 to 4 digits";
     public static final String FLIGHT_NUMBER_MUST_MATCH_AIRLINE = "Flight number must start with airline IATA code";
     public static final String AIRLINE_ACTIVE = "Cannot schedule a flight for an suspended airline";

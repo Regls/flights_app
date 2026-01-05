@@ -67,6 +67,15 @@ public class Flight {
         if (flightNumber == null || flightNumber.isBlank()) {
             throw new BusinessException(FlightMessages.FLIGHT_NUMBER_REQUIRED);
         }
+        if (airline == null) {
+            throw new BusinessException(FlightMessages.AIRLINE_REQUIRED);
+        }
+        if (departure == null) {
+            throw new BusinessException(FlightMessages.DEPARTURE_AIRPORT_REQUIRED);
+        }
+        if (arrival == null) {
+            throw new BusinessException(FlightMessages.ARRIVAL_AIRPORT_REQUIRED);
+        }
         if(!flightNumber.matches(FLIGHT_NUMBER_PATTERN)) {
             throw new BusinessException(FlightMessages.FLIGHT_NUMBER_INVALID_FORMAT);
         }

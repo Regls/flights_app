@@ -1,5 +1,6 @@
 package springboot.aviation.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import springboot.aviation.exception.BusinessException;
+import springboot.aviation.messages.BookingMessages;
 
 @ExtendWith(MockitoExtension.class)
 public class BookingTest {
@@ -22,11 +24,12 @@ public class BookingTest {
     }
 
     private Flight activateFlight() {
-        Airline airline = Airline.createAirline("TA", "Test Airline");
+        Airline airline = Airline.createAirline("G3", "Gol Airlines");
         Airport dep = Airport.createAirport("DPT", "Dpt Airport", "Departure City");
         Airport arr = Airport.createAirport("ARR", "Arr Airport", "Arrival City");
-        return Flight.createFlight("FL123", airline, dep, arr,
-                LocalDateTime.of(2024, 7, 1, 10, 0), LocalDateTime.of(2024, 7, 1, 12, 0)
+        return Flight.createFlight("G39206", airline, dep, arr,
+                LocalDateTime.of(2024, 7, 1, 10, 0),
+                LocalDateTime.of(2024, 7, 1, 12, 0)
         );
     }
 
@@ -39,13 +42,18 @@ public class BookingTest {
     void shouldCreateBookingSucessfully() {
         Booking booking = validBooking();
 
+        assertTrue(booking.hasClient("12345678900"));
+        assertTrue(booking.hasFlight("G39206"));
         assertTrue(booking.isCreated());
     }
 
     @Test
     void shouldNotCreateBookingIfClientIsNull() {
         
-        assertThrows(BusinessException.class, () -> Booking.createBooking(null, activateFlight()));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Booking.createBooking(null, activateFlight()));
+
+        assertEquals(BookingMessages.CLIENT_REQUIRED, exception.getMessage());
     }
 
     @Test
@@ -53,13 +61,19 @@ public class BookingTest {
         Client client = activateClient();
         client.deactivate();
 
-        assertThrows(BusinessException.class, () -> Booking.createBooking(client, activateFlight()));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Booking.createBooking(client, activateFlight()));
+
+        assertEquals(BookingMessages.CLIENT_ACTIVE, exception.getMessage());
     }
 
     @Test
     void shouldNotCreateBookingIfFlightIsNull() {
         
-        assertThrows(BusinessException.class, () -> Booking.createBooking(activateClient(), null));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Booking.createBooking(activateClient(), null));
+
+        assertEquals(BookingMessages.FLIGHT_REQUIRED, exception.getMessage());
     }
 
     @ParameterizedTest
@@ -77,7 +91,10 @@ public class BookingTest {
             default -> throw new BusinessException("Unexpected value: " + status);
         }
         
-        assertThrows(BusinessException.class, () -> Booking.createBooking(activateClient(), flight));
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Booking.createBooking(activateClient(), flight));
+
+        assertEquals(BookingMessages.FLIGHT_SCHEDULED, exception.getMessage());
     }
 
     @Test
@@ -88,18 +105,26 @@ public class BookingTest {
         assertTrue(booking.isConfirmed());
     }
 
-    @ParameterizedTest
-    @EnumSource(value = BookingStatus.class, names = {"CONFIRMED", "CANCELLED"})
-    void shouldNotConfirmIfBookingIsNotCreated(BookingStatus status) {
+    @Test
+    void shouldNotConfirmIfBookingIsAlreadyConfirmed() {
         Booking booking = validBooking();
+        booking.confirm();
 
-        switch (status) {
-            case CONFIRMED -> booking.confirm();
-            case CANCELLED -> booking.cancel();
-            default -> throw new BusinessException("Unexpected value: " + status);
-        }
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> booking.confirm());
 
-        assertThrows(BusinessException.class, () -> booking.confirm());
+        assertEquals(BookingMessages.CONFIRM_ONLY_CREATED, exception.getMessage());
+    }
+
+    @Test
+    void shouldNotConfirmIfBookingIsAlreadyCancelled() {
+        Booking booking = validBooking();
+        booking.cancel();
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> booking.confirm());
+
+        assertEquals(BookingMessages.CANCELLED_CANNOT_CHANGE, exception.getMessage());
     }
 
     @ParameterizedTest
@@ -119,7 +144,10 @@ public class BookingTest {
             default -> throw new BusinessException("Unexpected value: " + status);
         }
 
-        assertThrows(BusinessException.class, () -> booking.confirm());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> booking.confirm());
+
+        assertEquals(BookingMessages.CONFIRM_ONLY_FLIGHT_SCHEDULED, exception.getMessage());
     }
 
     @Test
@@ -135,7 +163,10 @@ public class BookingTest {
         Booking booking = validBooking();
         booking.cancel();
 
-        assertThrows(BusinessException.class, () -> booking.confirm());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> booking.confirm());
+
+        assertEquals(BookingMessages.CANCELLED_CANNOT_CHANGE, exception.getMessage());
     }
 
     @Test
@@ -143,7 +174,10 @@ public class BookingTest {
         Booking booking = validBooking();
         booking.cancel();
 
-        assertThrows(BusinessException.class, () -> booking.cancel());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> booking.cancel());
+        
+        assertEquals(BookingMessages.CANCEL_ONLY_CREATED_OR_CONFIRMED, exception.getMessage());
     }
 
     @Test
@@ -173,6 +207,9 @@ public class BookingTest {
             default -> throw new BusinessException("Unexpected value: " + status);
         }
 
-        assertThrows(BusinessException.class, () -> booking.cancel());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> booking.cancel());
+
+        assertEquals(BookingMessages.CANCEL_ONLY_FLIGHT_SCHEDULED, exception.getMessage());
     }
 }

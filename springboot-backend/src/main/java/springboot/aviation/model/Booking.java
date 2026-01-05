@@ -1,9 +1,10 @@
 package springboot.aviation.model;
 
 import jakarta.persistence.*;
-import springboot.aviation.exception.BusinessException;
-
 import java.time.LocalDateTime;
+
+import springboot.aviation.exception.BusinessException;
+import springboot.aviation.messages.BookingMessages;
 
 @Entity
 @Table(name = "bookings")
@@ -48,35 +49,50 @@ public class Booking {
 
     private void validateCreationRules(Client client, Flight flight) {
         if (client == null) {
-            throw new BusinessException("Client cannot be null");
-        }
-        if (!client.isActive()) {
-            throw new BusinessException("Client must be active to make a booking");
+            throw new BusinessException(BookingMessages.CLIENT_REQUIRED);
         }
         if (flight == null) {
-            throw new BusinessException("Flight cannot be null");
+            throw new BusinessException(BookingMessages.FLIGHT_REQUIRED);
+        }
+        if (!client.isActive()) {
+            throw new BusinessException(BookingMessages.CLIENT_ACTIVE);
         }
         if (!flight.isScheduled()){
-            throw new BusinessException("Can only book flights that are scheduled");
+            throw new BusinessException(BookingMessages.FLIGHT_SCHEDULED);
+        }
+    }
+
+    public boolean hasClient(String cpf){
+        return this.client.hasCpf(cpf);
+    }
+    public boolean hasFlight(String flightNumber) {
+        return this.flight.hasFlightNumber(flightNumber);
+    }
+
+    private void validateNotCancelled(){
+        if (isCancelled()) {
+            throw new BusinessException(BookingMessages.CANCELLED_CANNOT_CHANGE);
         }
     }
 
     public void confirm() {
+        validateNotCancelled();
+
         if (!isCreated()) {
-            throw new BusinessException("Only created bookings can be confirmed");
+            throw new BusinessException(BookingMessages.CONFIRM_ONLY_CREATED);
         }
         if (!flight.isScheduled()) {
-            throw new BusinessException("Cannot confirm booking for a flight that is not scheduled");
+            throw new BusinessException(BookingMessages.CONFIRM_ONLY_FLIGHT_SCHEDULED);
         }
         this.status = BookingStatus.CONFIRMED;
     }
 
     public void cancel() {
         if (!(isCreated() || isConfirmed())) {
-            throw new BusinessException("Only created or confirmed bookings can be cancelled");
+            throw new BusinessException(BookingMessages.CANCEL_ONLY_CREATED_OR_CONFIRMED);
         }
         if (!flight.isScheduled()) {
-            throw new BusinessException("Cannot cancel booking for a flight that is not scheduled");
+            throw new BusinessException(BookingMessages.CANCEL_ONLY_FLIGHT_SCHEDULED);
         }
         this.status = BookingStatus.CANCELLED;
     }
