@@ -1,5 +1,6 @@
 package springboot.aviation.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import springboot.aviation.exception.BusinessException;
+import springboot.aviation.messages.FlightMessages;
 
 @ExtendWith(MockitoExtension.class)
 public class FlightTest {
@@ -58,7 +60,8 @@ public class FlightTest {
         Airport dep = openAirport("DPT", "Dep Airport", "Departure City");
         Airport arr = openAirport("ARR", "Arr Airport", "Arrival City");
 
-        assertThrows(BusinessException.class, () -> Flight.createFlight(
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Flight.createFlight(
                 null,
                 airline,
                 dep,
@@ -66,6 +69,8 @@ public class FlightTest {
                 LocalDateTime.of(2024, 7, 2, 10, 0),
                 LocalDateTime.of(2024, 7, 2, 12, 0)
         ));
+
+        assertEquals(FlightMessages.FLIGHT_NUMBER_REQUIRED, exception.getMessage());
     }
 
     @Test
@@ -74,7 +79,8 @@ public class FlightTest {
         Airport dep = openAirport("DPT", "Dep Airport", "Departure City");
         Airport arr = openAirport("ARR", "Arr Airport", "Arrival City");
 
-        assertThrows(BusinessException.class, () -> Flight.createFlight(
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Flight.createFlight(
                 "",
                 airline,
                 dep,
@@ -82,6 +88,8 @@ public class FlightTest {
                 LocalDateTime.of(2024, 7, 2, 10, 0),
                 LocalDateTime.of(2024, 7, 2, 12, 0)
         ));
+
+        assertEquals(FlightMessages.FLIGHT_NUMBER_REQUIRED, exception.getMessage());
     }
 
     @Test
@@ -92,30 +100,36 @@ public class FlightTest {
         Airport dep = openAirport("DPT", "Dep Airport", "Departure City");
         Airport arr = openAirport("ARR", "Arr Airport", "Arrival City");
 
-        assertThrows(BusinessException.class, () -> Flight.createFlight(
-                "FL123",
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Flight.createFlight(
+                "G39206",
                 airline,
                 dep,
                 arr,
                 LocalDateTime.of(2024, 7, 2, 10, 0),
                 LocalDateTime.of(2024, 7, 2, 12, 0)
         ));
+
+        assertEquals(FlightMessages.AIRLINE_ACTIVE, exception.getMessage());
     }
-/*
+
     @Test
     void shouldNotCreateFlightIfDepartureTimeIsAfterArrivalTime() {
         Airline airline = activateAirline();
         Airport dep = openAirport("DPT", "Dep Airport", "Departure City");
         Airport arr = openAirport("ARR", "Arr Airport", "Arrival City");
 
-        assertThrows(BusinessException.class, () -> Flight.createFlight(
-                "FL123",
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Flight.createFlight(
+                "G39206",
                 airline,
                 dep,
                 arr,
                 LocalDateTime.of(2024, 7, 2, 14, 0),
                 LocalDateTime.of(2024, 7, 2, 12, 0)
         ));
+
+        assertEquals(FlightMessages.TIME_DEPARTURE_BEFORE, exception.getMessage());
     }
 
     @Test
@@ -124,14 +138,17 @@ public class FlightTest {
         Airport dep = openAirport("DPT", "Dep Airport", "Departure City");
         Airport arr = openAirport("ARR", "Arr Airport", "Arrival City");
 
-        assertThrows(BusinessException.class, () -> Flight.createFlight(
-                "FL123",
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Flight.createFlight(
+                "G39206",
                 airline,
                 dep,
                 arr,
                 LocalDateTime.of(2024, 7, 2, 12, 0),
                 LocalDateTime.of(2024, 7, 2, 12, 0)
         ));
+
+        assertEquals(FlightMessages.TIME_NOT_EQUALS, exception.getMessage());
     }
 
     @Test
@@ -139,14 +156,17 @@ public class FlightTest {
         Airline airline = activateAirline();
         Airport dep = openAirport("DPT", "Dep Airport", "Departure City");
 
-        assertThrows(BusinessException.class, () -> Flight.createFlight(
-                "FL123",
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Flight.createFlight(
+                "G39206",
                 airline,
                 dep,
                 dep,
                 LocalDateTime.of(2024, 7, 2, 10, 0),
                 LocalDateTime.of(2024, 7, 2, 12, 0)
         ));
+
+        assertEquals(FlightMessages.AIRPORT_NOT_EQUALS, exception.getMessage());
     }
 
     @Test
@@ -156,14 +176,17 @@ public class FlightTest {
         dep.closeAirport();
         Airport arr = openAirport("ARR", "Arr Airport", "Arrival City");
 
-        assertThrows(BusinessException.class, () -> Flight.createFlight(
-                "FL123",
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Flight.createFlight(
+                "G39206",
                 airline,
                 dep,
                 arr,
                 LocalDateTime.of(2024, 7, 2, 10, 0),
                 LocalDateTime.of(2024, 7, 2, 12, 0)
         ));
+
+        assertEquals(FlightMessages.AIRPORT_ACTIVE, exception.getMessage());
     }
 
     @Test
@@ -173,14 +196,17 @@ public class FlightTest {
         Airport arr = openAirport("ARR", "Arr Airport", "Arrival City");
         arr.closeAirport();
 
-        assertThrows(BusinessException.class, () -> Flight.createFlight(
-                "FL123",
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> Flight.createFlight(
+                "G39206",
                 airline,
                 dep,
                 arr,
                 LocalDateTime.of(2024, 7, 2, 10, 0),
                 LocalDateTime.of(2024, 7, 2, 12, 0)
         ));
+
+        assertEquals(FlightMessages.AIRPORT_ACTIVE, exception.getMessage());
     }
 
     @Test
@@ -196,14 +222,20 @@ public class FlightTest {
         Flight flight = validFlight();
         flight.depart();
 
-        assertThrows(BusinessException.class, () -> flight.depart());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> flight.depart());
+
+        assertEquals(FlightMessages.DEPART_ONLY_SCHEDULED, exception.getMessage());
     }
 
     @Test
     void shouldNotArriveIfNotInFlight() {
         Flight flight = validFlight();
 
-        assertThrows(BusinessException.class, () -> flight.arrive());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> flight.arrive());
+
+        assertEquals(FlightMessages.ARRIVE_ONLY_IN_FLIGHT, exception.getMessage());
     }
 
     @Test
@@ -211,7 +243,10 @@ public class FlightTest {
         Flight flight = validFlight();
         flight.depart();
 
-        assertThrows(BusinessException.class, () -> flight.cancel());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> flight.cancel());
+
+        assertEquals(FlightMessages.CANCEL_ONLY_SCHEDULED, exception.getMessage());
     }
 
     @Test
@@ -220,7 +255,10 @@ public class FlightTest {
         flight.depart();
         flight.arrive();
 
-        assertThrows(BusinessException.class, () -> flight.cancel());
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> flight.cancel());
+
+        assertEquals(FlightMessages.CANCEL_ONLY_SCHEDULED, exception.getMessage());
     }
 
     @Test
@@ -234,5 +272,4 @@ public class FlightTest {
         flight.arrive();
         assertFalse(flight.isActive());
     }
-*/
 }
