@@ -58,8 +58,8 @@ class ClientServiceTest {
 
     private ChangeClientRequest validChangeRequest(){
         ChangeClientRequest request = new ChangeClientRequest();
-        request.clientFirstName = "New";
-        request.clientLastName = "Client";
+        request.clientFirstName = "Newnew";
+        request.clientLastName = "Clientclient";
         return request;
     }
 
@@ -122,7 +122,7 @@ class ClientServiceTest {
 
         clientService.changeClientName(1L, request);
 
-        verify(client).changeName("New", "Client");
+        verify(client).changeName("Newnew", "Clientclient");
         verify(clientRepository).save(client);
     }
 

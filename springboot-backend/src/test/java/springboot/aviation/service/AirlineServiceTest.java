@@ -1,9 +1,16 @@
 package springboot.aviation.service;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -13,43 +20,175 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import springboot.aviation.exception.BusinessException;
+import springboot.aviation.exception.ResourceNotFoundException;
+import springboot.aviation.dto.ChangeAirlineRequest;
 import springboot.aviation.dto.CreateAirlineRequest;
+import springboot.aviation.model.Flight;
+import springboot.aviation.model.FlightStatus;
 import springboot.aviation.model.Airline;
 import springboot.aviation.repository.AirlineRepository;
+import springboot.aviation.repository.FlightRepository;
 
 
 @ExtendWith(MockitoExtension.class)
 class AirlineServiceTest {
     
     @Mock
-    private AirlineRepository repository;
+    private AirlineRepository airlineRepository;
+
+    @Mock
+    private FlightRepository flightRepository;
 
     @InjectMocks
-    private AirlineService service;
+    private AirlineService airlineService;
+
+    //support methods
+    private CreateAirlineRequest validRequest() {
+        CreateAirlineRequest request = new CreateAirlineRequest();
+        request.iataCode = "G3";
+        request.airlineName = "Gol Airlines";
+        return request;
+    }
+
+    private void mockValidDependencies(){
+        when(airlineRepository.existsByIataCode("G3")).thenReturn(false);
+    }
+
+    private ChangeAirlineRequest validChangeRequest(){
+        ChangeAirlineRequest request = new ChangeAirlineRequest();
+        request.airlineName = "Azul Airlines";
+        return request;
+    }
+
+    //tests
+    @Test
+    void shouldReturnAirlineList() {
+
+        Airline airline = mock(Airline.class);
+
+        when(airlineRepository.findAll()).thenReturn(List.of(airline));
+
+        List<Airline> airlines = airlineService.findAll();
+
+        assertEquals(1, airlines.size());
+    }
+
+    @Test
+    void shouldReturnAirlineById() {
+
+        Airline airline = mock(Airline.class);
+
+        when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
+
+        Airline airlineFound = airlineService.findById(1L);
+
+        assertEquals(airline, airlineFound);
+    }
+
+    @Test
+    void shouldCreateAirlineSuccessfully() {
+
+        mockValidDependencies();
+
+        when(airlineRepository.save(any(Airline.class)))
+            .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Airline airline = airlineService.createAirline(validRequest());
+
+        assertNotNull(airline);
+        assertTrue(airline.isActive());
+    }
 
     @Test
     void shouldNotCreateAirlineWithDuplicatedIataCode() {
 
-        when(repository.existsByIataCode("AA")).thenReturn(true);
-
-        CreateAirlineRequest request = new CreateAirlineRequest();
-        request.iataCode = "AA";
+        when(airlineRepository.existsByIataCode("G3")).thenReturn(true);
 
         assertThrows(BusinessException.class,
-            () -> service.createAirline(request));
+            () -> airlineService.createAirline(validRequest()));
     }
 
     @Test
-    void shouldSuspendAirlineSuccessfully() {
+    void shouldChangeAirlineNameSucessfully() {
 
-        Airline airline = Airline.createAirline("American Airlines", "AA");
+        Airline airline = mock(Airline.class);
 
-        when(repository.findById(1L)).thenReturn(Optional.of(airline));
-        when(repository.save(airline)).thenReturn(airline);
+        ChangeAirlineRequest request = validChangeRequest();
 
-        service.suspend(1L);
+        when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
 
-        assertFalse(airline.isActive());
+        airlineService.changeAirlineName(1L, request);
+
+        verify(airline).changeName("Azul Airlines");
+    }
+
+    @Test
+    void shouldNotChangeAirlineNameWhenNonExistingAirline() {
+        when(airlineRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, 
+            () -> airlineService.changeAirlineName(1L, validChangeRequest()));
+    }
+
+    @Test
+    void shouldActivateAirlineSucessfully() {
+
+        Airline airline = mock(Airline.class);
+
+        when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
+
+        airlineService.activate(1L);
+
+        verify(airline).activate();
+    }
+
+    @Test
+    void shouldNotActivateAirlineWhenNonExistingAirline() {
+
+        when(airlineRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+            () -> airlineService.activate(1L));
     }
     
+    @Test
+    void shouldSuspendAirlineSucessfully() {
+
+        Airline airline = mock(Airline.class);
+
+        when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
+
+        airlineService.suspend(1L);
+
+        verify(airline).suspend();
+    }
+
+    @Test
+    void shouldNotSuspendAirlineWhenNonExistingAirline() {
+
+        when(airlineRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+            () -> airlineService.suspend(1L));
+    }
+
+    @Test
+    void shouldCancelAllFlightsWhenAirlineIsSuspended() {
+        Airline airline = mock(Airline.class);
+        Flight flight1 = mock(Flight.class);
+        Flight flight2 = mock(Flight.class);
+
+        when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
+
+        when(flightRepository.findByAirlineAndStatus(airline, FlightStatus.SCHEDULED))
+            .thenReturn(List.of(flight1, flight2));
+        
+        airlineService.suspend(1L);
+
+        verify(airline).suspend();
+        verify(flight1).cancel();
+        verify(flight2).cancel();
+        verify(flightRepository).saveAll(anyList());
+        verify(airlineRepository).save(airline);
+    }
 }

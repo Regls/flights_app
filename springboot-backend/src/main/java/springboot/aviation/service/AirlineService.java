@@ -44,8 +44,8 @@ public class AirlineService {
         }
 
         Airline airline = Airline.createAirline(
-                request.airlineName,
-                request.iataCode
+                request.iataCode,
+                request.airlineName
         );
 
         return airlineRepository.save(airline);
