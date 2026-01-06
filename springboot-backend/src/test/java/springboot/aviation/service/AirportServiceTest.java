@@ -182,11 +182,27 @@ class AirportServiceTest {
     }
 
     @Test
+    void shouldNotOpenAirportWhenAlreadyOpen() {
+
+        Airport airport = mock(Airport.class);
+
+        when(airportRepository.findById(1L)).thenReturn(Optional.of(airport));
+        when(airport.isOperational()).thenReturn(true);
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airportService.open(1L));
+
+        assertEquals("Airport is already open", exception.getMessage());
+        verify(airportRepository, never()).save(any(Airport.class));
+    }
+
+    @Test
     void shouldCloseAirportSuccessfully() {
 
         Airport airport = mock(Airport.class);
 
         when(airportRepository.findById(1L)).thenReturn(Optional.of(airport));
+        when(airport.isOperational()).thenReturn(true);
 
         airportService.close(1L);
 
@@ -207,12 +223,28 @@ class AirportServiceTest {
     }
 
     @Test
+    void shouldNotCloseAirportWhenAlreadyClosed() {
+
+        Airport airport = mock(Airport.class);
+
+        when(airportRepository.findById(1L)).thenReturn(Optional.of(airport));
+        when(airport.isOperational()).thenReturn(false);
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airportService.close(1L));
+
+        assertEquals("Airport is already closed", exception.getMessage());
+        verify(airportRepository, never()).save(any(Airport.class));
+    }
+
+    @Test
     void shouldCancelAllFlightsWhenAirportIsClosed() {
         Airport airport = mock(Airport.class);
         Flight flight1 = mock(Flight.class);
         Flight flight2 = mock(Flight.class);
 
         when(airportRepository.findById(1L)).thenReturn(Optional.of(airport));
+        when(airport.isOperational()).thenReturn(true);
 
         when(flightRepository.findByAirportAndStatus(airport, FlightStatus.SCHEDULED))
             .thenReturn(List.of(flight1, flight2));
@@ -232,6 +264,7 @@ class AirportServiceTest {
         Flight cancelledFlight = mock(Flight.class);
 
         when(airportRepository.findById(1L)).thenReturn(Optional.of(airport));
+        when(airport.isOperational()).thenReturn(true);
 
         when(flightRepository.findByAirportAndStatus(any(), any())).thenReturn(List.of());
 

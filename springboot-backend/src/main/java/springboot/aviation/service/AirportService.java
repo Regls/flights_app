@@ -63,6 +63,8 @@ public class AirportService {
     public void open(Long airportId) {
         Airport airport = airportRepository.findById(airportId)
                 .orElseThrow(() -> new ResourceNotFoundException("Airport not found"));
+
+        if(airport.isOperational()) throw new BusinessException("Airport is already open");
         
         airport.open();
         airportRepository.save(airport);
@@ -72,6 +74,8 @@ public class AirportService {
     public void close(Long airportId) {
         Airport airport = airportRepository.findById(airportId)
                 .orElseThrow(() -> new ResourceNotFoundException("Airport not found"));
+
+        if(!airport.isOperational()) throw new BusinessException("Airport is already closed");
 
         List<Flight> scheduledFlights = flightRepository.findByAirportAndStatus(airport, FlightStatus.SCHEDULED);
 
