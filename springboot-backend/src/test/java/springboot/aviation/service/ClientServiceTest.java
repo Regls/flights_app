@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -74,6 +75,8 @@ class ClientServiceTest {
         List<Client> clients = clientService.findAll();
 
         assertEquals(1, clients.size());
+        assertTrue(clients.contains(client));
+        verify(clientRepository).findAll();
     }
 
     @Test
@@ -86,6 +89,19 @@ class ClientServiceTest {
         Client clientFound = clientService.findById(1L);
 
         assertEquals(client, clientFound);
+        verify(clientRepository).findById(1L);
+    }
+
+    @Test
+    void shouldNotReturnClientByIdWhenNonExistingClient(){
+
+        when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+            () -> clientService.findById(1L));
+
+        assertEquals("Client not found", exception.getMessage());
+        verify(clientRepository).findById(1L);
     }
 
     @Test
@@ -100,6 +116,7 @@ class ClientServiceTest {
 
         assertNotNull(client);
         assertTrue(client.isActive());
+        verify(clientRepository, times(1)).save(client);
     }
 
     @Test
@@ -107,8 +124,11 @@ class ClientServiceTest {
 
         when(clientRepository.existsByCpf("12345678900")).thenReturn(true);
 
-        assertThrows(BusinessException.class,
+        BusinessException exception = assertThrows(BusinessException.class,
             () -> clientService.createClient(validRequest()));
+        
+        assertEquals("Client with CPF already exists.", exception.getMessage());
+        verify(clientRepository, never()).save(any(Client.class));
     }
 
     @Test
@@ -130,8 +150,24 @@ class ClientServiceTest {
     void shouldNotChangeClientNameWhenNonExistingClient(){
         when(clientRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class,
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
             () -> clientService.changeClientName(1L, validChangeRequest()));
+
+        assertEquals("Client not found", exception.getMessage());
+        verify(clientRepository, never()).save(any(Client.class));
+    }
+
+    @Test
+    void shouldActivateClientSucessfully() {
+
+        Client client = mock(Client.class);
+
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+
+        clientService.activate(1L);
+
+        verify(client).activate();
+        verify(clientRepository).save(client);
     }
 
     @Test
@@ -139,8 +175,24 @@ class ClientServiceTest {
 
         when(clientRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class,
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
             () -> clientService.activate(1L));
+
+        assertEquals("Client not found", exception.getMessage());
+        verify(clientRepository, never()).save(any(Client.class));
+    }
+
+    @Test
+    void shouldDeactivateClientSucessfully() {
+
+        Client client = mock(Client.class);
+
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+
+        clientService.deactivate(1L);
+
+        verify(client).deactivate();
+        verify(clientRepository).save(client);
     }
 
     @Test
@@ -148,8 +200,11 @@ class ClientServiceTest {
 
         when(clientRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class,
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
             () -> clientService.deactivate(1L));
+
+        assertEquals("Client not found", exception.getMessage());
+        verify(clientRepository, never()).save(any(Client.class));
     }
 
     @Test

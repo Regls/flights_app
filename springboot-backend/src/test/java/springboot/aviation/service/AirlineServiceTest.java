@@ -140,6 +140,7 @@ class AirlineServiceTest {
         airlineService.changeAirlineName(1L, request);
 
         verify(airline).changeName("Azul Airlines");
+        verify(airlineRepository).save(airline);
     }
 
     @Test
@@ -187,6 +188,7 @@ class AirlineServiceTest {
         airlineService.suspend(1L);
 
         verify(airline).suspend();
+        verify(airlineRepository).save(airline);
     }
 
     @Test
