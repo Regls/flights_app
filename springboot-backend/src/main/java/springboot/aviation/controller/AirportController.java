@@ -44,7 +44,7 @@ public class AirportController {
         return ResponseEntity.ok(airportService.createAirport(request));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/name")
     public ResponseEntity<Airport> changeAirportName(@PathVariable Long id, @RequestBody ChangeAirportRequest request) {
         return ResponseEntity.ok(airportService.changeAirportName(id, request));
     }

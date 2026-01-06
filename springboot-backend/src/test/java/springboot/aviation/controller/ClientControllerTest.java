@@ -2,13 +2,14 @@ package springboot.aviation.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import springboot.aviation.exception.BusinessException;
 import springboot.aviation.exception.ResourceNotFoundException;
 import springboot.aviation.model.Client;
 import springboot.aviation.service.ClientService;
-import java.util.List;
+
 
 @WebMvcTest(ClientController.class)
 public class ClientControllerTest {
@@ -93,9 +94,9 @@ public class ClientControllerTest {
         when(clientService.createClient(any(CreateClientRequest.class))).thenReturn(client);
 
         mockMvc.perform(post("/api/v1/clients")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-            .andExpect(status().isOk());
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
 
         verify(clientService).createClient(any(CreateClientRequest.class));
     }
@@ -110,9 +111,9 @@ public class ClientControllerTest {
         when(clientService.changeClientName(eq(1L), any(ChangeClientRequest.class))).thenReturn(client);
 
         mockMvc.perform(put("/api/v1/clients/{id}/name", 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-            .andExpect(status().isOk());
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
 
         verify(clientService).changeClientName(eq(1L), any(ChangeClientRequest.class));
     }
@@ -121,7 +122,7 @@ public class ClientControllerTest {
     void shouldActivateClient() throws Exception {
 
         mockMvc.perform(put("/api/v1/clients/{id}/activate", 1L))
-            .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent());
 
         verify(clientService).activate(1L);
     }
@@ -130,7 +131,7 @@ public class ClientControllerTest {
     void shouldDeactivateClient() throws Exception {
 
         mockMvc.perform(put("/api/v1/clients/{id}/deactivate", 1L))
-            .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent());
 
         verify(clientService).deactivate(1L);
     }
@@ -156,10 +157,10 @@ public class ClientControllerTest {
             .thenThrow(new BusinessException("Client names must contain only letters"));
 
         mockMvc.perform(put("/api/v1/clients/{id}/name", 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().string("Client names must contain only letters"));
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Client names must contain only letters"));
 
         verify(clientService).changeClientName(eq(1L), any(ChangeClientRequest.class));
     }
