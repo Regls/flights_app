@@ -64,6 +64,8 @@ public class ClientService {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
 
+        if(client.isActive()) throw new BusinessException("Client already active");
+
         client.activate();
         clientRepository.save(client);
     }
@@ -72,6 +74,8 @@ public class ClientService {
     public void deactivate(Long clientId) {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
+
+        if(!client.isActive()) throw new BusinessException("Client already inactive");
 
         List<Booking> bookings = bookingRepository.findByClientAndStatusIn(client, List.of(BookingStatus.CREATED, BookingStatus.CONFIRMED));
 

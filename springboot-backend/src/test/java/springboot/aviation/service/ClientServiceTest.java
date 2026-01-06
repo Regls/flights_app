@@ -183,11 +183,28 @@ class ClientServiceTest {
     }
 
     @Test
+    void shouldNotActivateWhenAlreadyActiveClient() {
+
+        Client client = mock(Client.class);
+
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+
+        when(client.isActive()).thenReturn(true);
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> clientService.activate(1L));
+
+        assertEquals("Client already active", exception.getMessage());
+        verify(clientRepository, never()).save(any(Client.class));
+    }
+
+    @Test
     void shouldDeactivateClientSucessfully() {
 
         Client client = mock(Client.class);
 
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+        when(client.isActive()).thenReturn(true);
 
         clientService.deactivate(1L);
 
@@ -208,12 +225,29 @@ class ClientServiceTest {
     }
 
     @Test
+    void shouldNotDeactivateWhenAlreadyInactiveClient() {
+
+        Client client = mock(Client.class);
+
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+
+        when(client.isActive()).thenReturn(false);
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> clientService.deactivate(1L));
+
+        assertEquals("Client already inactive", exception.getMessage());
+        verify(clientRepository, never()).save(any(Client.class));
+    }
+
+    @Test
     void shouldCancelAllBookingsWhenClientIsDeactivated() {
         Client client = mock(Client.class);
         Booking booking1 = mock(Booking.class);
         Booking booking2 = mock(Booking.class);
 
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+        when(client.isActive()).thenReturn(true);
 
         when(bookingRepository.findByClientAndStatusIn(client, List.of(BookingStatus.CREATED, BookingStatus.CONFIRMED))).thenReturn(List.of(booking1, booking2));
 
@@ -232,6 +266,7 @@ class ClientServiceTest {
         Booking cancelledBooking = mock(Booking.class);
 
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+        when(client.isActive()).thenReturn(true);
 
         when(bookingRepository.findByClientAndStatusIn(any(), any())).thenReturn(List.of());
 
