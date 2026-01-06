@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -50,15 +53,16 @@ public class BookingServiceTest {
 
     //support methods
     private Client activateClient() {
-        return Client.createClient("12345678901", "New", "Client");
+        return Client.createClient("12345678900", "New", "Client");
     }
 
     private Flight activateFlight() {
-        Airline airline = Airline.createAirline("TA", "Test Airline");
+        Airline airline = Airline.createAirline("G3", "Gol Airlines");
         Airport dep = Airport.createAirport("DPT", "Dep Airport", "Departure City");
         Airport arr = Airport.createAirport("ARR", "Arr Airport", "Arrival City");
-        return Flight.createFlight("FL123", airline, dep, arr,
-                LocalDateTime.of(2024, 7, 1, 10, 0), LocalDateTime.of(2024, 7, 1, 12, 0)
+        return Flight.createFlight("G39206", airline, dep, arr,
+                LocalDateTime.of(2024, 7, 1, 10, 0),
+                LocalDateTime.of(2024, 7, 1, 12, 0)
         );
     }
 
@@ -86,6 +90,8 @@ public class BookingServiceTest {
         List<Booking> bookings = bookingService.findAll();
 
         assertEquals(1, bookings.size());
+        assertTrue(bookings.contains(booking));
+        verify(bookingRepository).findAll();
     }
 
     @Test
@@ -95,9 +101,22 @@ public class BookingServiceTest {
 
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
 
-        Booking result = bookingService.findById(1L);
+        Booking bookingFound = bookingService.findById(1L);
 
-        assertNotNull(result);
+        assertEquals(booking, bookingFound);
+        verify(bookingRepository).findById(1L);
+    }
+
+    @Test
+    void shouldNotReturnBookingByIdWhenNonExistingBooking() {
+
+        when(bookingRepository.findById(1L)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+            () -> bookingService.findById(1L));
+
+        assertEquals("Booking not found", exception.getMessage());
+        verify(bookingRepository).findById(1L);
     }
 
     @Test
@@ -115,6 +134,34 @@ public class BookingServiceTest {
 
         assertNotNull(booking);
         assertTrue(booking.isCreated());
+        verify(bookingRepository, times(1)).save(booking);
+    }
+
+    @Test
+    void shouldNotCreateBookingWithNonExistingClient() {
+
+        when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+            () -> bookingService.createBooking(validRequest()));
+
+        assertEquals("Client not found", exception.getMessage());
+        verify(bookingRepository, never()).save(any(Booking.class));
+    }
+
+    @Test
+    void shouldNotCreateBookingWithNonExistingFlight() {
+
+        Client client = mock(Client.class);
+
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+        when(flightRepository.findById(1L)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+            () -> bookingService.createBooking(validRequest()));
+
+        assertEquals("Flight not found", exception.getMessage());
+        verify(bookingRepository, never()).save(any(Booking.class));
     }
 
     @Test
@@ -127,20 +174,24 @@ public class BookingServiceTest {
 
         when(bookingRepository.existsByClientAndFlightAndStatusIn(client, flight, List.of(BookingStatus.CREATED, BookingStatus.CONFIRMED))).thenReturn(true);
 
-        assertThrows(BusinessException.class,
+        BusinessException exception = assertThrows(BusinessException.class,
             () -> bookingService.createBooking(validRequest()));
+
+        assertEquals("Client already has an active booking for this flight", exception.getMessage());
+        verify(bookingRepository, never()).save(any(Booking.class));
     }
 
     @Test
     void shouldConfirmBookingSucessfully() {
 
-        Booking booking = Booking.createBooking(activateClient(), activateFlight());
+        Booking booking = mock(Booking.class);
 
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+        when(booking.isCreated()).thenReturn(true);
 
         bookingService.confirm(1L);
 
-        assertTrue(booking.isConfirmed());
+        verify(booking).confirm();
     }
 
     @Test
@@ -148,20 +199,40 @@ public class BookingServiceTest {
 
         when(bookingRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class,
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
             () -> bookingService.confirm(1L));
+
+        assertEquals("Booking not found", exception.getMessage());
+        verify(bookingRepository, never()).save(any(Booking.class));
+    }
+
+    @Test
+    void shouldNotConfirmWhenBookingAlreadyConfirmed() {
+
+        Booking booking = mock(Booking.class);
+
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+        when(booking.isCreated()).thenReturn(false);
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> bookingService.confirm(1L));
+
+        assertEquals("Only created bookings can be confirmed", exception.getMessage());
+        verify(booking, never()).confirm();
+        verify(bookingRepository, never()).save(any(Booking.class));
     }
 
     @Test
     void shouldCancelBookingSucessfully() {
 
-        Booking booking = Booking.createBooking(activateClient(), activateFlight());
+        Booking booking = mock(Booking.class);
 
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
 
         bookingService.cancel(1L);
 
-        assertTrue(booking.isCancelled());
+        verify(booking).cancel();
+        verify(bookingRepository).save(booking);
     }
 
     @Test
@@ -169,8 +240,26 @@ public class BookingServiceTest {
 
         when(bookingRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class,
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
             () -> bookingService.cancel(1L));
+        
+        assertEquals("Booking not found", exception.getMessage());
+        verify(bookingRepository, never()).save(any(Booking.class));
     }
 
+    @Test
+    void shouldNotCancelWhenBookingAlreadyCancelled() {
+
+        Booking booking = mock(Booking.class);
+
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+        when(booking.isCancelled()).thenReturn(true);
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> bookingService.cancel(1L));
+
+        assertEquals("Cancelled bookings cant be cancelled", exception.getMessage());
+        verify(booking, never()).cancel();
+        verify(bookingRepository, never()).save(any(Booking.class));
+    }
 }

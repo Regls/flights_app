@@ -47,7 +47,7 @@ public class BookingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Flight not found"));
 
         if (bookingRepository.existsByClientAndFlightAndStatusIn(client, flight, List.of(BookingStatus.CREATED, BookingStatus.CONFIRMED))) {
-            throw new BusinessException("Client already has an active booking for this flight.");
+            throw new BusinessException("Client already has an active booking for this flight");
         }
         
         Booking booking = Booking.createBooking(client, flight);
@@ -60,6 +60,8 @@ public class BookingService {
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        if(!booking.isCreated()) throw new BusinessException("Only created bookings can be confirmed");
         
         booking.confirm();
         bookingRepository.save(booking);
@@ -69,6 +71,8 @@ public class BookingService {
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        if(booking.isCancelled()) throw new BusinessException("Cancelled bookings cant be cancelled");
 
         booking.cancel();
         bookingRepository.save(booking);

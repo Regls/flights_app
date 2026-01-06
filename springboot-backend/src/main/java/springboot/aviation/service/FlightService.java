@@ -45,10 +45,6 @@ public class FlightService {
 
     public Flight createFlight(CreateFlightRequest request) {
 
-        if (flightRepository.existsByFlightNumber(request.flightNumber)) {
-            throw new BusinessException("Flight with flight number already exists");
-        }
-
         Airline airline = airlineRepository.findById(request.airlineId)
                 .orElseThrow(() -> new ResourceNotFoundException("Airline not found"));
 
@@ -57,6 +53,10 @@ public class FlightService {
 
         Airport arrival = airportRepository.findById(request.arrivalAirportId)
                 .orElseThrow(() -> new ResourceNotFoundException("Arrival airport not found"));
+
+        if (flightRepository.existsByFlightNumber(request.flightNumber)) {
+            throw new BusinessException("Flight with flight number already exists");
+        }
         
         Flight flight = Flight.createFlight(
                 request.flightNumber,

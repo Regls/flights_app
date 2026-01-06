@@ -195,6 +195,7 @@ class ClientServiceTest {
             () -> clientService.activate(1L));
 
         assertEquals("Client already active", exception.getMessage());
+        verify(client, never()).activate();
         verify(clientRepository, never()).save(any(Client.class));
     }
 
@@ -237,6 +238,7 @@ class ClientServiceTest {
             () -> clientService.deactivate(1L));
 
         assertEquals("Client already inactive", exception.getMessage());
+        verify(client, never()).deactivate();
         verify(clientRepository, never()).save(any(Client.class));
     }
 

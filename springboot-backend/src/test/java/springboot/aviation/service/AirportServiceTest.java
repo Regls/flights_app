@@ -193,6 +193,7 @@ class AirportServiceTest {
             () -> airportService.open(1L));
 
         assertEquals("Airport is already open", exception.getMessage());
+        verify(airport, never()).open();
         verify(airportRepository, never()).save(any(Airport.class));
     }
 
@@ -234,6 +235,7 @@ class AirportServiceTest {
             () -> airportService.close(1L));
 
         assertEquals("Airport is already closed", exception.getMessage());
+        verify(airport, never()).close();
         verify(airportRepository, never()).save(any(Airport.class));
     }
 

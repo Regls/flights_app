@@ -144,18 +144,6 @@ public class FlightServiceTest {
     }
 
     @Test
-    void shouldNotCreateFlightWithDuplicatedFlightNumber() {
-
-        when(flightRepository.existsByFlightNumber("G39206")).thenReturn(true);
-
-        BusinessException exception = assertThrows(BusinessException.class,
-            () -> flightService.createFlight(validRequest()));
-
-        assertEquals("Flight with flight number already exists", exception.getMessage());
-        verify(flightRepository, never()).save(any(Flight.class));
-    }
-
-    @Test
     void shouldNotCreateFlightWithNonExistingAirline() {
 
         when(airlineRepository.findById(1L)).thenReturn(Optional.empty());
@@ -200,6 +188,24 @@ public class FlightServiceTest {
     }
 
     @Test
+    void shouldNotCreateFlightWithDuplicatedFlightNumber() {
+
+        Airline airline = activateAirline();
+        Airport dep = openDepAirport();
+        Airport arr = openArrAirport();
+
+        mockValidDependencies(airline, dep, arr);
+
+        when(flightRepository.existsByFlightNumber("G39206")).thenReturn(true);
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> flightService.createFlight(validRequest()));
+
+        assertEquals("Flight with flight number already exists", exception.getMessage());
+        verify(flightRepository, never()).save(any(Flight.class));
+    }
+
+    @Test
     void shouldDepartScheduledFlight() {
 
         Flight flight = mock(Flight.class);
@@ -237,6 +243,7 @@ public class FlightServiceTest {
             () -> flightService.depart(1L));
 
         assertEquals("Only scheduled flights can depart", exception.getMessage());
+        verify(flight, never()).depart();
         verify(flightRepository, never()).save(any(Flight.class));
     }
 
@@ -278,6 +285,7 @@ public class FlightServiceTest {
             () -> flightService.arrive(1L));
 
         assertEquals("Only in-flight flights can arrive", exception.getMessage());
+        verify(flight, never()).arrive();
         verify(flightRepository, never()).save(any(Flight.class));
     }
 
@@ -319,6 +327,7 @@ public class FlightServiceTest {
             () -> flightService.cancel(1L));
 
         assertEquals("Only scheduled flights can be cancelled", exception.getMessage());
+        verify(flight, never()).cancel();
         verify(flightRepository, never()).save(any(Flight.class));
     }
 

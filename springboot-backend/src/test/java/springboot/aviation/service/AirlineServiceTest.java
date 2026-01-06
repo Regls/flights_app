@@ -190,6 +190,7 @@ class AirlineServiceTest {
             () -> airlineService.activate(1L));
 
         assertEquals("Airline is already active", exception.getMessage());
+        verify(airline, never()).activate();
         verify(airlineRepository, never()).save(any(Airline.class));
     }
     
@@ -231,6 +232,7 @@ class AirlineServiceTest {
             () -> airlineService.suspend(1L));
 
         assertEquals("Airline is already suspended", exception.getMessage());
+        verify(airline, never()).suspend();
         verify(airlineRepository, never()).save(any(Airline.class));
     }
 
