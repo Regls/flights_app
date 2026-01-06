@@ -99,14 +99,14 @@ public class Airport {
         return this.city.equals(city);
     }
 
-    public void openAirport() {
+    public void open() {
         if (this.operational){
             throw new BusinessException(AirportMessages.AIRPORT_ALREADY_OPEN);
         }
         this.operational = true;
     }
 
-    public void closeAirport() {
+    public void close() {
         if (!this.operational){
             throw new BusinessException(AirportMessages.AIRPORT_ALREADY_CLOSED);
         }

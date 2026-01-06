@@ -153,9 +153,9 @@ public class AirportTest {
     @Test
     void shouldOpenAirportSucessfully(){
         Airport airport = validAirport();
-        airport.closeAirport();
+        airport.close();
 
-        airport.openAirport();
+        airport.open();
 
         assertTrue(airport.isOperational());
     }
@@ -164,7 +164,7 @@ public class AirportTest {
     void shouldCloseAirportSucessfully(){
         Airport airport = validAirport();
 
-        airport.closeAirport();
+        airport.close();
 
         assertTrue(!airport.isOperational());
     }
@@ -174,7 +174,7 @@ public class AirportTest {
         Airport airport = validAirport();
 
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> airport.openAirport());
+            () -> airport.open());
 
         assertEquals(AirportMessages.AIRPORT_ALREADY_OPEN, exception.getMessage());
     }
@@ -183,10 +183,10 @@ public class AirportTest {
     void shouldNotCloseAirportIfAirportIsAlreadyClosed(){
         Airport airport = validAirport();
 
-        airport.closeAirport();
+        airport.close();
 
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> airport.closeAirport());
+            () -> airport.close());
 
         assertEquals(AirportMessages.AIRPORT_ALREADY_CLOSED, exception.getMessage());
     }

@@ -165,7 +165,7 @@ class AirportServiceTest {
 
         airportService.open(1L);
 
-        verify(airport).openAirport();
+        verify(airport).open();
         verify(airportRepository).save(airport);
     }
 
@@ -190,7 +190,7 @@ class AirportServiceTest {
 
         airportService.close(1L);
 
-        verify(airport).closeAirport();
+        verify(airport).close();
         verify(airportRepository).save(airport);
     }
 
@@ -219,7 +219,7 @@ class AirportServiceTest {
 
         airportService.close(1L);
 
-        verify(airport).closeAirport();
+        verify(airport).close();
         verify(flight1).cancel();
         verify(flight2).cancel();
         verify(flightRepository).saveAll(anyList());

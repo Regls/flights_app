@@ -242,7 +242,7 @@ public class FlightTest {
     void shouldNotCreateFlightIfDepartureAirportIsClosed() {
         Airline airline = activateAirline();
         Airport dep = openDepAirport();
-        dep.closeAirport();
+        dep.close();
         Airport arr = openArrAirport();
 
         BusinessException exception = assertThrows(BusinessException.class,
@@ -263,7 +263,7 @@ public class FlightTest {
         Airline airline = activateAirline();
         Airport dep = openDepAirport();
         Airport arr = openArrAirport();
-        arr.closeAirport();
+        arr.close();
 
         BusinessException exception = assertThrows(BusinessException.class,
             () -> Flight.createFlight(

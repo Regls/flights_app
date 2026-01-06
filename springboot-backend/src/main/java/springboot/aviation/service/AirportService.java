@@ -64,7 +64,7 @@ public class AirportService {
         Airport airport = airportRepository.findById(airportId)
                 .orElseThrow(() -> new ResourceNotFoundException("Airport not found"));
         
-        airport.openAirport();
+        airport.open();
         airportRepository.save(airport);
     }
 
@@ -79,7 +79,7 @@ public class AirportService {
             flight.cancel();
         }
 
-        airport.closeAirport();
+        airport.close();
         flightRepository.saveAll(scheduledFlights);
         airportRepository.save(airport);
     }
