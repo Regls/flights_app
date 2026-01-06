@@ -52,11 +52,11 @@ class AirlineServiceTest {
         return request;
     }
 
-    private void mockValidDependencies(){
+    private void mockValidDependencies() {
         when(airlineRepository.existsByIataCode("G3")).thenReturn(false);
     }
 
-    private ChangeAirlineRequest validChangeRequest(){
+    private ChangeAirlineRequest validChangeRequest() {
         ChangeAirlineRequest request = new ChangeAirlineRequest();
         request.airlineName = "Azul Airlines";
         return request;
@@ -224,7 +224,7 @@ class AirlineServiceTest {
     }
 
     @Test
-    void shouldNotCancelCancelledFlightsWhenClientIsDeactivated() {
+    void shouldNotCancelCancelledFlightsWhenAirlineIsDeactivated() {
         Airline airline = mock(Airline.class);
         Flight cancelledFlight = mock(Flight.class);
 

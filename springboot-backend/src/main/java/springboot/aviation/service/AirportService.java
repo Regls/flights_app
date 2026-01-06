@@ -40,7 +40,7 @@ public class AirportService {
     public Airport createAirport(CreateAirportRequest request) {
 
         if (airportRepository.existsByIataCode(request.iataCode)) {
-            throw new BusinessException("Airport with IATA code already exists.");
+            throw new BusinessException("Airport with IATA code already exists");
         }
 
         Airport airport = Airport.createAirport(
