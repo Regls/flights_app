@@ -46,7 +46,7 @@ public class FlightService {
     public Flight createFlight(CreateFlightRequest request) {
 
         if (flightRepository.existsByFlightNumber(request.flightNumber)) {
-            throw new BusinessException("Flight with flight number already exists.");
+            throw new BusinessException("Flight with flight number already exists");
         }
 
         Airline airline = airlineRepository.findById(request.airlineId)
@@ -74,6 +74,10 @@ public class FlightService {
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight not found"));
 
+        if (!flight.isScheduled()) {
+            throw new BusinessException("Only scheduled flights can depart");
+        }
+
         flight.depart();
         flightRepository.save(flight);
     }
@@ -83,7 +87,7 @@ public class FlightService {
                 .orElseThrow(() -> new ResourceNotFoundException("Flight not found"));
 
         if (!flight.isInFlight()) {
-            throw new BusinessException("Only in-flight flights can arrive.");
+            throw new BusinessException("Only in-flight flights can arrive");
         }
 
         flight.arrive();
@@ -94,6 +98,10 @@ public class FlightService {
     public void cancel(Long flightId) {
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight not found"));
+
+        if(!flight.isScheduled()) {
+            throw new BusinessException("Only scheduled flights can be cancelled");
+        }
 
         List<Booking> bookings = bookingRepository.findByFlightAndStatusIn(flight, List.of(BookingStatus.CREATED, BookingStatus.CONFIRMED));
 

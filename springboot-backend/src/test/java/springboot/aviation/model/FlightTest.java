@@ -23,7 +23,7 @@ public class FlightTest {
     }
 
     private Airport openDepAirport() {
-        return Airport.createAirport("DPT", "Dep Airport", "Departure city");
+        return Airport.createAirport("DPT", "Dep Airport", "Departure City");
     }
 
     private Airport openArrAirport() {
