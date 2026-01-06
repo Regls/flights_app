@@ -177,6 +177,21 @@ class AirlineServiceTest {
         assertEquals("Airline not found", exception.getMessage());
         verify(airlineRepository, never()).save(any(Airline.class));
     }
+
+    @Test
+    void shouldNotActivateAirlineWhenAlreadyActive() {
+
+        Airline airline = mock(Airline.class);
+
+        when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
+        when(airline.isActive()).thenReturn(true);
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airlineService.activate(1L));
+
+        assertEquals("Airline is already active", exception.getMessage());
+        verify(airlineRepository, never()).save(any(Airline.class));
+    }
     
     @Test
     void shouldSuspendAirlineSucessfully() {
@@ -184,6 +199,7 @@ class AirlineServiceTest {
         Airline airline = mock(Airline.class);
 
         when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
+        when(airline.isActive()).thenReturn(true);
 
         airlineService.suspend(1L);
 
@@ -204,12 +220,28 @@ class AirlineServiceTest {
     }
 
     @Test
+    void shouldNotSuspendAirlineWhenAlreadySuspended() {
+
+        Airline airline = mock(Airline.class);
+
+        when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
+        when(airline.isActive()).thenReturn(false);
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> airlineService.suspend(1L));
+
+        assertEquals("Airline is already suspended", exception.getMessage());
+        verify(airlineRepository, never()).save(any(Airline.class));
+    }
+
+    @Test
     void shouldCancelAllFlightsWhenAirlineIsSuspended() {
         Airline airline = mock(Airline.class);
         Flight flight1 = mock(Flight.class);
         Flight flight2 = mock(Flight.class);
 
         when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
+        when(airline.isActive()).thenReturn(true);
 
         when(flightRepository.findByAirlineAndStatus(airline, FlightStatus.SCHEDULED))
             .thenReturn(List.of(flight1, flight2));
@@ -229,6 +261,7 @@ class AirlineServiceTest {
         Flight cancelledFlight = mock(Flight.class);
 
         when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
+        when(airline.isActive()).thenReturn(true);
 
         when(flightRepository.findByAirlineAndStatus(any(), any())).thenReturn(List.of());
 

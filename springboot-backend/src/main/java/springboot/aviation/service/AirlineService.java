@@ -63,6 +63,8 @@ public class AirlineService {
         Airline airline = airlineRepository.findById(airlineId)
                 .orElseThrow(() -> new ResourceNotFoundException("Airline not found"));
 
+        if(airline.isActive()) throw new BusinessException("Airline is already active");
+
         airline.activate();
         airlineRepository.save(airline);
     }
@@ -71,6 +73,8 @@ public class AirlineService {
     public void suspend(Long airlineId) {
         Airline airline = airlineRepository.findById(airlineId)
                 .orElseThrow(() -> new ResourceNotFoundException("Airline not found"));
+
+        if(!airline.isActive()) throw new BusinessException("Airline is already suspended");
 
         List<Flight> scheduledFlights = flightRepository.findByAirlineAndStatus(airline, FlightStatus.SCHEDULED);
 

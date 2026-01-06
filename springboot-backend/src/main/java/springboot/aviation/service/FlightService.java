@@ -74,7 +74,7 @@ public class FlightService {
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight not found"));
 
-        if (!flight.isScheduled()) throw new BusinessException("Only scheduled flights can depart");
+        if(!flight.isScheduled()) throw new BusinessException("Only scheduled flights can depart");
 
         flight.depart();
         flightRepository.save(flight);
@@ -84,7 +84,7 @@ public class FlightService {
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight not found"));
 
-        if (!flight.isInFlight()) throw new BusinessException("Only in-flight flights can arrive");
+        if(!flight.isInFlight()) throw new BusinessException("Only in-flight flights can arrive");
 
         flight.arrive();
         flightRepository.save(flight);
