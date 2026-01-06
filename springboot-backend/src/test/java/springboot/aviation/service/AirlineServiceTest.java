@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -65,12 +67,13 @@ class AirlineServiceTest {
     void shouldReturnAirlineList() {
 
         Airline airline = mock(Airline.class);
-
         when(airlineRepository.findAll()).thenReturn(List.of(airline));
 
         List<Airline> airlines = airlineService.findAll();
 
         assertEquals(1, airlines.size());
+        assertTrue(airlines.contains(airline));
+        verify(airlineRepository).findAll();
     }
 
     @Test
@@ -83,6 +86,19 @@ class AirlineServiceTest {
         Airline airlineFound = airlineService.findById(1L);
 
         assertEquals(airline, airlineFound);
+        verify(airlineRepository).findById(1L);
+    }
+
+    @Test
+    void shouldNotReturnAirlineByIdWhenNonExistingAirline() {
+
+        when(airlineRepository.findById(1L)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+            () -> airlineService.findById(1L));
+        
+        assertEquals("Airline not found", exception.getMessage());
+        verify(airlineRepository).findById(1L);
     }
 
     @Test
@@ -97,6 +113,7 @@ class AirlineServiceTest {
 
         assertNotNull(airline);
         assertTrue(airline.isActive());
+        verify(airlineRepository, times(1)).save(airline);
     }
 
     @Test
@@ -104,8 +121,11 @@ class AirlineServiceTest {
 
         when(airlineRepository.existsByIataCode("G3")).thenReturn(true);
 
-        assertThrows(BusinessException.class,
+        BusinessException exception = assertThrows(BusinessException.class,
             () -> airlineService.createAirline(validRequest()));
+
+        assertEquals("Airline with IATA code already exists.", exception.getMessage());
+        verify(airlineRepository, never()).save(any(Airline.class));
     }
 
     @Test
@@ -126,8 +146,11 @@ class AirlineServiceTest {
     void shouldNotChangeAirlineNameWhenNonExistingAirline() {
         when(airlineRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, 
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, 
             () -> airlineService.changeAirlineName(1L, validChangeRequest()));
+
+        assertEquals("Airline not found", exception.getMessage());
+        verify(airlineRepository, never()).save(any(Airline.class));
     }
 
     @Test
@@ -147,8 +170,11 @@ class AirlineServiceTest {
 
         when(airlineRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class,
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
             () -> airlineService.activate(1L));
+
+        assertEquals("Airline not found", exception.getMessage());
+        verify(airlineRepository, never()).save(any(Airline.class));
     }
     
     @Test
@@ -168,8 +194,11 @@ class AirlineServiceTest {
 
         when(airlineRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class,
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
             () -> airlineService.suspend(1L));
+
+        assertEquals("Airline not found", exception.getMessage());
+        verify(airlineRepository, never()).save(any(Airline.class));
     }
 
     @Test
@@ -190,5 +219,19 @@ class AirlineServiceTest {
         verify(flight2).cancel();
         verify(flightRepository).saveAll(anyList());
         verify(airlineRepository).save(airline);
+    }
+
+    @Test
+    void shouldNotCancelCancelledFlightsWhenClientIsDeactivated() {
+        Airline airline = mock(Airline.class);
+        Flight cancelledFlight = mock(Flight.class);
+
+        when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
+
+        when(flightRepository.findByAirlineAndStatus(any(), any())).thenReturn(List.of());
+
+        airlineService.suspend(1L);
+
+        verify(cancelledFlight, never()).cancel();
     }
 }
