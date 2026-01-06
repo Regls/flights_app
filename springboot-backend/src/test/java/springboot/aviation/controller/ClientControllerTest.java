@@ -1,5 +1,7 @@
 package springboot.aviation.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,8 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import springboot.aviation.dto.ChangeClientRequest;
+import springboot.aviation.dto.CreateClientRequest;
+import springboot.aviation.exception.BusinessException;
+import springboot.aviation.exception.ResourceNotFoundException;
 import springboot.aviation.model.Client;
 import springboot.aviation.service.ClientService;
 import java.util.List;
@@ -34,6 +41,21 @@ public class ClientControllerTest {
         return Client.createClient("12345678900", "New", "Client");
     }
 
+    private CreateClientRequest validRequest() {
+        CreateClientRequest request = new CreateClientRequest();
+        request.cpf = "12345678900";
+        request.clientFirstName = "New";
+        request.clientLastName = "Client";
+        return request;
+    }
+
+    private ChangeClientRequest validChangeRequest(){
+        ChangeClientRequest request = new ChangeClientRequest();
+        request.clientFirstName = "Newnew";
+        request.clientLastName = "Clientclient";
+        return request;
+    }
+
     @Test
     void shouldReturnClientList() throws Exception {
         
@@ -48,4 +70,97 @@ public class ClientControllerTest {
         verify(clientService).findAll();
     }
 
+    @Test
+    void shouldReturnClientById() throws Exception {
+
+        Client client = validClient();
+
+        when(clientService.findById(1L)).thenReturn(client);
+
+        mockMvc.perform(get("/api/v1/clients/{id}", 1L))
+                .andExpect(status().isOk());
+
+        verify(clientService).findById(1L);
+    }
+
+    @Test
+    void shouldCreateClient() throws Exception {
+
+        CreateClientRequest request = validRequest();
+
+        Client client = validClient();
+
+        when(clientService.createClient(any(CreateClientRequest.class))).thenReturn(client);
+
+        mockMvc.perform(post("/api/v1/clients")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk());
+
+        verify(clientService).createClient(any(CreateClientRequest.class));
+    }
+
+    @Test
+    void shouldChangeClientName() throws Exception {
+
+        ChangeClientRequest request = validChangeRequest();
+
+        Client client = validClient();
+
+        when(clientService.changeClientName(eq(1L), any(ChangeClientRequest.class))).thenReturn(client);
+
+        mockMvc.perform(put("/api/v1/clients/{id}/name", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk());
+
+        verify(clientService).changeClientName(eq(1L), any(ChangeClientRequest.class));
+    }
+
+    @Test
+    void shouldActivateClient() throws Exception {
+
+        mockMvc.perform(put("/api/v1/clients/{id}/activate", 1L))
+            .andExpect(status().isNoContent());
+
+        verify(clientService).activate(1L);
+    }
+
+    @Test
+    void shouldDeactivateClient() throws Exception {
+
+        mockMvc.perform(put("/api/v1/clients/{id}/deactivate", 1L))
+            .andExpect(status().isNoContent());
+
+        verify(clientService).deactivate(1L);
+    }
+
+    @Test
+    void shouldReturn404WhenClientNotFound() throws Exception {
+
+        when(clientService.findById(1L)).thenThrow(new ResourceNotFoundException("Client not found"));
+
+        mockMvc.perform(get("/api/v1/clients/{id}", 1L))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Client not found"));
+
+        verify(clientService).findById(1L);
+    }
+
+    @Test
+    void shouldReturn400WhenBusinessExceptionOccurs() throws Exception {
+
+        ChangeClientRequest request = validChangeRequest();
+
+        when(clientService.changeClientName(eq(1L), any(ChangeClientRequest.class)))
+            .thenThrow(new BusinessException("Client names must contain only letters"));
+
+        mockMvc.perform(put("/api/v1/clients/{id}/name", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string("Client names must contain only letters"));
+
+        verify(clientService).changeClientName(eq(1L), any(ChangeClientRequest.class));
+    }
 }
