@@ -40,7 +40,7 @@ public class ClientService {
     public Client createClient(CreateClientRequest request) {
 
         if (clientRepository.existsByCpf(request.cpf)) {
-            throw new BusinessException("Client with CPF already exists.");
+            throw new BusinessException("Client with CPF already exists");
         }
 
         Client client = Client.createClient(

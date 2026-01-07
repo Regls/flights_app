@@ -127,7 +127,7 @@ class ClientServiceTest {
         BusinessException exception = assertThrows(BusinessException.class,
             () -> clientService.createClient(validRequest()));
         
-        assertEquals("Client with CPF already exists.", exception.getMessage());
+        assertEquals("Client with CPF already exists", exception.getMessage());
         verify(clientRepository, never()).save(any(Client.class));
     }
 

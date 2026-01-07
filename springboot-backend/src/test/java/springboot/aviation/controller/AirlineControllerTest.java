@@ -149,17 +149,17 @@ public class AirlineControllerTest {
     @Test
     void shouldReturn400WhenBusinessExceptionOccurs() throws Exception {
 
-        ChangeAirlineRequest request = validChangeRequest();
+        CreateAirlineRequest request = validRequest();
 
-        when(airlineService.changeAirlineName(eq(1L), any(ChangeAirlineRequest.class)))
-                .thenThrow(new BusinessException("Airline name must contain only letters and spaces"));
+        when(airlineService.createAirline(any(CreateAirlineRequest.class)))
+                .thenThrow(new BusinessException("Airline with IATA code already exists."));
 
-        mockMvc.perform(put("/api/v1/airlines/{id}/name", 1L)
+        mockMvc.perform(post("/api/v1/airlines", 1L)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Airline name must contain only letters and spaces"));
+                .andExpect(content().string("Airline with IATA code already exists."));
 
-        verify(airlineService).changeAirlineName(eq(1L), any(ChangeAirlineRequest.class));
+        verify(airlineService).createAirline(any(CreateAirlineRequest.class));
     }
 }

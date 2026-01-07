@@ -1,7 +1,6 @@
 package springboot.aviation.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -144,23 +143,22 @@ public class FlightControllerTest {
 
         verify(flightService).findById(1L);
     }
-/*
+
     @Test
     void shouldReturn400WhenBusinessExceptionOccurs() throws Exception {
 
-        ChangeFlightRequest request = validChangeRequest();
+        CreateFlightRequest request = validRequest();
 
-        when(flightService.changeFlightName(eq(1L), any(ChangeFlightRequest.class)))
-                .thenThrow(new BusinessException("Flight name must contain only letters and spaces"));
+        when(flightService.createFlight(any(CreateFlightRequest.class)))
+                .thenThrow(new BusinessException("Flight with flight number already exists"));
 
-        mockMvc.perform(put("/api/v1/flights/{id}/name", 1L)
+        mockMvc.perform(post("/api/v1/flights")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Flight name must contain only letters and spaces"));
+                .andExpect(content().string("Flight with flight number already exists"));
 
-        verify(flightService).changeFlightName(eq(1L), any(ChangeFlightRequest.class));
+        verify(flightService).createFlight(any(CreateFlightRequest.class));
     }
-*/
 }
 

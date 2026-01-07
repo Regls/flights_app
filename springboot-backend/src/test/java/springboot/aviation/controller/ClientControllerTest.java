@@ -151,17 +151,17 @@ public class ClientControllerTest {
     @Test
     void shouldReturn400WhenBusinessExceptionOccurs() throws Exception {
 
-        ChangeClientRequest request = validChangeRequest();
+        CreateClientRequest request = validRequest();
 
-        when(clientService.changeClientName(eq(1L), any(ChangeClientRequest.class)))
-            .thenThrow(new BusinessException("Client names must contain only letters"));
+        when(clientService.createClient(any(CreateClientRequest.class)))
+            .thenThrow(new BusinessException("Client with CPF already exists"));
 
-        mockMvc.perform(put("/api/v1/clients/{id}/name", 1L)
+        mockMvc.perform(post("/api/v1/clients", 1L)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Client names must contain only letters"));
+                .andExpect(content().string("Client with CPF already exists"));
 
-        verify(clientService).changeClientName(eq(1L), any(ChangeClientRequest.class));
+        verify(clientService).createClient(any(CreateClientRequest.class));
     }
 }
