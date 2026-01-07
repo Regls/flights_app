@@ -44,7 +44,7 @@ public class AirlineController {
         return ResponseEntity.ok(airlineService.createAirline(request));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/name")
     public ResponseEntity<Airline> changeAirlineName(@PathVariable Long id, @RequestBody ChangeAirlineRequest request) {
         return ResponseEntity.ok(airlineService.changeAirlineName(id, request));
     }
