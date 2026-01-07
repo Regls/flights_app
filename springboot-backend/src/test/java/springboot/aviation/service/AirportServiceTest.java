@@ -248,7 +248,7 @@ class AirportServiceTest {
         when(airportRepository.findById(1L)).thenReturn(Optional.of(airport));
         when(airport.isOperational()).thenReturn(true);
 
-        when(flightRepository.findByAirportAndStatus(airport, FlightStatus.SCHEDULED))
+        when(flightRepository.findByDepartureAirportOrArrivalAirportAndStatus(airport, airport, FlightStatus.SCHEDULED))
             .thenReturn(List.of(flight1, flight2));
 
         airportService.close(1L);
@@ -261,18 +261,19 @@ class AirportServiceTest {
     }
 
     @Test
-    void shouldNotCancelCancelledFlightsWhenAirportIsClosed() {
+    void shouldNotCancelFlightsWhenNoScheduledWhenAirportIsClosed() {
         Airport airport = mock(Airport.class);
-        Flight cancelledFlight = mock(Flight.class);
 
         when(airportRepository.findById(1L)).thenReturn(Optional.of(airport));
         when(airport.isOperational()).thenReturn(true);
 
-        when(flightRepository.findByAirportAndStatus(any(), any())).thenReturn(List.of());
+        when(flightRepository.findByDepartureAirportOrArrivalAirportAndStatus(airport, airport, FlightStatus.SCHEDULED)).thenReturn(List.of());
 
         airportService.close(1L);
 
-        verify(cancelledFlight, never()).cancel();
+        verify(flightRepository).saveAll(List.of());
+        verify(airport).close();
+        verify(airportRepository).save(airport);
     }
     
 }

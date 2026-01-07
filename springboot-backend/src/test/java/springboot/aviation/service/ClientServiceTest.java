@@ -263,17 +263,18 @@ class ClientServiceTest {
     }
 
     @Test
-    void shouldNotCancelCancelledBookingsWhenClientIsDeactivated(){
+    void shouldNotCancelBookingsWhenNoCreatedOrConfirmedWhenClientIsDeactivated(){
         Client client = mock(Client.class);
-        Booking cancelledBooking = mock(Booking.class);
 
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
         when(client.isActive()).thenReturn(true);
 
-        when(bookingRepository.findByClientAndStatusIn(any(), any())).thenReturn(List.of());
+        when(bookingRepository.findByClientAndStatusIn(client, List.of(BookingStatus.CREATED, BookingStatus.CONFIRMED))).thenReturn(List.of());
 
         clientService.deactivate(1L);
 
-        verify(cancelledBooking, never()).cancel();
+        verify(bookingRepository).saveAll(List.of());
+        verify(client).deactivate();
+        verify(clientRepository).save(client);
     }
 }

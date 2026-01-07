@@ -258,17 +258,18 @@ class AirlineServiceTest {
     }
 
     @Test
-    void shouldNotCancelCancelledFlightsWhenAirlineIsDeactivated() {
+    void shouldNotCancelFlightsWhenNoScheduledWhenAirlineIsDeactivated() {
         Airline airline = mock(Airline.class);
-        Flight cancelledFlight = mock(Flight.class);
 
         when(airlineRepository.findById(1L)).thenReturn(Optional.of(airline));
         when(airline.isActive()).thenReturn(true);
 
-        when(flightRepository.findByAirlineAndStatus(any(), any())).thenReturn(List.of());
+        when(flightRepository.findByAirlineAndStatus(airline, FlightStatus.SCHEDULED)).thenReturn(List.of());
 
         airlineService.suspend(1L);
 
-        verify(cancelledFlight, never()).cancel();
+        verify(flightRepository).saveAll(List.of());
+        verify(airline).suspend();
+        verify(airlineRepository).save(airline);
     }
 }

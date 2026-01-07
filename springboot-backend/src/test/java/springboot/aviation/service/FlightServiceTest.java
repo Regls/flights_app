@@ -353,17 +353,18 @@ public class FlightServiceTest {
     }
 
     @Test
-    void shouldNotCancelCancelledBookingsWhenFlightIsCancelled() {
+    void shouldNotCancelBookingsWhenNoCreatedOrConfirmedWhenFlightIsCancelled() {
         Flight flight = mock(Flight.class);
-        Booking cancelledBooking = mock(Booking.class);
 
         when(flightRepository.findById(1L)).thenReturn(Optional.of(flight));
         when(flight.isScheduled()).thenReturn(true);
 
-        when(bookingRepository.findByFlightAndStatusIn(any(), any())).thenReturn(List.of());
+        when(bookingRepository.findByFlightAndStatusIn(flight, List.of(BookingStatus.CREATED, BookingStatus.CONFIRMED))).thenReturn(List.of());
 
         flightService.cancel(1L);
 
-        verify(cancelledBooking, never()).cancel();
+        verify(bookingRepository).saveAll(List.of());
+        verify(flight).cancel();
+        verify(flightRepository).save(flight);
     }
 }

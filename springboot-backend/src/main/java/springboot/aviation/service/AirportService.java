@@ -77,7 +77,7 @@ public class AirportService {
 
         if(!airport.isOperational()) throw new BusinessException("Airport is already closed");
 
-        List<Flight> scheduledFlights = flightRepository.findByAirportAndStatus(airport, FlightStatus.SCHEDULED);
+        List<Flight> scheduledFlights = flightRepository.findByDepartureAirportOrArrivalAirportAndStatus(airport, airport, FlightStatus.SCHEDULED);
 
         for (Flight flight : scheduledFlights) {
             flight.cancel();
