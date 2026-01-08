@@ -2,6 +2,7 @@ package springboot.aviation.dto.response;
 
 import springboot.aviation.model.Client;
 
+
 public class ClientResponse {
 
     public Long id;
@@ -21,6 +22,5 @@ public class ClientResponse {
         response.lastName = client.hasLastName();
         response.active = client.isActive();
         return response;
-
     }
 }

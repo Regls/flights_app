@@ -32,7 +32,6 @@ public class ClientController {
 
     @GetMapping
     public ResponseEntity<List<ClientResponse>> list() {
-
         List<ClientResponse> response = clientService.findAll()
             .stream()
             .map(ClientResponse::from)
@@ -43,7 +42,6 @@ public class ClientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ClientResponse> clientById(@PathVariable Long id) {
-
         Client client = clientService.findById(id);
 
         return ResponseEntity.ok(ClientResponse.from(client));
@@ -51,7 +49,6 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<ClientResponse> createClient(@RequestBody CreateClientRequest request) {
-        
         Client client = clientService.createClient(request);
 
         return ResponseEntity.ok(ClientResponse.from(client));
@@ -59,7 +56,6 @@ public class ClientController {
 
     @PutMapping("/{id}/name")
     public ResponseEntity<ClientResponse> changeClientName(@PathVariable Long id, @RequestBody ChangeClientRequest request) {
-        
         Client client= clientService.changeClientName(id, request);
 
         return ResponseEntity.ok(ClientResponse.from(client));

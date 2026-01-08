@@ -74,6 +74,18 @@ public class Airline {
         this.airlineName = airlineName;
     }
 
+    public Long hasId() {
+        return this.id;
+    }
+
+    public String hasIataCode() {
+        return this.iataCode;
+    }
+
+    public String hasName() {
+        return this.airlineName;
+    }
+
     public boolean hasIataCode(String iataCode) {
         return this.iataCode.equals(iataCode);
     }

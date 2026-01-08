@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springboot.aviation.dto.request.ChangeAirlineRequest;
 import springboot.aviation.dto.request.CreateAirlineRequest;
+import springboot.aviation.dto.response.AirlineResponse;
 import springboot.aviation.model.Airline;
 import springboot.aviation.service.AirlineService;
 
@@ -30,23 +31,34 @@ public class AirlineController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Airline>> list() {
-        return ResponseEntity.ok(airlineService.findAll());
+    public ResponseEntity<List<AirlineResponse>> list() {
+        List<AirlineResponse> response = airlineService.findAll()
+            .stream()
+            .map(AirlineResponse::from)
+            .toList();
+        
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Airline> airlineById(@PathVariable Long id) {
-        return ResponseEntity.ok(airlineService.findById(id));
+    public ResponseEntity<AirlineResponse> airlineById(@PathVariable Long id) {
+        Airline airline = airlineService.findById(id);
+
+        return ResponseEntity.ok(AirlineResponse.from(airline));
     }
 
     @PostMapping
-    public ResponseEntity<Airline> createAirline(@RequestBody CreateAirlineRequest request) {
-        return ResponseEntity.ok(airlineService.createAirline(request));
+    public ResponseEntity<AirlineResponse> createAirline(@RequestBody CreateAirlineRequest request) {
+        Airline airline = airlineService.createAirline(request);
+
+        return ResponseEntity.ok(AirlineResponse.from(airline));
     }
 
     @PutMapping("/{id}/name")
-    public ResponseEntity<Airline> changeAirlineName(@PathVariable Long id, @RequestBody ChangeAirlineRequest request) {
-        return ResponseEntity.ok(airlineService.changeAirlineName(id, request));
+    public ResponseEntity<AirlineResponse> changeAirlineName(@PathVariable Long id, @RequestBody ChangeAirlineRequest request) {
+        Airline airline = airlineService.changeAirlineName(id, request);
+
+        return ResponseEntity.ok(AirlineResponse.from(airline));
     }
 
     @PutMapping("/{id}/activate")
