@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import springboot.aviation.dto.request.CreateFlightRequest;
+import springboot.aviation.dto.response.FlightResponse;
 import springboot.aviation.model.Flight;
 import springboot.aviation.service.FlightService;
 
@@ -28,18 +29,27 @@ public class FlightController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Flight>> list() {
-        return ResponseEntity.ok(flightService.findAll());
+    public ResponseEntity<List<FlightResponse>> list() {
+        List<FlightResponse> response = flightService.findAll()
+            .stream()
+            .map(FlightResponse::from)
+            .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Flight> flightById(@PathVariable Long id) {
-        return ResponseEntity.ok(flightService.findById(id));
+    public ResponseEntity<FlightResponse> flightById(@PathVariable Long id) {
+        Flight flight = flightService.findById(id);
+
+        return ResponseEntity.ok(FlightResponse.from(flight));
     }
 
     @PostMapping
-    public ResponseEntity<Flight> createFlight(@RequestBody CreateFlightRequest request) {
-        return ResponseEntity.ok(flightService.createFlight(request));
+    public ResponseEntity<FlightResponse> createFlight(@RequestBody CreateFlightRequest request) {
+        Flight flight = flightService.createFlight(request);
+
+        return ResponseEntity.ok(FlightResponse.from(flight));
     }
 
     @PutMapping("/{id}/depart")

@@ -99,6 +99,39 @@ public class Flight {
         }
     }
 
+    public Long hasId() {
+        return this.id;
+    }
+
+    public String hasFlightNumber() {
+        return this.flightNumber;
+    }
+
+    public Airline hasAirline() {
+        return this.airline;
+    }
+
+    public Airport hasDepartureAirport() {
+        return this.departureAirport;
+    }
+
+    public Airport hasArrivalAirport() {
+        return this.arrivalAirport;
+    }
+
+    public LocalDateTime hasDepartureTime() {
+        return this.departureTime;
+    }
+
+    public LocalDateTime hasArrivalTime() {
+        return this.arrivalTime;
+    }
+
+    public FlightStatus hasStatus() {
+        return this.status;
+    }
+
+
     public boolean hasFlightNumber(String flightNumber) {
         return this.flightNumber.equals(flightNumber);
     }
