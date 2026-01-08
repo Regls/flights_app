@@ -87,6 +87,22 @@ public class Airport {
         this.airportName = airportName;
     }
 
+    public Long hasId() {
+        return this.id;
+    }
+
+    public String hasIataCode() {
+        return this.iataCode;
+    }
+
+    public String hasName() {
+        return this.airportName;
+    }
+
+    public String hasCity() {
+        return this.city;
+    }
+
     public boolean hasIataCode(String iataCode){
         return this.iataCode.equals(iataCode);
     }

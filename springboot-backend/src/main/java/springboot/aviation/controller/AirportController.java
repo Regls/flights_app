@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springboot.aviation.dto.request.ChangeAirportRequest;
 import springboot.aviation.dto.request.CreateAirportRequest;
+import springboot.aviation.dto.response.AirportResponse;
 import springboot.aviation.model.Airport;
 import springboot.aviation.service.AirportService;
 
@@ -30,23 +31,34 @@ public class AirportController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Airport>> list() {
-        return ResponseEntity.ok(airportService.findAll());
+    public ResponseEntity<List<AirportResponse>> list() {
+        List<AirportResponse> response = airportService.findAll()
+            .stream()
+            .map(AirportResponse::from)
+            .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Airport> airportById(@PathVariable Long id) {
-        return ResponseEntity.ok(airportService.findById(id));
+    public ResponseEntity<AirportResponse> airportById(@PathVariable Long id) {
+        Airport airport = airportService.findById(id);
+
+        return ResponseEntity.ok(AirportResponse.from(airport));
     }
 
     @PostMapping
-    public ResponseEntity<Airport> createAirport(@RequestBody CreateAirportRequest request) {
-        return ResponseEntity.ok(airportService.createAirport(request));
+    public ResponseEntity<AirportResponse> createAirport(@RequestBody CreateAirportRequest request) {
+        Airport airport = airportService.createAirport(request);
+
+        return ResponseEntity.ok(AirportResponse.from(airport));
     }
 
     @PutMapping("/{id}/name")
-    public ResponseEntity<Airport> changeAirportName(@PathVariable Long id, @RequestBody ChangeAirportRequest request) {
-        return ResponseEntity.ok(airportService.changeAirportName(id, request));
+    public ResponseEntity<AirportResponse> changeAirportName(@PathVariable Long id, @RequestBody ChangeAirportRequest request) {
+        Airport airport = airportService.changeAirportName(id, request);
+
+        return ResponseEntity.ok(AirportResponse.from(airport));
     }
 
     @PutMapping("/{id}/open")
