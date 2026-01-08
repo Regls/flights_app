@@ -29,6 +29,11 @@ public class Booking {
     @Column(name = "status", nullable = false)
     private BookingStatus status;
 
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = LocalDateTime.now();
+    }
+
     protected Booking() {
     }
 
@@ -60,6 +65,26 @@ public class Booking {
         if (!flight.isScheduled()){
             throw new BusinessException(BookingMessages.FLIGHT_SCHEDULED);
         }
+    }
+
+    public Long hasId() {
+        return this.id;
+    }
+
+    public Client hasClient() {
+        return this.client;
+    }
+
+    public Flight hasFlight() {
+        return this.flight;
+    }
+
+    public LocalDateTime hasCreatedAt() {
+        return this.createdAt;
+    }
+
+    public BookingStatus hasStatus() {
+        return this.status;
     }
 
     public boolean hasClient(String cpf){

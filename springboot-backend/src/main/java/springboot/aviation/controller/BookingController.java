@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import springboot.aviation.dto.request.CreateBookingRequest;
+import springboot.aviation.dto.response.BookingResponse;
 import springboot.aviation.model.Booking;
 import springboot.aviation.service.BookingService;
 
@@ -28,18 +29,27 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Booking>> list() {
-        return ResponseEntity.ok(bookingService.findAll());
+    public ResponseEntity<List<BookingResponse>> list() {
+        List<BookingResponse> response = bookingService.findAll()
+            .stream()
+            .map(BookingResponse::from)
+            .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Booking> bookingById(@PathVariable Long id) {
-        return ResponseEntity.ok(bookingService.findById(id));
+    public ResponseEntity<BookingResponse> bookingById(@PathVariable Long id) {
+        Booking booking = bookingService.findById(id);
+
+        return ResponseEntity.ok(BookingResponse.from(booking));
     }
 
     @PostMapping
-    public ResponseEntity<Booking> createBooking(@RequestBody CreateBookingRequest request) {
-        return ResponseEntity.ok(bookingService.createBooking(request));
+    public ResponseEntity<BookingResponse> createBooking(@RequestBody CreateBookingRequest request) {
+        Booking booking = bookingService.createBooking(request);
+
+        return ResponseEntity.ok(BookingResponse.from(booking));
     }
 
     @PutMapping("/{id}/confirm")
