@@ -1,4 +1,4 @@
-package springboot.aviation.dto;
+package springboot.aviation.dto.request;
 
 import java.time.LocalDateTime;
 

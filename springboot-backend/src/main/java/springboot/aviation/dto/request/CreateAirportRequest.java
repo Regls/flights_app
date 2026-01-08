@@ -1,4 +1,4 @@
-package springboot.aviation.dto;
+package springboot.aviation.dto.request;
 
 public class CreateAirportRequest {
     public String iataCode;

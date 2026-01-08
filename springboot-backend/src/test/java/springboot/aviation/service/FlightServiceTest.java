@@ -22,9 +22,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import springboot.aviation.dto.request.CreateFlightRequest;
 import springboot.aviation.exception.BusinessException;
 import springboot.aviation.exception.ResourceNotFoundException;
-import springboot.aviation.dto.CreateFlightRequest;
 import springboot.aviation.model.Flight;
 import springboot.aviation.model.Airline;
 import springboot.aviation.model.Airport;

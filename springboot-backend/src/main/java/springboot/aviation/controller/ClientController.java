@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import springboot.aviation.dto.CreateClientRequest;
-import springboot.aviation.dto.ChangeClientRequest;
+import springboot.aviation.dto.request.ChangeClientRequest;
+import springboot.aviation.dto.request.CreateClientRequest;
+import springboot.aviation.dto.response.ClientResponse;
 import springboot.aviation.model.Client;
 import springboot.aviation.service.ClientService;
 
@@ -30,23 +31,38 @@ public class ClientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Client>> list() {
-        return ResponseEntity.ok(clientService.findAll());
+    public ResponseEntity<List<ClientResponse>> list() {
+
+        List<ClientResponse> response = clientService.findAll()
+            .stream()
+            .map(ClientResponse::from)
+            .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> clientById(@PathVariable Long id) {
-        return ResponseEntity.ok(clientService.findById(id));
+    public ResponseEntity<ClientResponse> clientById(@PathVariable Long id) {
+
+        Client client = clientService.findById(id);
+
+        return ResponseEntity.ok(ClientResponse.from(client));
     }
 
     @PostMapping
-    public ResponseEntity<Client> createClient(@RequestBody CreateClientRequest request) {
-        return ResponseEntity.ok(clientService.createClient(request));
+    public ResponseEntity<ClientResponse> createClient(@RequestBody CreateClientRequest request) {
+        
+        Client client = clientService.createClient(request);
+
+        return ResponseEntity.ok(ClientResponse.from(client));
     }
 
     @PutMapping("/{id}/name")
-    public ResponseEntity<Client> changeClientName(@PathVariable Long id, @RequestBody ChangeClientRequest request) {
-        return ResponseEntity.ok(clientService.changeClientName(id, request));
+    public ResponseEntity<ClientResponse> changeClientName(@PathVariable Long id, @RequestBody ChangeClientRequest request) {
+        
+        Client client= clientService.changeClientName(id, request);
+
+        return ResponseEntity.ok(ClientResponse.from(client));
     }
 
     @PutMapping("/{id}/activate")

@@ -84,6 +84,22 @@ public class Client {
         this.clientLastName = clientLastName;
     }
 
+    public Long hasId(){
+        return this.id;
+    }
+
+    public String hasCpf(){
+        return this.cpf;
+    }
+
+    public String hasFirstName(){
+        return this.clientFirstName;
+    }
+
+    public String hasLastName(){
+        return this.clientLastName;
+    }
+
     public boolean hasCpf(String cpf){
         return this.cpf.equals(cpf);
     }

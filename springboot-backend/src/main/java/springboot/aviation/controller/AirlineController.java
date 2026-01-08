@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import springboot.aviation.dto.CreateAirlineRequest;
-import springboot.aviation.dto.ChangeAirlineRequest;
+import springboot.aviation.dto.request.ChangeAirlineRequest;
+import springboot.aviation.dto.request.CreateAirlineRequest;
 import springboot.aviation.model.Airline;
 import springboot.aviation.service.AirlineService;
 

@@ -18,8 +18,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import springboot.aviation.dto.ChangeAirportRequest;
-import springboot.aviation.dto.CreateAirportRequest;
+import springboot.aviation.dto.request.ChangeAirportRequest;
+import springboot.aviation.dto.request.CreateAirportRequest;
 import springboot.aviation.exception.BusinessException;
 import springboot.aviation.exception.ResourceNotFoundException;
 import springboot.aviation.model.Airport;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import springboot.aviation.dto.CreateFlightRequest;
+import springboot.aviation.dto.request.CreateFlightRequest;
 import springboot.aviation.model.Flight;
 import springboot.aviation.service.FlightService;
 

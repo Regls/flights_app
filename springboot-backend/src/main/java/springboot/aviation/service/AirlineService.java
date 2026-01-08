@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import springboot.aviation.dto.CreateAirlineRequest;
-import springboot.aviation.dto.ChangeAirlineRequest;
+import springboot.aviation.dto.request.ChangeAirlineRequest;
+import springboot.aviation.dto.request.CreateAirlineRequest;
 import springboot.aviation.exception.BusinessException;
 import springboot.aviation.exception.ResourceNotFoundException;
 import springboot.aviation.model.Airline;

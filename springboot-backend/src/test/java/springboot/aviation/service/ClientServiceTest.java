@@ -21,10 +21,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import springboot.aviation.dto.request.ChangeClientRequest;
+import springboot.aviation.dto.request.CreateClientRequest;
 import springboot.aviation.exception.BusinessException;
 import springboot.aviation.exception.ResourceNotFoundException;
-import springboot.aviation.dto.ChangeClientRequest;
-import springboot.aviation.dto.CreateClientRequest;
 import springboot.aviation.model.Booking;
 import springboot.aviation.model.BookingStatus;
 import springboot.aviation.model.Client;
