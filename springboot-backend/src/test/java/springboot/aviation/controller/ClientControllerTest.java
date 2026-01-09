@@ -122,16 +122,20 @@ public class ClientControllerTest {
     void shouldActivateClient() throws Exception {
 
         mockMvc.perform(put("/api/v1/clients/{id}/activate", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Client with id 1 was successfully activated"));
 
         verify(clientService).activate(1L);
     }
+    //<Client with id 1 was sucessfully activated>
+    //<Client with id 1 was successfully activated>
 
     @Test
     void shouldDeactivateClient() throws Exception {
 
         mockMvc.perform(put("/api/v1/clients/{id}/deactivate", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Client with id 1 was successfully deactivated"));
 
         verify(clientService).deactivate(1L);
     }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springboot.aviation.dto.request.ChangeClientRequest;
 import springboot.aviation.dto.request.CreateClientRequest;
 import springboot.aviation.dto.response.ClientResponse;
+import springboot.aviation.dto.response.MessageResponse;
 import springboot.aviation.model.Client;
 import springboot.aviation.service.ClientService;
 
@@ -62,15 +63,15 @@ public class ClientController {
     }
 
     @PutMapping("/{id}/activate")
-    public ResponseEntity<Void> activate(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> activate(@PathVariable Long id) {
         clientService.activate(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Client with id " + id + " was successfully activated"));
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivate(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> deactivate(@PathVariable Long id) {
         clientService.deactivate(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Client with id " + id + " was successfully deactivated"));
     }
     
 }
