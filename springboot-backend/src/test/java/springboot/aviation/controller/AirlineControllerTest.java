@@ -120,7 +120,8 @@ public class AirlineControllerTest {
     void shouldOpenAirline() throws Exception {
 
         mockMvc.perform(put("/api/v1/airlines/{id}/activate", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Airline with id 1 was successfully activated"));
 
         verify(airlineService).activate(1L);
     }
@@ -129,7 +130,8 @@ public class AirlineControllerTest {
     void shouldCloseAirline() throws Exception {
 
         mockMvc.perform(put("/api/v1/airlines/{id}/suspend", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Airline with id 1 was successfully suspended"));
 
         verify(airlineService).suspend(1L);
     }

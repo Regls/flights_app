@@ -121,7 +121,8 @@ public class AirportControllerTest {
     void shouldOpenAirport() throws Exception {
 
         mockMvc.perform(put("/api/v1/airports/{id}/open", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Airport with id 1 was successfully opened"));
 
         verify(airportService).open(1L);
     }
@@ -130,7 +131,8 @@ public class AirportControllerTest {
     void shouldCloseAirport() throws Exception {
 
         mockMvc.perform(put("/api/v1/airports/{id}/close", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Airport with id 1 was successfully closed"));
 
         verify(airportService).close(1L);
     }

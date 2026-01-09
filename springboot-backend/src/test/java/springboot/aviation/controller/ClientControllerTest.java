@@ -127,8 +127,6 @@ public class ClientControllerTest {
 
         verify(clientService).activate(1L);
     }
-    //<Client with id 1 was sucessfully activated>
-    //<Client with id 1 was successfully activated>
 
     @Test
     void shouldDeactivateClient() throws Exception {

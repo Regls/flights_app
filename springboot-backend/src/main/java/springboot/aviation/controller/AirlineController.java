@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springboot.aviation.dto.request.ChangeAirlineRequest;
 import springboot.aviation.dto.request.CreateAirlineRequest;
 import springboot.aviation.dto.response.AirlineResponse;
+import springboot.aviation.dto.response.MessageResponse;
 import springboot.aviation.model.Airline;
 import springboot.aviation.service.AirlineService;
 
@@ -62,15 +63,15 @@ public class AirlineController {
     }
 
     @PutMapping("/{id}/activate")
-    public ResponseEntity<Void> activate(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> activate(@PathVariable Long id) {
         airlineService.activate(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Airline with id " + id + " was successfully activated"));
     }
 
     @PutMapping("/{id}/suspend")
-    public ResponseEntity<Void> suspend(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> suspend(@PathVariable Long id) {
         airlineService.suspend(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Airline with id " + id + " was successfully suspended"));
     }
 
 }

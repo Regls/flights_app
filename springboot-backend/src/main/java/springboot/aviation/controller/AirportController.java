@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springboot.aviation.dto.request.ChangeAirportRequest;
 import springboot.aviation.dto.request.CreateAirportRequest;
 import springboot.aviation.dto.response.AirportResponse;
+import springboot.aviation.dto.response.MessageResponse;
 import springboot.aviation.model.Airport;
 import springboot.aviation.service.AirportService;
 
@@ -62,15 +63,15 @@ public class AirportController {
     }
 
     @PutMapping("/{id}/open")
-    public ResponseEntity<Void> open(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> open(@PathVariable Long id) {
         airportService.open(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Airport with id " + id + " was successfully opened"));
     }
 
     @PutMapping("/{id}/close")
-    public ResponseEntity<Void> close(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> close(@PathVariable Long id) {
         airportService.close(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Airport with id " + id + " was successfully closed"));
     }
 
 }
