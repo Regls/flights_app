@@ -1,0 +1,31 @@
+<h2> Client List</h2>
+<table class = "table table-striped">
+    <thead>
+        <tr>
+            <th> CPF </th>
+            <th> First Name </th>
+            <th> Last Name </th>
+            <th> Status </th>
+            <th> Actions </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let client of clients" >
+            <td> {{ client.cpf }} </td>
+            <td> {{ client.clientFirstName }} </td>
+            <td> {{ client.clientLastName }} </td>
+            <td>
+                <span [ngclass]="client.status ? 'text-sucess' : 'text-danger'">
+                    {{ client.status ? 'Active' : 'Inactive' }}
+                </span>
+            </td>
+            <td>
+                <button (click) = "deleteClient(client.id)" class = "btn btn-danger" style="margin-left: 10px"> Delete</button>
+                <!--
+                <button (click) = "updateClient(client.id)" class = "btn btn-info"> Update</button>
+                <button (click) = "clientDetails(client.id)" class = "btn btn-info" style="margin-left: 10px"> View</button>
+                -->
+            </td>
+        </tr>
+    </tbody>
+</table>
