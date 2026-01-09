@@ -109,7 +109,8 @@ public class FlightControllerTest {
     void shouldDepartFlight() throws Exception {
 
         mockMvc.perform(put("/api/v1/flights/{id}/depart", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Flight with id 1 was successfully departed"));
 
         verify(flightService).depart(1L);
     }
@@ -118,7 +119,8 @@ public class FlightControllerTest {
     void shouldArriveFlight() throws Exception {
 
         mockMvc.perform(put("/api/v1/flights/{id}/arrive", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Flight with id 1 was successfully arrived"));
 
         verify(flightService).arrive(1L);
     }
@@ -127,7 +129,8 @@ public class FlightControllerTest {
     void shouldCancelFlight() throws Exception {
 
         mockMvc.perform(put("/api/v1/flights/{id}/cancel", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Flight with id 1 was successfully cancelled"));
 
         verify(flightService).cancel(1L);
     }

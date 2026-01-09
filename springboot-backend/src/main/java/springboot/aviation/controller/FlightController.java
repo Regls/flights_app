@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springboot.aviation.dto.request.CreateFlightRequest;
 import springboot.aviation.dto.response.FlightResponse;
+import springboot.aviation.dto.response.MessageResponse;
 import springboot.aviation.model.Flight;
 import springboot.aviation.service.FlightService;
 
@@ -53,21 +54,21 @@ public class FlightController {
     }
 
     @PutMapping("/{id}/depart")
-    public ResponseEntity<Flight> depart(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> depart(@PathVariable Long id) {
         flightService.depart(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Flight with id " + id + " was successfully departed"));
     }
 
     @PutMapping("/{id}/arrive")
-    public ResponseEntity<Flight> arrive(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> arrive(@PathVariable Long id) {
         flightService.arrive(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Flight with id " + id + " was successfully arrived"));
     }
 
     @PutMapping("/{id}/cancel")
-    public ResponseEntity<Flight> cancel(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> cancel(@PathVariable Long id) {
         flightService.cancel(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Flight with id " + id + " was successfully cancelled"));
     }
     
 }

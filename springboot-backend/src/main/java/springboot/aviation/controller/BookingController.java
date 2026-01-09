@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springboot.aviation.dto.request.CreateBookingRequest;
 import springboot.aviation.dto.response.BookingResponse;
+import springboot.aviation.dto.response.MessageResponse;
 import springboot.aviation.model.Booking;
 import springboot.aviation.service.BookingService;
 
@@ -53,14 +54,14 @@ public class BookingController {
     }
 
     @PutMapping("/{id}/confirm")
-    public ResponseEntity<Booking> confirm(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> confirm(@PathVariable Long id) {
         bookingService.confirm(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Booking with id " + id + " was successfully confirmed"));
     }
 
     @PutMapping("/{id}/cancel")
-    public ResponseEntity<Booking> cancel(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> cancel(@PathVariable Long id) {
         bookingService.cancel(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of("Booking with id " + id + " was successfully cancelled"));
     }
 }

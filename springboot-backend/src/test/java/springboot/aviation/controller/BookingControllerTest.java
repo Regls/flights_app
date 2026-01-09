@@ -109,7 +109,8 @@ public class BookingControllerTest {
     void shouldDepartBooking() throws Exception {
 
         mockMvc.perform(put("/api/v1/bookings/{id}/confirm", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Booking with id 1 was successfully confirmed"));
 
         verify(bookingService).confirm(1L);
     }
@@ -118,7 +119,8 @@ public class BookingControllerTest {
     void shouldCancelBooking() throws Exception {
 
         mockMvc.perform(put("/api/v1/bookings/{id}/cancel", 1L))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Booking with id 1 was successfully cancelled"));
 
         verify(bookingService).cancel(1L);
     }
