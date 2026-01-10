@@ -102,6 +102,21 @@ fdescribe('ClientListComponent', () => {
     expect(rows[1].textContent).toContain('Jane');
   });
 
+  //test button details
+  it('should call clientDetails when details button is clicked', () => {
+    spyOn(component, 'clientDetails');
+
+    component.clients = mockClients;
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('.details-btn') as HTMLButtonElement;
+
+    button.click();
+
+    expect(component.clientDetails).toHaveBeenCalledWith(1);
+  });
+
   //test button update
   it('should call updateClient when update button is clicked', () => {
     spyOn(component, 'updateClient');
@@ -117,7 +132,22 @@ fdescribe('ClientListComponent', () => {
     expect(component.updateClient).toHaveBeenCalledWith(1);
   });
 
-  //test html navigation
+  //test button delete
+  it('should call deleteClient when delete button is clicked', () => {
+    spyOn(component, 'deleteClient');
+
+    component.clients = mockClients;
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('.delete-btn') as HTMLButtonElement;
+
+    button.click();
+
+    expect(component.deleteClient).toHaveBeenCalledWith(1);
+  });
+
+  //test html navigation with details button
   it('should navigate when clicking details button', () => {
     component.clients = mockClients;
     fixture.detectChanges();
@@ -129,4 +159,34 @@ fdescribe('ClientListComponent', () => {
 
     expect(router.navigate).toHaveBeenCalledWith(['client-details', 1]);
   });
+
+  //test html navigation with update button
+  it('should navigate when clicking update button', () => {
+    component.clients = mockClients;
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('.update-btn') as HTMLButtonElement;
+
+    button.click();
+
+    expect(router.navigate).toHaveBeenCalledWith(['update-client', 1]);
+  });
+
+  //test html navigation with delete button (return to list itself)
+  it('should call service and reload clients when delete button is clicked', () => {
+  spyOn(clientService, 'deleteClient').and.returnValue(of({}));
+  spyOn(clientService, 'getClients').and.returnValue(of(mockClients));
+
+  component.clients = mockClients;
+  fixture.detectChanges();
+
+  const compiled = fixture.nativeElement as HTMLElement;
+  const button = compiled.querySelector('.delete-btn') as HTMLButtonElement;
+
+  button.click();
+
+  expect(clientService.deleteClient).toHaveBeenCalledWith(1);
+  expect(clientService.getClients).toHaveBeenCalled();
+});
 });

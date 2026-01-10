@@ -20,9 +20,9 @@
                 </span>
             </td>
             <td>
+                <button (click) = "clientDetails(client.id)" class = "btn btn-info details-btn"> View</button>
+                <button (click) = "updateClient(client.id)" class = "btn btn-info update-btn" style="margin-left: 10px"> Update</button>
                 <button (click) = "deleteClient(client.id)" class = "btn btn-danger delete-btn" style="margin-left: 10px"> Delete</button>
-                <button (click) = "updateClient(client.id)" class = "btn btn-info update-btn"> Update</button>
-                <button (click) = "clientDetails(client.id)" class = "btn btn-info details-btn" style="margin-left: 10px"> View</button>
             </td>
         </tr>
     </tbody>
