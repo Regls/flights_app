@@ -86,4 +86,47 @@ fdescribe('ClientListComponent', () => {
     expect(clientService.getClients).toHaveBeenCalled();
   });
 
+  //test html
+  it('should render clients in the table', () => {
+    spyOn(clientService, 'getClients').and.returnValue(of(mockClients));
+    
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const rows = compiled.querySelectorAll('tbody tr');
+
+
+    expect(rows.length).toBe(2);
+    expect(rows[0].textContent).toContain('Renan');
+    expect(rows[1].textContent).toContain('Jane');
+  });
+
+  //test button update
+  it('should call updateClient when update button is clicked', () => {
+    spyOn(component, 'updateClient');
+
+    component.clients = mockClients;
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('.update-btn') as HTMLButtonElement;
+
+    button.click();
+
+    expect(component.updateClient).toHaveBeenCalledWith(1);
+  });
+
+  //test html navigation
+  it('should navigate when clicking details button', () => {
+    component.clients = mockClients;
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('.details-btn') as HTMLButtonElement;
+
+    button.click();
+
+    expect(router.navigate).toHaveBeenCalledWith(['client-details', 1]);
+  });
 });
