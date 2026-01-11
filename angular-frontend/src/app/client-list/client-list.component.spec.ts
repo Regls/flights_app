@@ -7,7 +7,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Client } from '../client';
 
 
-fdescribe('ClientListComponent', () => {
+describe('ClientListComponent', () => {
   let component: ClientListComponent;
   let fixture: ComponentFixture<ClientListComponent>;
   let clientService: ClientService;
