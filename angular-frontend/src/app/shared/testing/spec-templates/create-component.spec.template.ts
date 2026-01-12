@@ -1,35 +1,49 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { CreateClientComponent } from './create-client.component';
-import { ClientService } from '../client.service';
+/**
+ * ⚠️ CREATE SPEC TEMPLATE
+ * ----------------
+ * This file is a template and MUST NOT be executed.
+ * Do not rename to *.spec.ts
+ * 
+ * Replace:
+ * - Entity -> Client / Airport / Airline / Flight / Booking (entity -> x)
+ * - createEntity -> createX
+ * - /entitys -> route
+ * 
+ * - S-tier: core behavior
+ * - A-tier: http errors
+ * - B-tier: UX behavior
+ * - C-tier: fallback / defensive
+*/
+
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
-import { Client } from '../client';
-import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 
-describe('CreateClientComponent', () => {
-  let component: CreateClientComponent;
-  let fixture: ComponentFixture<CreateClientComponent>;
-  let clientService: ClientService;
+import { CreateEntityComponent } from './create-entity.component';
+import { EntityService } from '../entity.service';
+import { Entity } from '../entity';
+
+describe('CreateEntityComponent', () => {
+  let component: CreateEntityComponent;
+  let fixture: ComponentFixture<CreateEntityComponent>;
+  let entityService: EntityService;
   let router: Router;
 
-  const mockClient: Client = {
-    id: 1,
-    cpf: '12345678901',
-    clientFirstName: 'Renan',
-    clientLastName: 'Reginato',
-    status: true
+  const mockEntity: Entity = {
+    id: 1
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateClientComponent ],
+      declarations: [ CreateEntityComponent ],
       imports: [ FormsModule ],
       providers: [
         {
-          provide: ClientService,
+          provide: EntityService,
           useValue: {
-            createClient: jasmine.createSpy('createClient')
+            createEntity: jasmine.createSpy('createEntity')
           }
         },
         {
@@ -43,9 +57,9 @@ describe('CreateClientComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateClientComponent);
+    fixture = TestBed.createComponent(CreateEntityComponent);
     component = fixture.componentInstance;
-    clientService = TestBed.inject(ClientService);
+    entityService = TestBed.inject(EntityService);
     router = TestBed.inject(Router);
     fixture.detectChanges();
   });
@@ -57,31 +71,31 @@ describe('CreateClientComponent', () => {
 
   //test service save and navigate (S-tier)
   it('should call service and navigate on submit', () => {
-    (clientService.createClient as jasmine.Spy).and.returnValue(of({}));
+    (entityService.createEntity as jasmine.Spy).and.returnValue(of({}));
 
-    component.client = mockClient
+    component.entity = mockEntity
 
     component.onSubmit();
 
-    expect(clientService.createClient).toHaveBeenCalledWith(mockClient);
-    expect(router.navigate).toHaveBeenCalledWith(['/clients']);
+    expect(entityService.createEntity).toHaveBeenCalledWith(mockEntity);
+    expect(router.navigate).toHaveBeenCalledWith(['/entities']);
     expect(component.isSubmitting).toBe(true);
   });
 
   //test http error message(A-tier)
   it('should show http error message when service fails', () => {
     const errorResponse = new HttpErrorResponse({
-      error: { message: 'CPF already exists' },
+      error: { message: 'Entity already exists' },
       status: 400,
       statusText: 'Bad Request'
     });
 
-    (clientService.createClient as jasmine.Spy)
+    (entityService.createEntity as jasmine.Spy)
       .and.returnValue(throwError(errorResponse));
 
     component.onSubmit();
 
-    expect(component.errorMessage).toBe('CPF already exists');
+    expect(component.errorMessage).toBe('Entity already exists');
     expect(component.isSubmitting).toBe(false);
   });
 
@@ -96,8 +110,8 @@ describe('CreateClientComponent', () => {
   });
 
   //test error message (C-tier)
-  it('should show error message when service fails', () => {
-    (clientService.createClient as jasmine.Spy).and.returnValue(throwError({ message: 'Error' }));
+  it('should show generic error message when service fails', () => {
+    (entityService.createEntity as jasmine.Spy).and.returnValue(throwError({ message: 'Error' }));
 
     component.onSubmit();
 
