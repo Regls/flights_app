@@ -12,26 +12,49 @@ export class UpdateClientComponent implements OnInit {
 
   id: number;
   client: Client = new Client();
+  errorMessage: string | null = null;
+  isSubmitting = false;
+
   constructor(private clientService: ClientService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.clientService.getClientById(this.id).subscribe(data => {
-      this.client = data;
-    }, error => console.log(error));
+    this.clientService.getClientById(this.id).subscribe({
+      next: data => {
+          this.client = data;
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+        this.isSubmitting = false;
+      }
+    });
   }
 
-  onSubmit(){
-    this.clientService.updateClient(this.id, this.client).subscribe( data =>{
-      this.goToClientList();
-    }
-    , error => console.log(error));
+  saveClient(): void {
+    this.isSubmitting = true;
+    this.errorMessage = null;
+
+    
+    this.clientService.updateClient(this.id, this.client).subscribe({
+      next: () => {
+        this.goToClientList();
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+        this.isSubmitting = false;
+      }
+    });
   }
 
   goToClientList(){
     this.router.navigate(['/clients']);
+  }
+
+  onSubmit(){
+    this.saveClient();
   }
 }

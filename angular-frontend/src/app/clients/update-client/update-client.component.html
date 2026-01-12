@@ -13,8 +13,12 @@
             <input type="text" class ="form-control" id = "clientLastName"
                 [(ngModel)] = "client.clientLastName" name = "clientLastName">
         </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+            {{ errorMessage }}
+        </div>
     
-        <button class = "btn btn-success" type ="submit">Submit</button>
+        <button class = "btn btn-success" type ="submit" [disabled]="isSubmitting">Submit</button>
     
     </form>
     </div> 

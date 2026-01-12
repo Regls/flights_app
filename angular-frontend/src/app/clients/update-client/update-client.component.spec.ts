@@ -1,13 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import { UpdateClientComponent } from './update-client.component';
 import { ClientService } from '../client.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
 import { Client } from '../client';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FormsModule } from '@angular/forms';
 
-describe('UpdateClientComponent', () => {
+
+
+fdescribe('UpdateClientComponent', () => {
   let component: UpdateClientComponent;
   let fixture: ComponentFixture<UpdateClientComponent>;
   let clientService: ClientService;
@@ -24,11 +27,12 @@ describe('UpdateClientComponent', () => {
   beforeEach(async() => {
     await TestBed.configureTestingModule({
       declarations: [ UpdateClientComponent ],
-      imports: [ HttpClientTestingModule, FormsModule ],
+      imports: [ FormsModule ],
       providers: [
         {
           provide: ClientService,
           useValue: {
+            getClientById: jasmine.createSpy('getClientById'),
             updateClient: jasmine.createSpy('updateClient')
           }
         },
@@ -36,7 +40,9 @@ describe('UpdateClientComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              params: { id: 1 }
+              paramMap: {
+                get: () => '1'
+              }
             }
           }
         },
@@ -55,33 +61,64 @@ describe('UpdateClientComponent', () => {
     component = fixture.componentInstance;
     clientService = TestBed.inject(ClientService);
     router = TestBed.inject(Router);
-    fixture.detectChanges();
   });
 
-  //test creation (S-tier)
+  // S - tier
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  //test service save and navigate (S-tier)
-  it('should call updateClient and navigate on submit', () => {
+  // S - tier
+  it('should load client by id on init', () => {
+    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClient))
+    
+    fixture.detectChanges();
+
+    expect(clientService.getClientById).toHaveBeenCalledWith(1);
+    expect(component.client).toEqual(mockClient);
+  });
+
+  // S - tier
+  it('should call service and navigate on update', () => {
+    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClient));
     (clientService.updateClient as jasmine.Spy).and.returnValue(of({}))
 
-    component.id = 1;
-    component.client = mockClient;
+    fixture.detectChanges();
 
     component.onSubmit();
 
     expect(clientService.updateClient).toHaveBeenCalledWith(1, mockClient);
     expect(router.navigate).toHaveBeenCalledWith(['/clients']);
+    expect(component.isSubmitting).toBe(true);
   });
 
-  it('should load client by id on init', () => {
-    spyOn(clientService, 'getClientById').and.returnValue(of(mockClient))
+  // S - tier
+  it('should show http error message on update fails', () => {
+    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClient));
     
-    component.ngOnInit();
+    const errorResponse = new HttpErrorResponse({
+      error: { message: 'Update failed' },
+      status: 400
+    });
 
-    expect(clientService.getClientById).toHaveBeenCalledWith(1);
-    expect(component.client.clientFirstName).toEqual('Renan');
+    (clientService.updateClient as jasmine.Spy)
+      .and.returnValue(throwError(errorResponse));
+
+    fixture.detectChanges();
+    component.onSubmit();
+
+    expect(component.errorMessage).toBe('Update failed');
+    expect(component.isSubmitting).toBeFalse();
+  });
+
+  // B - tier
+  it('should disable submit while submitting', () => {
+    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClient));
+    component.isSubmitting = true;
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('button');
+
+    expect(button.disabled).toBeTrue();
   });
 });

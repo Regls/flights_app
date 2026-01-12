@@ -70,7 +70,7 @@ describe('CreateClientComponent', () => {
   });
 
   // S - tier
-  it('should show http error message when service fails', () => {
+  it('should show http error message when create fails', () => {
     const errorResponse = new HttpErrorResponse({
       error: { message: 'CPF already exists' },
       status: 400,
@@ -80,6 +80,7 @@ describe('CreateClientComponent', () => {
     (clientService.createClient as jasmine.Spy)
       .and.returnValue(throwError(errorResponse));
 
+    fixture.detectChanges();
     component.onSubmit();
 
     expect(component.errorMessage).toBe('CPF already exists');
