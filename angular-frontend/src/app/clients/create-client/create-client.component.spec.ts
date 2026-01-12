@@ -49,15 +49,14 @@ describe('CreateClientComponent', () => {
     component = fixture.componentInstance;
     clientService = TestBed.inject(ClientService);
     router = TestBed.inject(Router);
-    fixture.detectChanges();
   });
 
-  //test creation (S-tier)
+  // S - tier
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  //test service save and navigate (S-tier)
+  // S - tier
   it('should call service and navigate on submit', () => {
     (clientService.createClient as jasmine.Spy).and.returnValue(of({}));
 
@@ -70,7 +69,7 @@ describe('CreateClientComponent', () => {
     expect(component.isSubmitting).toBe(true);
   });
 
-  //test http error message(A-tier)
+  // S - tier
   it('should show http error message when service fails', () => {
     const errorResponse = new HttpErrorResponse({
       error: { message: 'CPF already exists' },
@@ -87,7 +86,7 @@ describe('CreateClientComponent', () => {
     expect(component.isSubmitting).toBe(false);
   });
 
-  //test disabled on btn (B-tier)
+  // B - tier
   it('should disable submit while submitting', () => {
     component.isSubmitting = true;
     fixture.detectChanges();
@@ -97,7 +96,7 @@ describe('CreateClientComponent', () => {
     expect(button.disabled).toBeTrue();
   });
 
-  //test error message (C-tier)
+  // C - tier
   it('should show generic error message when service fails', () => {
     (clientService.createClient as jasmine.Spy).and.returnValue(throwError({ message: 'Error' }));
 

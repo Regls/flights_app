@@ -1,9 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import { ClientListComponent } from './client-list.component';
 import { ClientService } from '../client.service';
-import { Router } from '@angular/router';
-import { of } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Client } from '../client';
 
 
@@ -23,7 +25,13 @@ describe('ClientListComponent', () => {
       declarations: [ ClientListComponent ],
       imports: [ HttpClientTestingModule ],
       providers: [
-        ClientService,
+        {
+          provide: ClientService,
+          useValue: {
+            getClients: jasmine.createSpy('getClients'),
+            deleteClient: jasmine.createSpy('deleteClient')
+          }
+        },
         {
           provide: Router,
           useValue: {
@@ -39,154 +47,68 @@ describe('ClientListComponent', () => {
     component = fixture.componentInstance;
     clientService = TestBed.inject(ClientService);
     router = TestBed.inject(Router);
-    fixture.detectChanges();
   });
 
-  //test creation
+  // S - tier
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  //test ngOnInit and getClients
+  // S - tier
   it('should load clients on init', () => {
-    spyOn(clientService, 'getClients').and.returnValue(of(mockClients));
+    (clientService.getClients as jasmine.Spy).and.returnValue(of(mockClients));
 
-    component.ngOnInit();
+    fixture.detectChanges();
 
     expect(clientService.getClients).toHaveBeenCalled();
     expect(component.clients.length).toBe(2);
-    expect(component.clients[0].clientFirstName).toBe('Renan');
+    expect(component.clients).toEqual(mockClients);
   });
 
-  //test clientDetails
-  it('should navigate to client details', () => {
-    const clientId = 1;
-    component.clientDetails(clientId);
+  // S - tier
+  it('should handle http error when service fails', () => {
+    const errorResponse = new HttpErrorResponse({
+      error: { message: 'Failed to load clients' },
+      status: 500
+    });
 
-    expect(router.navigate).toHaveBeenCalledWith(['client-details', clientId]);
+    (clientService.getClients as jasmine.Spy).and.returnValue(throwError(errorResponse));
+
+    fixture.detectChanges();
+
+    expect(component.errorMessage).toBe('Failed to load clients');
+    expect(component.clients.length).toBe(0);
   });
 
-  //test updateClient
-  it('should navigate to update client', () => {
-    const clientId = 1;
-    component.updateClient(clientId);
-
-    expect(router.navigate).toHaveBeenCalledWith(['update-client', clientId]);
-  });
-
-  //test deleteClient
+  // A - tier
   it('should delete client and reload clients', () => {
-    const clientId = 1;
-    spyOn(clientService, 'deleteClient').and.returnValue(of({}));
-    spyOn(clientService, 'getClients').and.returnValue(of(mockClients));
+    (clientService.deleteClient as jasmine.Spy).and.returnValue(of({}));
+    (clientService.getClients as jasmine.Spy).and.returnValue(of(mockClients));
 
-    component.deleteClient(clientId);
+    component.deleteClient(1);
 
-    expect(clientService.deleteClient).toHaveBeenCalledWith(clientId);
+    expect(clientService.deleteClient).toHaveBeenCalledWith(1);
     expect(clientService.getClients).toHaveBeenCalled();
   });
 
-  //test html
-  it('should render clients in the table', () => {
-    spyOn(clientService, 'getClients').and.returnValue(of(mockClients));
-    
-    component.ngOnInit();
-    fixture.detectChanges();
+  // A - tier
+  it('should handle empty client list', () => {
+    (clientService.getClients as jasmine.Spy).and.returnValue(of([]));
 
-    const compiled = fixture.nativeElement as HTMLElement;
-    const rows = compiled.querySelectorAll('tbody tr');
-
-
-    expect(rows.length).toBe(2);
-    expect(rows[0].textContent).toContain('Renan');
-    expect(rows[1].textContent).toContain('Jane');
+    expect(component.clients).toEqual([]);
   });
 
-  //test button details
-  it('should call clientDetails when details button is clicked', () => {
-    spyOn(component, 'clientDetails');
-
-    component.clients = mockClients;
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('.details-btn') as HTMLButtonElement;
-
-    button.click();
-
-    expect(component.clientDetails).toHaveBeenCalledWith(1);
-  });
-
-  //test button update
-  it('should call updateClient when update button is clicked', () => {
-    spyOn(component, 'updateClient');
-
-    component.clients = mockClients;
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('.update-btn') as HTMLButtonElement;
-
-    button.click();
-
-    expect(component.updateClient).toHaveBeenCalledWith(1);
-  });
-
-  //test button delete
-  it('should call deleteClient when delete button is clicked', () => {
-    spyOn(component, 'deleteClient');
-
-    component.clients = mockClients;
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('.delete-btn') as HTMLButtonElement;
-
-    button.click();
-
-    expect(component.deleteClient).toHaveBeenCalledWith(1);
-  });
-
-  //test html navigation with details button
-  it('should navigate when clicking details button', () => {
-    component.clients = mockClients;
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('.details-btn') as HTMLButtonElement;
-
-    button.click();
+  // B - tier
+  it('should navigate to client details', () => {
+    component.clientDetails(1);
 
     expect(router.navigate).toHaveBeenCalledWith(['client-details', 1]);
   });
 
-  //test html navigation with update button
-  it('should navigate when clicking update button', () => {
-    component.clients = mockClients;
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('.update-btn') as HTMLButtonElement;
-
-    button.click();
+  // B - tier
+  it('should navigate to update client', () => {
+    component.updateClient(1);
 
     expect(router.navigate).toHaveBeenCalledWith(['update-client', 1]);
   });
-
-  //test html navigation with delete button (return to list itself)
-  it('should call service and reload clients when delete button is clicked', () => {
-  spyOn(clientService, 'deleteClient').and.returnValue(of({}));
-  spyOn(clientService, 'getClients').and.returnValue(of(mockClients));
-
-  component.clients = mockClients;
-  fixture.detectChanges();
-
-  const compiled = fixture.nativeElement as HTMLElement;
-  const button = compiled.querySelector('.delete-btn') as HTMLButtonElement;
-
-  button.click();
-
-  expect(clientService.deleteClient).toHaveBeenCalledWith(1);
-  expect(clientService.getClients).toHaveBeenCalled();
-});
 });

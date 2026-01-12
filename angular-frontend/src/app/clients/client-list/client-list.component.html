@@ -1,4 +1,9 @@
 <h2> Client List</h2>
+
+<div *ngIf="errorMessage" class="alert alert-danger mt-2">
+    {{ errorMessage }}
+</div>
+
 <table class = "table table-striped">
     <thead>
         <tr>

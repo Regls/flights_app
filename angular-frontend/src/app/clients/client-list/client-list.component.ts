@@ -10,32 +10,44 @@ import { Router } from '@angular/router';
 export class ClientListComponent implements OnInit {
 
   clients: Client[] = [];
+  errorMessage: string | null = null;
 
-  constructor(private clientService: ClientService,
-    private router: Router) { }
+  constructor(
+    private clientService: ClientService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getClients();
   }
 
-  private getClients(){
-    this.clientService.getClients().subscribe(data => {
-      this.clients = data;
+  private getClients() {
+    this.errorMessage = null;
+
+    this.clientService.getClients().subscribe({
+      next: data => {
+        this.clients = data;
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+      }
     });
   }
 
-  clientDetails(id: number){
+  clientDetails(id: number) {
     this.router.navigate(['client-details', id]);
   }
 
-  updateClient(id: number){
+  updateClient(id: number) {
     this.router.navigate(['update-client', id]);
   }
 
-  deleteClient(id: number){
-    this.clientService.deleteClient(id).subscribe( data => {
-      console.log(data);
-      this.getClients();
-    })
+  deleteClient(id: number) {
+    this.clientService.deleteClient(id).subscribe({
+      next: () => this.getClients(),
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+      }
+    });
   }
 }
