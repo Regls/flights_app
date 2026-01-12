@@ -7,7 +7,7 @@ import { Client } from '../client';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule } from '@angular/forms';
 
-fdescribe('UpdateClientComponent', () => {
+describe('UpdateClientComponent', () => {
   let component: UpdateClientComponent;
   let fixture: ComponentFixture<UpdateClientComponent>;
   let clientService: ClientService;
@@ -26,7 +26,12 @@ fdescribe('UpdateClientComponent', () => {
       declarations: [ UpdateClientComponent ],
       imports: [ HttpClientTestingModule, FormsModule ],
       providers: [
-        ClientService,
+        {
+          provide: ClientService,
+          useValue: {
+            updateClient: jasmine.createSpy('updateClient')
+          }
+        },
         {
           provide: ActivatedRoute,
           useValue: {
@@ -53,21 +58,14 @@ fdescribe('UpdateClientComponent', () => {
     fixture.detectChanges();
   });
 
+  //test creation (S-tier)
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load client by id on init', () => {
-    spyOn(clientService, 'getClientById').and.returnValue(of(mockClient))
-    
-    component.ngOnInit();
-
-    expect(clientService.getClientById).toHaveBeenCalledWith(1);
-    expect(component.client.clientFirstName).toEqual('Renan');
-  });
-
+  //test service save and navigate (S-tier)
   it('should call updateClient and navigate on submit', () => {
-    spyOn(clientService, 'updateClient').and.returnValue(of({}))
+    (clientService.updateClient as jasmine.Spy).and.returnValue(of({}))
 
     component.id = 1;
     component.client = mockClient;
@@ -78,9 +76,12 @@ fdescribe('UpdateClientComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/clients']);
   });
 
-  it('should navigate to client list', () => {
-    component.goToClientList();
+  it('should load client by id on init', () => {
+    spyOn(clientService, 'getClientById').and.returnValue(of(mockClient))
+    
+    component.ngOnInit();
 
-    expect(router.navigate).toHaveBeenCalledWith(['/clients']);
-  })
+    expect(clientService.getClientById).toHaveBeenCalledWith(1);
+    expect(component.client.clientFirstName).toEqual('Renan');
+  });
 });

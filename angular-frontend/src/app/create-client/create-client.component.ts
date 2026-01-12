@@ -11,18 +11,29 @@ import { Router } from '@angular/router';
 export class CreateClientComponent implements OnInit {
 
   client: Client = new Client();
-  constructor(private clientService: ClientService,
-    private router: Router) { }
+  errorMessage: string | null = null;
+  isSubmitting = false;
 
-  ngOnInit(): void {
-  }
+  constructor(
+    private clientService: ClientService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {}
 
   saveClient(){
-    this.clientService.createClient(this.client).subscribe( data =>{
-      console.log(data);
-      this.goToClientList();
-    },
-    error => console.log(error));
+    this.isSubmitting = true;
+    this.errorMessage = null;
+
+    this.clientService.createClient(this.client).subscribe({
+      next: () => {
+        this.goToClientList();
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+        this.isSubmitting = false;
+      }
+    });
   }
 
   goToClientList(){
@@ -30,7 +41,6 @@ export class CreateClientComponent implements OnInit {
   }
   
   onSubmit(){
-    console.log(this.client);
     this.saveClient();
   }
 }

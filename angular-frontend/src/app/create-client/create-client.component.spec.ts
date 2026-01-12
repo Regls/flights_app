@@ -2,14 +2,24 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { CreateClientComponent } from './create-client.component';
 import { ClientService } from '../client.service';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { Client } from '../client';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('CreateClientComponent', () => {
   let component: CreateClientComponent;
   let fixture: ComponentFixture<CreateClientComponent>;
   let clientService: ClientService;
   let router: Router;
+
+  const mockClient: Client = {
+    id: 1,
+    cpf: '12345678901',
+    clientFirstName: 'Renan',
+    clientLastName: 'Reginato',
+    status: true
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -40,51 +50,58 @@ describe('CreateClientComponent', () => {
     fixture.detectChanges();
   });
 
-  //test component creation
-  it('should create component', () => {
+  //test creation (S-tier)
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  //test saveClient
-  it('should save client and navigate to client list', () => {
-    (clientService.createClient as jasmine.Spy).and.returnValue(of({}));
-    spyOn(component, 'goToClientList');
-
-    component.saveClient();
-
-    expect(clientService.createClient).toHaveBeenCalled();
-    expect(component.goToClientList).toHaveBeenCalled();
-  });
-
-  //test goToClientList
-  it('should navigate to client list', () => {
-    component.goToClientList();
-
-    expect(router.navigate).toHaveBeenCalledWith(['/clients']);
-  });
-
-  //test onSubmit
-  it('should call saveClient on form submission', () => {
-    spyOn(component, 'saveClient');
-
-    component.onSubmit();
-
-    expect(component.saveClient).toHaveBeenCalled();
-  });
-
+  //test service save and navigate (S-tier)
   it('should call service and navigate on submit', () => {
     (clientService.createClient as jasmine.Spy).and.returnValue(of({}));
 
-    component.client = {
-        id: 1,
-        cpf: '12345678901',
-        clientFirstName: 'Renan',
-        clientLastName: 'Reginato',
-        status: true
-    };
+    component.client = mockClient
+
     component.onSubmit();
 
-    expect(clientService.createClient).toHaveBeenCalledWith(component.client);
+    expect(clientService.createClient).toHaveBeenCalledWith(mockClient);
     expect(router.navigate).toHaveBeenCalledWith(['/clients']);
+    expect(component.isSubmitting).toBe(true);
+  });
+
+  //test http error message(A-tier)
+  it('should show http error message when service fails', () => {
+    const errorResponse = new HttpErrorResponse({
+      error: { message: 'CPF already exists' },
+      status: 400,
+      statusText: 'Bad Request'
+    });
+
+    (clientService.createClient as jasmine.Spy)
+      .and.returnValue(throwError(errorResponse));
+
+    component.onSubmit();
+
+    expect(component.errorMessage).toBe('CPF already exists');
+    expect(component.isSubmitting).toBe(false);
+  });
+
+  //test disabled on btn (B-tier)
+  it('should disable submit while submitting', () => {
+    component.isSubmitting = true;
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('button');
+
+    expect(button.disabled).toBeTrue();
+  });
+
+  //test error message (C-tier)
+  it('should show error message when service fails', () => {
+    (clientService.createClient as jasmine.Spy).and.returnValue(throwError({ message: 'Error' }));
+
+    component.onSubmit();
+
+    expect(component.errorMessage).toBe('Error');
+    expect(component.isSubmitting).toBe(false);
   });
 });
