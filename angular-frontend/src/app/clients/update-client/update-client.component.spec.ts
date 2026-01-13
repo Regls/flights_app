@@ -10,7 +10,7 @@ import { Client } from '../client';
 
 
 
-fdescribe('UpdateClientComponent', () => {
+describe('UpdateClientComponent', () => {
   let component: UpdateClientComponent;
   let fixture: ComponentFixture<UpdateClientComponent>;
   let clientService: ClientService;
