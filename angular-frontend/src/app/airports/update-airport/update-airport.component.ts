@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientService } from '../client.service';
-import { Client } from '../client';
+import { AirportService } from '../airport.service';
+import { Airport } from '../airport';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-update-client',
-  templateUrl: './update-client.component.html',
-  styleUrls: ['./update-client.component.css']
+  selector: 'app-update-airport',
+  templateUrl: './update-airport.component.html',
+  styleUrls: ['./update-airport.component.css']
 })
-export class UpdateClientComponent implements OnInit {
+export class UpdateAirportComponent implements OnInit {
 
   id: number;
-  client: Client = new Client();
+  airport: Airport = new Airport();
   errorMessage: string | null = null;
   isSubmitting = false;
 
   constructor(
-    private clientService: ClientService,
+    private airportService: AirportService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -24,9 +24,9 @@ export class UpdateClientComponent implements OnInit {
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.clientService.getClientById(this.id).subscribe({
+    this.airportService.getAirportById(this.id).subscribe({
       next: data => {
-          this.client = data;
+          this.airport = data;
       },
       error: err => {
         this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
@@ -35,14 +35,14 @@ export class UpdateClientComponent implements OnInit {
     });
   }
 
-  saveClient(): void {
+  saveAirport(): void {
     this.isSubmitting = true;
     this.errorMessage = null;
 
     
-    this.clientService.updateClient(this.id, this.client).subscribe({
+    this.airportService.updateAirport(this.id, this.airport).subscribe({
       next: () => {
-        this.goToClientList();
+        this.goToAirportList();
       },
       error: err => {
         this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
@@ -51,11 +51,11 @@ export class UpdateClientComponent implements OnInit {
     });
   }
 
-  goToClientList(){
-    this.router.navigate(['/clients']);
+  goToAirportList(){
+    this.router.navigate(['/airports']);
   }
 
   onSubmit(){
-    this.saveClient();
+    this.saveAirport();
   }
 }

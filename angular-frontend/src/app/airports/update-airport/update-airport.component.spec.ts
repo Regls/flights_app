@@ -1,51 +1,38 @@
-/**
- * ⚠️ UPDATE SPEC TEMPLATE
- * ----------------
- * This file is a template and MUST NOT be executed.
- * Do not rename to *.spec.ts
- * 
- * Replace:
- * - Entity -> Client / Airport / Airline / Flight / Booking (entity -> x)
- * - createEntity -> createX
- * - /entitys -> route
- * 
- * - S-tier: core behavior
- * - A-tier: http errors
- * - B-tier: UX behavior
- * - C-tier: fallback / defensive
-*/
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { UpdateEntityComponent } from './update-entity.component';
-import { EntityService } from '../entity.service';
-import { Entity } from '../entity';
+import { UpdateAirportComponent } from './update-airport.component';
+import { AirportService } from '../airport.service';
+import { Airport } from '../airport';
 
 
-describe('UpdateEntityComponent', () => {
-  let component: UpdateEntityComponent;
-  let fixture: ComponentFixture<UpdateEntityComponent>;
-  let entityService: EntityService;
+fdescribe('UpdateAirportComponent', () => {
+  let component: UpdateAirportComponent;
+  let fixture: ComponentFixture<UpdateAirportComponent>;
+  let airportService: AirportService;
   let router: Router;
 
-  const mockEntity: Entity = {
-    id: 1
+  const mockAirport: Airport = {
+    id: 1,
+    iataCode: 'GRU',
+    airportName: 'Guarulhos International Airport',
+    city: 'Sao Paulo',
+    operational: true
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UpdateEntityComponent ],
+      declarations: [ UpdateAirportComponent ],
       imports: [ FormsModule ],
       providers: [
         {
-          provide: EntityService,
+          provide: AirportService,
           useValue: {
-            getEntityById: jasmine.createSpy('getEntityById'),
-            updateEntity: jasmine.createSpy('updateEntity')
+            getAirportById: jasmine.createSpy('getAirportById'),
+            updateAirport: jasmine.createSpy('updateAirport')
           }
         },
         {
@@ -69,9 +56,9 @@ describe('UpdateEntityComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UpdateEntityComponent);
+    fixture = TestBed.createComponent(UpdateAirportComponent);
     component = fixture.componentInstance;
-    entityService = TestBed.inject(EntityService);
+    airportService = TestBed.inject(AirportService);
     router = TestBed.inject(Router);
   });
 
@@ -81,43 +68,40 @@ describe('UpdateEntityComponent', () => {
   });
 
   // S - tier
-  it('should load entity by id on init', () => {
-    (entityService.getEntityById as jasmine.Spy)
-      .and.returnValue(of(mockEntity));
+  it('should load airport by id on init', () => {
+    (airportService.getAirportById as jasmine.Spy).and.returnValue(of(mockAirport));
 
     fixture.detectChanges();
 
-    expect(entityService.getEntityById).toHaveBeenCalledWith(1);
-    expect(component.entity).toEqual(mockEntity);
+    expect(airportService.getAirportById).toHaveBeenCalledWith(1);
+    expect(component.airport).toEqual(mockAirport);
   });
 
   // S - tier
   it('should call service and navigate on update', () => {
-    (entityService.getEntityById as jasmine.Spy)
-      .and.returnValue(of(mockEntity));
+    (airportService.getAirportById as jasmine.Spy).and.returnValue(of(mockAirport));
 
-    (entityService.updateEntity as jasmine.Spy)
-      .and.returnValue(of({}));
+    (airportService.updateAirport as jasmine.Spy).and.returnValue(of({}));
 
     fixture.detectChanges();
 
     component.onSubmit();
 
-    expect(entityService.updateEntity).toHaveBeenCalledWith(1, mockEntity);
-
-    expect(router.navigate).toHaveBeenCalledWith(['/entities']);
+    expect(airportService.updateAirport).toHaveBeenCalledWith(1, mockAirport);
+    expect(router.navigate).toHaveBeenCalledWith(['/airports']);
+    expect(component.isSubmitting).toBe(true);
   });
 
   // S - tier
   it('should show http error message when update fails', () => {
-    (entityService.getEntityById as jasmine.Spy).and.returnValue(of(mockEntity));
+    (airportService.getAirportById as jasmine.Spy).and.returnValue(of(mockAirport));
 
     const errorResponse = new HttpErrorResponse({
       error: { message: 'Update failed' },
       status: 400
     });
 
-    (entityService.updateEntity as jasmine.Spy)
+    (airportService.updateAirport as jasmine.Spy)
       .and.returnValue(throwError(errorResponse));
 
     fixture.detectChanges();
@@ -129,7 +113,7 @@ describe('UpdateEntityComponent', () => {
 
   // B - tier
   it('should disable submit while submitting', () => {
-    (entityService.getEntityById as jasmine.Spy).and.returnValue(of(mockEntity));
+    (airportService.getAirportById as jasmine.Spy).and.returnValue(of(mockAirport));
     component.isSubmitting = true;
     fixture.detectChanges();
 
@@ -137,7 +121,5 @@ describe('UpdateEntityComponent', () => {
 
     expect(button.disabled).toBeTrue();
   });
-
-
 });
 
