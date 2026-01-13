@@ -1,0 +1,18 @@
+<h3> View Airport Details</h3>
+<div * ngIf="airport; else errorTpl">
+    <div>
+        <label> <b> IATA Code: </b></label> {{airport.iataCode}}
+    </div>
+    <div>
+        <label> <b> Airport Name: </b></label> {{airport.airportName}}
+    </div>
+    <div>
+        <label> <b> City: </b></label> {{airport.city}}
+    </div>
+
+    <ng-tempate #errorTpl>
+        <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+            {{ errorMessage }}
+        </div>
+    </ng-tempate>
+</div>

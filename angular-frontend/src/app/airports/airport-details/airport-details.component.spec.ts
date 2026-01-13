@@ -3,32 +3,32 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { ClientDetailsComponent } from './client-details.component';
-import { ClientService } from '../client.service';
-import { Client } from '../client';
+import { AirportDetailsComponent } from './airport-details.component';
+import { AirportService } from '../airport.service';
+import { Airport } from '../airport';
 
 
-describe('ClientDetailsComponent', () => {
-  let component: ClientDetailsComponent;
-  let fixture: ComponentFixture<ClientDetailsComponent>;
-  let clientService: jasmine.SpyObj<ClientService>;
+fdescribe('AirportDetailsComponent', () => {
+  let component: AirportDetailsComponent;
+  let fixture: ComponentFixture<AirportDetailsComponent>;
+  let airportService: jasmine.SpyObj<AirportService>;
   let router: Router;
 
-  const mockClient: Client = {
+  const mockAirport: Airport = {
     id: 1,
-    cpf: '12345678901',
-    clientFirstName: 'Renan',
-    clientLastName: 'Reginato',
-    status: true
+    iataCode: 'GRU',
+    airportName: 'Guarulhos International Airport',
+    city: 'São Paulo',
+    operational: true
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ClientDetailsComponent],
+      declarations: [AirportDetailsComponent],
       providers: [
-        { provide: ClientService,
+        { provide: AirportService,
           useValue: {
-            getClientById: jasmine.createSpy('getClientById')
+            getAirportById: jasmine.createSpy('getAirportById')
           }
         },
         {
@@ -50,12 +50,12 @@ describe('ClientDetailsComponent', () => {
       ]
     }).compileComponents();
 
-    clientService = TestBed.inject(ClientService) as jasmine.SpyObj<ClientService>;
+    airportService = TestBed.inject(AirportService) as jasmine.SpyObj<AirportService>;
     router = TestBed.inject(Router);
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ClientDetailsComponent);
+    fixture = TestBed.createComponent(AirportDetailsComponent);
     component = fixture.componentInstance;
   });
 
@@ -65,36 +65,36 @@ describe('ClientDetailsComponent', () => {
   });
 
   // S -tier
-  it('should load client by id on init', () => {
-    clientService.getClientById.and.returnValue(of(mockClient));
+  it('should load airport by id on init', () => {
+    airportService.getAirportById.and.returnValue(of(mockAirport));
 
     fixture.detectChanges();
 
-    expect(clientService.getClientById).toHaveBeenCalledWith(1);
-    expect(component.client).toEqual(mockClient);
+    expect(airportService.getAirportById).toHaveBeenCalledWith(1);
+    expect(component.airport).toEqual(mockAirport);
   });
 
   // S -tier
   it('should show http error message on details fail', () => {
     
     const errorResponse = new HttpErrorResponse({
-      error: { message: 'Client not found' },
+      error: { message: 'Airport not found' },
       status: 404
     });
 
-    (clientService.getClientById as jasmine.Spy)
+    (airportService.getAirportById as jasmine.Spy)
       .and.returnValue(throwError(errorResponse));
 
     fixture.detectChanges();
 
-    expect(component.errorMessage).toBe('Client not found');
+    expect(component.errorMessage).toBe('Airport not found');
   });
 
   // B - tier
   it('should navigate back to list', () => {
-    component.goToClientList();
+    component.goToAirportList();
 
-    expect(router.navigate).toHaveBeenCalledWith(['clients']);
+    expect(router.navigate).toHaveBeenCalledWith(['airports']);
   })
 
 });
