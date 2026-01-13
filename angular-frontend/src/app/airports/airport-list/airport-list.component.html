@@ -1,0 +1,34 @@
+<h2> Airport List</h2>
+
+<div *ngIf="errorMessage" class="alert alert-danger mt-2">
+    {{ errorMessage }}
+</div>
+
+<table class = "table table-striped">
+    <thead>
+        <tr>
+            <th> IATA Code </th>
+            <th> Airport Name </th>
+            <th> City </th>
+            <th> Operational </th>
+            <th> Actions </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let airport of airports" >
+            <td> {{ airport.iataCode }} </td>
+            <td> {{ airport.airportName }} </td>
+            <td> {{ airport.city }} </td>
+            <td>
+                <span [ngclass]="airport.operational ? 'text-sucess' : 'text-danger'">
+                    {{ airport.operational ? 'Open' : 'Suspended' }}
+                </span>
+            </td>
+            <td>
+                <button (click) = "airportDetails(airport.id)" class = "btn btn-info details-btn"> View</button>
+                <button (click) = "updateAirport(airport.id)" class = "btn btn-info update-btn" style="margin-left: 10px"> Update</button>
+                <button (click) = "deleteAirport(airport.id)" class = "btn btn-danger delete-btn" style="margin-left: 10px"> Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
