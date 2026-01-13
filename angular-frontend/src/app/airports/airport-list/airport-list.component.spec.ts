@@ -9,7 +9,7 @@ import { AirportService } from '../airport.service';
 import { Airport } from '../airport';
 
 
-fdescribe('AirportListComponent', () => {
+describe('AirportListComponent', () => {
   let component: AirportListComponent;
   let fixture: ComponentFixture<AirportListComponent>;
   let airportService: AirportService;

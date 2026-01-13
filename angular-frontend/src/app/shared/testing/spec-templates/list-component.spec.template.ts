@@ -17,8 +17,9 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { EntityListComponent } from './entity-list.component';
 import { EntityService } from '../entity.service';
@@ -39,7 +40,7 @@ describe('EntityListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ EntityListComponent ],
-      imports: [ HttpEntityTestingModule ],
+      imports: [ HttpClientTestingModule ],
       providers: [
         {
           provide: EntityService,
@@ -99,7 +100,7 @@ describe('EntityListComponent', () => {
   // A - tier
   it('should delete entity and reload entities', () => {
     (entityService.deleteEntity as jasmine.Spy).and.returnValue(of({}));
-    (entityService.getEntity as jasmine.Spy).and.returnValue(of(mockEntity));
+    (entityService.getEntity as jasmine.Spy).and.returnValue(of(mockEntitys));
 
     component.deleteEntity(1);
 
@@ -111,7 +112,7 @@ describe('EntityListComponent', () => {
   it('should handle empty entity list', () => {
     (entityService.getEntitys as jasmine.Spy).and.returnValue(of([]));
 
-    expect(component.entitys.length).toEqual([]);
+    expect(component.entitys).toEqual([]);
   });
 
   // B - tier

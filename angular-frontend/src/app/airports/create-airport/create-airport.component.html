@@ -1,0 +1,32 @@
+<div class="col-md-6 offset-md-3">
+    <h3> Create Airport </h3>
+    <form (ngSubmit) = "onSubmit()">
+    
+        <div class="form-group">
+            <label> IATA Code</label>
+            <input type="text" class ="form-control" id = "iataCode"
+                [(ngModel)] = "airport.cpf" name = "iataCode" required 
+                pattern="[A-Z]{3}" maxlength="3"
+                (input)="airport.iataCode = airport.iataCode?.toUpperCase()">
+        </div>
+
+        <div class="form-group">
+            <label> Airport Name</label>
+            <input type="text" class ="form-control" id = "airportName"
+                [(ngModel)] = "airport.airportName" name = "airportName" required>
+        </div>
+    
+        <div class="form-group">
+            <label> City</label>
+            <input type="text" class ="form-control" id = "city"
+                [(ngModel)] = "airport.city" name = "city" required>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+            {{ errorMessage }}
+        </div>
+    
+        <button class = "btn btn-success" type ="submit" [disabled]="isSubmitting">Submit</button>
+    
+    </form>
+    </div>

@@ -1,49 +1,36 @@
-/**
- * ⚠️ CREATE SPEC TEMPLATE
- * ----------------
- * This file is a template and MUST NOT be executed.
- * Do not rename to *.spec.ts
- * 
- * Replace:
- * - Entity -> Client / Airport / Airline / Flight / Booking (entity -> x)
- * - createEntity -> createX
- * - /entitys -> route
- * 
- * - S-tier: core behavior
- * - A-tier: http errors
- * - B-tier: UX behavior
- * - C-tier: fallback / defensive
-*/
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { CreateEntityComponent } from './create-entity.component';
-import { EntityService } from '../entity.service';
-import { Entity } from '../entity';
+import { CreateAirportComponent } from './create-airport.component';
+import { AirportService } from '../airport.service';
+import { Airport } from '../airport';
 
-describe('CreateEntityComponent', () => {
-  let component: CreateEntityComponent;
-  let fixture: ComponentFixture<CreateEntityComponent>;
-  let entityService: EntityService;
+describe('CreateAirportComponent', () => {
+  let component: CreateAirportComponent;
+  let fixture: ComponentFixture<CreateAirportComponent>;
+  let airportService: AirportService;
   let router: Router;
 
-  const mockEntity: Entity = {
-    id: 1
+  const mockAirport: Airport = {
+    id: 1,
+    iataCode: 'GRU',
+    airportName: 'Guarulhos International Airport',
+    city: 'Sao Paulo',
+    operational: true
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateEntityComponent ],
+      declarations: [ CreateAirportComponent ],
       imports: [ FormsModule ],
       providers: [
         {
-          provide: EntityService,
+          provide: AirportService,
           useValue: {
-            createEntity: jasmine.createSpy('createEntity')
+            createAirport: jasmine.createSpy('createAirport')
           }
         },
         {
@@ -57,9 +44,9 @@ describe('CreateEntityComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateEntityComponent);
+    fixture = TestBed.createComponent(CreateAirportComponent);
     component = fixture.componentInstance;
-    entityService = TestBed.inject(EntityService);
+    airportService = TestBed.inject(AirportService);
     router = TestBed.inject(Router);
     fixture.detectChanges();
   });
@@ -71,31 +58,31 @@ describe('CreateEntityComponent', () => {
 
   // S - tier
   it('should call service and navigate on submit', () => {
-    (entityService.createEntity as jasmine.Spy).and.returnValue(of({}));
+    (airportService.createAirport as jasmine.Spy).and.returnValue(of({}));
 
-    component.entity = mockEntity
+    component.airport = mockAirport
 
     component.onSubmit();
 
-    expect(entityService.createEntity).toHaveBeenCalledWith(mockEntity);
-    expect(router.navigate).toHaveBeenCalledWith(['/entitys']);
+    expect(airportService.createAirport).toHaveBeenCalledWith(mockAirport);
+    expect(router.navigate).toHaveBeenCalledWith(['/airports']);
     expect(component.isSubmitting).toBe(true);
   });
 
   // S - tier
   it('should show http error message when create fails', () => {
     const errorResponse = new HttpErrorResponse({
-      error: { message: 'Entity already exists' },
+      error: { message: 'Airport already exists' },
       status: 400,
       statusText: 'Bad Request'
     });
 
-    (entityService.createEntity as jasmine.Spy)
+    (airportService.createAirport as jasmine.Spy)
       .and.returnValue(throwError(errorResponse));
 
     component.onSubmit();
 
-    expect(component.errorMessage).toBe('Entity already exists');
+    expect(component.errorMessage).toBe('Airport already exists');
     expect(component.isSubmitting).toBe(false);
   });
 
@@ -111,7 +98,7 @@ describe('CreateEntityComponent', () => {
 
   // C - tier
   it('should show generic error message when service fails', () => {
-    (entityService.createEntity as jasmine.Spy).and.returnValue(throwError({ message: 'Error' }));
+    (airportService.createAirport as jasmine.Spy).and.returnValue(throwError({ message: 'Error' }));
 
     component.onSubmit();
 
