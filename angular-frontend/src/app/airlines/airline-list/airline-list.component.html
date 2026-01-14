@@ -1,0 +1,32 @@
+<h2> Airline List</h2>
+
+<div *ngIf="errorMessage" class="alert alert-danger mt-2">
+    {{ errorMessage }}
+</div>
+
+<table class = "table table-striped">
+    <thead>
+        <tr>
+            <th> IATA Code </th>
+            <th> Airline Name </th>
+            <th> Status </th>
+            <th> Actions </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let airline of airlines" >
+            <td> {{ airline.iataCode }} </td>
+            <td> {{ airline.airlineName }} </td>
+            <td>
+                <span [ngclass]="airline.operational ? 'text-sucess' : 'text-danger'">
+                    {{ airline.operational ? 'Active' : 'Suspended' }}
+                </span>
+            </td>
+            <td>
+                <button (click) = "airlineDetails(airline.id)" class = "btn btn-info details-btn"> View</button>
+                <button (click) = "updateAirline(airline.id)" class = "btn btn-info update-btn" style="margin-left: 10px"> Update</button>
+                <button (click) = "deleteAirline(airline.id)" class = "btn btn-danger delete-btn" style="margin-left: 10px"> Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
