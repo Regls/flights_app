@@ -4,7 +4,13 @@
     {{ errorMessage }}
 </div>
 
-<table class = "table table-striped">
+<div class="d-flex gap-3 mt-2">
+    <a routerLink="/create-client" class="btn btn-primary">
+        + Add Client
+    </a>
+</div>
+
+<table class = "table table-striped mt-4">
     <thead>
         <tr>
             <th> CPF </th>
@@ -20,7 +26,7 @@
             <td> {{ client.clientFirstName }} </td>
             <td> {{ client.clientLastName }} </td>
             <td>
-                <span [ngclass]="client.status ? 'text-sucess' : 'text-danger'">
+                <span [ngClass]="client.status ? 'text-success' : 'text-danger'">
                     {{ client.status ? 'Active' : 'Inactive' }}
                 </span>
             </td>

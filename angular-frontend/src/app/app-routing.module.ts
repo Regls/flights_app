@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
 import { ClientListComponent } from './clients/client-list/client-list.component';
 import { CreateClientComponent } from './clients/create-client/create-client.component';
 import { UpdateClientComponent } from './clients/update-client/update-client.component';
@@ -14,8 +15,8 @@ import { UpdateAirlineComponent } from './airlines/update-airline/update-airline
 import { AirlineDetailsComponent } from './airlines/airline-details/airline-details.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: 'clients', pathMatch: 'full'},
-  {path: '**', redirectTo: 'clients'},
+  {path: '', redirectTo: 'flightapp', pathMatch: 'full'},
+  {path: 'flightapp', component: HomeComponent},
 
   {path: 'clients', component: ClientListComponent},
   {path: 'create-client', component: CreateClientComponent},
@@ -30,8 +31,9 @@ const routes: Routes = [
   {path: 'airlines', component: AirlineListComponent},
   {path: 'create-airline', component: CreateAirlineComponent},
   {path: 'update-airline/:id', component: UpdateAirlineComponent},
-  {path: 'airline-details/:id', component: AirlineDetailsComponent}
+  {path: 'airline-details/:id', component: AirlineDetailsComponent},
 
+  {path: '**', redirectTo: 'flightapp'}
 ];
 
 @NgModule({

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
 import { ClientListComponent } from './clients/client-list/client-list.component';
 import { CreateClientComponent } from './clients/create-client/create-client.component';
 import { UpdateClientComponent } from './clients/update-client/update-client.component';
@@ -22,6 +23,7 @@ import { FormsModule} from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     ClientListComponent,
     CreateClientComponent,
     UpdateClientComponent,
