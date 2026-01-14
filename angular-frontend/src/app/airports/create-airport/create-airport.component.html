@@ -5,8 +5,8 @@
         <div class="form-group">
             <label> IATA Code</label>
             <input type="text" class ="form-control" id = "iataCode"
-                [(ngModel)] = "airport.cpf" name = "iataCode" required 
-                pattern="[A-Z]{3}" maxlength="3"
+                [(ngModel)] = "airport.iataCode" name = "iataCode" required 
+                pattern="[A-Za-z]{3}" maxlength="3"
                 (input)="airport.iataCode = airport.iataCode?.toUpperCase()">
         </div>
 
