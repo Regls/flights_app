@@ -23,11 +23,11 @@
     <tbody>
         <tr *ngFor = "let client of clients" >
             <td> {{ client.cpf }} </td>
-            <td> {{ client.clientFirstName }} </td>
-            <td> {{ client.clientLastName }} </td>
+            <td> {{ client.firstName }} </td>
+            <td> {{ client.lastName }} </td>
             <td>
-                <span [ngClass]="client.status ? 'text-success' : 'text-danger'">
-                    {{ client.status ? 'Active' : 'Inactive' }}
+                <span [ngClass]="client.active ? 'text-success' : 'text-danger'">
+                    {{ client.active ? 'Active' : 'Inactive' }}
                 </span>
             </td>
             <td>

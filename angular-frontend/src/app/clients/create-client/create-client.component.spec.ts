@@ -18,9 +18,9 @@ fdescribe('CreateClientComponent', () => {
   const mockClient: Client = {
     id: 1,
     cpf: '12345678901',
-    clientFirstName: 'Renan',
-    clientLastName: 'Reginato',
-    status: true
+    firstName: 'Renan',
+    lastName: 'Reginato',
+    active: true
   };
 
   beforeEach(async () => {
