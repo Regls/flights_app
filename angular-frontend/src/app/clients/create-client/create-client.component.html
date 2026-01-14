@@ -6,7 +6,11 @@
             <label> CPF</label>
             <input type="text" class ="form-control" id = "cpf"
                 [(ngModel)] = "client.cpf" name = "cpf" required 
-                pattern="\d{11}" maxlength="11">
+                pattern="\d{11}" maxlength="11" #cpf="ngModel">
+
+            <div *ngIf="cpf.invalid && cpf.touched" class="text-danger mt-1">
+                CPF must contain 11 digits
+            </div>
         </div>
 
         <div class="form-group">

@@ -8,7 +8,7 @@ import { AirlineService } from '../airline.service';
 import { Airline } from '../airline';
 
 
-fdescribe('AirlineDetailsComponent', () => {
+describe('AirlineDetailsComponent', () => {
   let component: AirlineDetailsComponent;
   let fixture: ComponentFixture<AirlineDetailsComponent>;
   let airlineService: jasmine.SpyObj<AirlineService>;

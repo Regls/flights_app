@@ -6,8 +6,12 @@
             <label> IATA Code</label>
             <input type="text" class ="form-control" id = "iataCode"
                 [(ngModel)] = "airline.iataCode" name = "iataCode" required 
-                pattern="[A-Za-z0-9]{2}" maxlength="2"
+                pattern="[A-Za-z0-9]{2}" maxlength="2" #iataCode="ngModel"
                 (input)="airline.iataCode = airline.iataCode?.toUpperCase()">
+
+            <div *ngIf="iataCode.invalid && iataCode.touched" class="text-danger mt-1">
+                IATA Code must contain 2 alphanumeric characters
+            </div>
         </div>
         
 

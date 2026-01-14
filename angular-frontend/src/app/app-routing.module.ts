@@ -1,16 +1,37 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { EmployeeListComponent } from './employee-list/employee-list.component';
-import { CreateEmployeeComponent } from './create-employee/create-employee.component';
-import { UpdateEmployeeComponent } from './update-employee/update-employee.component';
-import { EmployeeDetailsComponent } from './employee-details/employee-details.component';
+import { ClientListComponent } from './clients/client-list/client-list.component';
+import { CreateClientComponent } from './clients/create-client/create-client.component';
+import { UpdateClientComponent } from './clients/update-client/update-client.component';
+import { ClientDetailsComponent } from './clients/client-details/client-details.component';
+import { AirportListComponent } from './airports/airport-list/airport-list.component';
+import { CreateAirportComponent } from './airports/create-airport/create-airport.component';
+import { UpdateAirportComponent } from './airports/update-airport/update-airport.component';
+import { AirportDetailsComponent } from './airports/airport-details/airport-details.component';
+import { AirlineListComponent } from './airlines/airline-list/airline-list.component';
+import { CreateAirlineComponent } from './airlines/create-airline/create-airline.component';
+import { UpdateAirlineComponent } from './airlines/update-airline/update-airline.component';
+import { AirlineDetailsComponent } from './airlines/airline-details/airline-details.component';
 
 const routes: Routes = [
-  {path: 'employees', component: EmployeeListComponent},
-  {path: 'create-employee', component: CreateEmployeeComponent},
-  {path: '', redirectTo: 'employees', pathMatch: 'full'},
-  {path: 'update-employee/:id', component: UpdateEmployeeComponent},
-  {path: 'employee-details/:id', component: EmployeeDetailsComponent}
+  {path: '', redirectTo: 'clients', pathMatch: 'full'},
+  {path: '**', redirectTo: 'clients'},
+
+  {path: 'clients', component: ClientListComponent},
+  {path: 'create-client', component: CreateClientComponent},
+  {path: 'update-client/:id', component: UpdateClientComponent},
+  {path: 'client-details/:id', component: ClientDetailsComponent},
+
+  {path: 'airports', component: AirportListComponent},
+  {path: 'create-airport', component: CreateAirportComponent},
+  {path: 'update-airport/:id', component: UpdateAirportComponent},
+  {path: 'airport-details/:id', component: AirportDetailsComponent},
+
+  {path: 'airlines', component: AirlineListComponent},
+  {path: 'create-airline', component: CreateAirlineComponent},
+  {path: 'update-airline/:id', component: UpdateAirlineComponent},
+  {path: 'airline-details/:id', component: AirlineDetailsComponent}
+
 ];
 
 @NgModule({

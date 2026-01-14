@@ -3,21 +3,38 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ClientListComponent } from './client-list/client-list.component';
-import { EmployeeListComponent } from './employee-list/employee-list.component';
-import { CreateEmployeeComponent } from './create-employee/create-employee.component';
+import { ClientListComponent } from './clients/client-list/client-list.component';
+import { CreateClientComponent } from './clients/create-client/create-client.component';
+import { UpdateClientComponent } from './clients/update-client/update-client.component';
+import { ClientDetailsComponent } from './clients/client-details/client-details.component';
+import { AirportListComponent } from './airports/airport-list/airport-list.component';
+import { CreateAirportComponent } from './airports/create-airport/create-airport.component';
+import { UpdateAirportComponent } from './airports/update-airport/update-airport.component';
+import { AirportDetailsComponent } from './airports/airport-details/airport-details.component';
+import { AirlineListComponent } from './airlines/airline-list/airline-list.component';
+import { CreateAirlineComponent } from './airlines/create-airline/create-airline.component';
+import { UpdateAirlineComponent } from './airlines/update-airline/update-airline.component';
+import { AirlineDetailsComponent } from './airlines/airline-details/airline-details.component';
+
 import { FormsModule} from '@angular/forms';
-import { UpdateEmployeeComponent } from './update-employee/update-employee.component';
-import { EmployeeDetailsComponent } from './employee-details/employee-details.component'
+
 
 @NgModule({
   declarations: [
     AppComponent,
     ClientListComponent,
-    EmployeeListComponent,
-    CreateEmployeeComponent,
-    UpdateEmployeeComponent,
-    EmployeeDetailsComponent
+    CreateClientComponent,
+    UpdateClientComponent,
+    ClientDetailsComponent,
+    AirportListComponent,
+    CreateAirportComponent,
+    UpdateAirportComponent,
+    AirportDetailsComponent,
+    AirlineListComponent,
+    CreateAirlineComponent,
+    UpdateAirlineComponent,
+    AirlineDetailsComponent
+
   ],
   imports: [
     BrowserModule,
