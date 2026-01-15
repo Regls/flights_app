@@ -9,7 +9,7 @@ import { ClientService } from '../client.service';
 import { Client } from '../client';
 
 
-fdescribe('CreateClientComponent', () => {
+describe('CreateClientComponent', () => {
   let component: CreateClientComponent;
   let fixture: ComponentFixture<CreateClientComponent>;
   let clientService: ClientService;
@@ -18,8 +18,8 @@ fdescribe('CreateClientComponent', () => {
   const mockClient: Client = {
     id: 1,
     cpf: '12345678901',
-    firstName: 'Renan',
-    lastName: 'Reginato',
+    clientFirstName: 'Renan',
+    clientLastName: 'Reginato',
     active: true
   };
 

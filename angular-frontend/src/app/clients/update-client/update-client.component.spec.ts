@@ -19,8 +19,8 @@ describe('UpdateClientComponent', () => {
   const mockClient: Client = {
     id: 1,
     cpf: '12345678901',
-    firstName: 'Renan',
-    lastName: 'Reginato',
+    clientFirstName: 'Renan',
+    clientLastName: 'Reginato',
     active: true
   }
 

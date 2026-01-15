@@ -26,7 +26,7 @@ import { EntityService } from '../entity.service';
 import { Entity } from '../entity';
 
 
-fdescribe('EntityDetailsComponent', () => {
+describe('EntityDetailsComponent', () => {
   let component: EntityDetailsComponent;
   let fixture: ComponentFixture<EntityDetailsComponent>;
   let entityService: jasmine.SpyObj<EntityService>;
