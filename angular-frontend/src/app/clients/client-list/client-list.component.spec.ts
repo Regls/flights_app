@@ -16,8 +16,8 @@ describe('ClientListComponent', () => {
   let router: Router;
 
   const mockClients: Client[] = [
-    { id: 1, cpf: '12345678901', firstName: 'Renan', lastName: 'Reginato', active: true},
-    { id: 2, cpf: '98765432101', firstName: 'Jane', lastName: 'Silver', active: false}
+    { id: 1, cpf: '12345678901', clientFirstName: 'Renan', clientLastName: 'Reginato', active: true},
+    { id: 2, cpf: '98765432101', clientFirstName: 'Jane', clientLastName: 'Silver', active: false}
   ];
 
   beforeEach(async () => {

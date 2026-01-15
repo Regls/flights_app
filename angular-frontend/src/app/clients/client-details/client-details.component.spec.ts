@@ -19,7 +19,7 @@ describe('ClientDetailsComponent', () => {
     cpf: '12345678901',
     clientFirstName: 'Renan',
     clientLastName: 'Reginato',
-    status: true
+    active: true
   };
 
   beforeEach(async () => {

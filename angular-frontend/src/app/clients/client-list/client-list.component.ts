@@ -27,6 +27,7 @@ export class ClientListComponent implements OnInit {
     this.clientService.getClients().subscribe({
       next: data => {
         this.clients = data;
+        this.sortClients();
       },
       error: err => {
         this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
@@ -42,6 +43,28 @@ export class ClientListComponent implements OnInit {
     this.router.navigate(['update-client', id]);
   }
 
+  activateClient(id: number) {
+    this.clientService.activateClient(id).subscribe({
+      next: () => {
+        this.getClients();
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+      }
+    });
+  }
+
+  deactivateClient(id: number) {
+    this.clientService.deactivateClient(id).subscribe({
+      next: () => {
+        this.getClients();
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+      }
+    });
+  }
+
   deleteClient(id: number) {
     this.clientService.deleteClient(id).subscribe({
       next: () => this.getClients(),
@@ -50,4 +73,14 @@ export class ClientListComponent implements OnInit {
       }
     });
   }
+
+  private sortClients() {
+    this.clients.sort((a, b) => {
+      if (a.active === b.active) {
+        return a.id - b.id;
+      }
+      return a.active ? -1 : 1;
+    });
+  };
 }
+

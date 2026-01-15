@@ -1,7 +1,7 @@
 export class Client {
     id: number;
     cpf: string;
-    firstName: string;
-    lastName: string;
+    clientFirstName: string;
+    clientLastName: string;
     active: boolean;
 }

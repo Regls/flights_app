@@ -25,7 +25,15 @@ export class ClientService {
     }
 
     updateClient(id: number, client: Client) {
-        return this.http.put(`${this.baseUrl}/${id}`, client);
+        return this.http.put(`${this.baseUrl}/${id}/name`, client);
+    }
+
+    activateClient(id: number) {
+        return this.http.put(`${this.baseUrl}/${id}/activate`, {});
+    }
+
+    deactivateClient(id: number) {
+        return this.http.put(`${this.baseUrl}/${id}/deactivate`, {});
     }
 
     deleteClient(id: number) {
