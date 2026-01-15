@@ -27,6 +27,7 @@ export class AirportListComponent implements OnInit {
     this.airportService.getAirports().subscribe({
       next: data => {
         this.airports = data;
+        this.sortAirports();
       },
       error: err => {
         this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
@@ -42,6 +43,28 @@ export class AirportListComponent implements OnInit {
     this.router.navigate(['update-airport', id]);
   }
 
+  openAirport(id: number) {
+    this.airportService.openAirport(id).subscribe({
+      next: () => {
+        this.getAirports();
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+      }
+    });
+  }
+
+  closeAirport(id: number) {
+    this.airportService.closeAirport(id).subscribe({
+      next: () => {
+        this.getAirports();
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+      }
+    })
+  }
+
   deleteAirport(id: number) {
     this.airportService.deleteAirport(id).subscribe({
       next: () => this.getAirports(),
@@ -50,4 +73,13 @@ export class AirportListComponent implements OnInit {
       }
     });
   }
+
+  private sortAirports() {
+    this.airports.sort((a, b) => {
+      if (a.operational === b.operational) {
+        return a.id - b.id;
+      }
+      return a.operational ? -1 : 1;
+    });
+  };
 }

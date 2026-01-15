@@ -6,7 +6,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { CreateClientComponent } from './create-client.component';
 import { ClientService } from '../client.service';
-import { Client } from '../client';
+import { ClientResponse } from '../models/client-reponse';
+import { CreateClientRequest } from '../models/create-client-request';
 
 
 describe('CreateClientComponent', () => {
@@ -15,12 +16,10 @@ describe('CreateClientComponent', () => {
   let clientService: ClientService;
   let router: Router;
 
-  const mockClient: Client = {
-    id: 1,
+  const mockCreateClientRequest: CreateClientRequest = {
     cpf: '12345678901',
     clientFirstName: 'Renan',
-    clientLastName: 'Reginato',
-    active: true
+    clientLastName: 'Reginato'
   };
 
   beforeEach(async () => {
@@ -60,11 +59,11 @@ describe('CreateClientComponent', () => {
   it('should call service and navigate on submit', () => {
     (clientService.createClient as jasmine.Spy).and.returnValue(of({}));
 
-    component.client = mockClient
+    component.client = mockCreateClientRequest
 
     component.onSubmit();
 
-    expect(clientService.createClient).toHaveBeenCalledWith(mockClient);
+    expect(clientService.createClient).toHaveBeenCalledWith(mockCreateClientRequest);
     expect(router.navigate).toHaveBeenCalledWith(['/clients']);
     expect(component.isSubmitting).toBe(true);
   });

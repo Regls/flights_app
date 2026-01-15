@@ -5,7 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { ClientDetailsComponent } from './client-details.component';
 import { ClientService } from '../client.service';
-import { Client } from '../client';
+import { ClientResponse } from '../models/client-reponse';
 
 
 describe('ClientDetailsComponent', () => {
@@ -14,11 +14,11 @@ describe('ClientDetailsComponent', () => {
   let clientService: jasmine.SpyObj<ClientService>;
   let router: Router;
 
-  const mockClient: Client = {
+  const mockClient: ClientResponse = {
     id: 1,
     cpf: '12345678901',
-    clientFirstName: 'Renan',
-    clientLastName: 'Reginato',
+    firstName: 'Renan',
+    lastName: 'Reginato',
     active: true
   };
 

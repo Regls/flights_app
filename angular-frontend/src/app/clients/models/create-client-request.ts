@@ -1,7 +1,5 @@
-export class Client {
-    id: number;
+export interface CreateClientRequest {
     cpf: string;
     clientFirstName: string;
     clientLastName: string;
-    active: boolean;
 }

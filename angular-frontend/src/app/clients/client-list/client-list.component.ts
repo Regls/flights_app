@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Client } from '../client'
+import { ClientResponse } from '../models/client-reponse'
 import { ClientService } from '../client.service'
 import { Router } from '@angular/router';
 @Component({
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class ClientListComponent implements OnInit {
 
-  clients: Client[] = [];
+  clients: ClientResponse[] = [];
   errorMessage: string | null = null;
 
   constructor(
@@ -25,8 +25,8 @@ export class ClientListComponent implements OnInit {
     this.errorMessage = null;
 
     this.clientService.getClients().subscribe({
-      next: data => {
-        this.clients = data;
+      next: response => {
+        this.clients = response;
         this.sortClients();
       },
       error: err => {

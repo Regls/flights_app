@@ -4,9 +4,16 @@
     {{ errorMessage }}
 </div>
 
-<table class = "table table-striped">
+<div class="d-flex gap-3 mt-2">
+    <a routerLink="/create-airport" class="btn btn-primary">
+        + Add Airport
+    </a>
+</div>
+
+<table class = "table table-striped mt-4">
     <thead>
         <tr>
+            <th> ID </th>
             <th> IATA Code </th>
             <th> Airport Name </th>
             <th> City </th>
@@ -16,6 +23,7 @@
     </thead>
     <tbody>
         <tr *ngFor = "let airport of airports" >
+            <td> {{ airport.id }} </td>
             <td> {{ airport.iataCode }} </td>
             <td> {{ airport.airportName }} </td>
             <td> {{ airport.city }} </td>
@@ -27,6 +35,8 @@
             <td>
                 <button (click) = "airportDetails(airport.id)" class = "btn btn-info details-btn"> View</button>
                 <button (click) = "updateAirport(airport.id)" class = "btn btn-info update-btn" style="margin-left: 10px"> Update</button>
+                <button *ngIf="airport.operational" (click)="closeAirport(airport.id)" class="btn btn-warning" style="margin-left: 10px">Close</button>
+                <button *ngIf="!airport.operational" (click)="openAirport(airport.id)" class="btn btn-success" style="margin-left: 10px">Open</button>
                 <button (click) = "deleteAirport(airport.id)" class = "btn btn-danger delete-btn" style="margin-left: 10px"> Delete</button>
             </td>
         </tr>

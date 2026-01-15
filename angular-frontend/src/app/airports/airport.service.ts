@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class AirportService {
     
-    private baseUrl = 'http://localhost:8080/airports'
+    private baseUrl = 'http://localhost:8080/api/v1/airports'
 
     constructor(private http: HttpClient) {}
 
@@ -25,7 +25,15 @@ export class AirportService {
     }
 
     updateAirport(id: number, airport: Airport) {
-        return this.http.put(`${this.baseUrl}/${id}`, airport);
+        return this.http.put(`${this.baseUrl}/${id}/name`, airport);
+    }
+
+    openAirport(id:number) {
+        return this.http.put(`${this.baseUrl}/${id}/open`, {});
+    }
+
+    closeAirport(id:number) {
+        return this.http.put(`${this.baseUrl}/${id}/close`, {});
     }
 
     deleteAirport(id: number) {

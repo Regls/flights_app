@@ -80,7 +80,9 @@ public class AirportService {
         List<Flight> scheduledFlights = flightRepository.findByDepartureAirportOrArrivalAirportAndStatus(airport, airport, FlightStatus.SCHEDULED);
 
         for (Flight flight : scheduledFlights) {
-            flight.cancel();
+            if (flight.isScheduled()) {
+                flight.cancel();
+            }
         }
 
         airport.close();

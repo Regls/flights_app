@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Client } from '../client';
-import { ClientService } from '../client.service';
 import { Router } from '@angular/router';
+
+import { ClientService } from '../client.service';
+import { CreateClientRequest } from '../models/create-client-request';
+import { ClientResponse } from '../models/client-reponse';
+
 
 @Component({
   selector: 'app-create-client',
@@ -10,7 +13,13 @@ import { Router } from '@angular/router';
 })
 export class CreateClientComponent implements OnInit {
 
-  client: Client = new Client();
+  client: CreateClientRequest = {
+    cpf: '',
+    clientFirstName: '',
+    clientLastName: ''
+  }
+
+  clientResponse: ClientResponse;
   errorMessage: string | null = null;
   isSubmitting = false;
 

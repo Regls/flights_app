@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientService } from '../client.service';
-import { Client } from '../client';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { ClientService } from '../client.service';
+import { UpdateClientRequest } from '../models/update-client-request';
+import { ClientResponse } from '../models/client-reponse';
+
 
 @Component({
   selector: 'app-update-client',
@@ -11,7 +14,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class UpdateClientComponent implements OnInit {
 
   id: number;
-  client: Client = new Client();
+  client: UpdateClientRequest = {
+    clientFirstName: '',
+    clientLastName: ''
+  };
+
+  clientResponse: ClientResponse;
+
   errorMessage: string | null = null;
   isSubmitting = false;
 
@@ -22,18 +31,20 @@ export class UpdateClientComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.id = Number(this.route.snapshot.paramMap.get('id'));
+  this.id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.clientService.getClientById(this.id).subscribe({
-      next: data => {
-          this.client = data;
-      },
-      error: err => {
-        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
-        this.isSubmitting = false;
-      }
-    });
-  }
+  this.clientService.getClientById(this.id).subscribe({
+    next: response => {
+      this.clientResponse = response;
+      this.client.clientFirstName = response.firstName,
+      this.client.clientLastName = response.lastName
+    },
+    error: err => {
+      this.errorMessage = err.error?.message || 'Unexpected error';
+      this.isSubmitting = false;
+    }
+  });
+}
 
   saveClient(): void {
     this.isSubmitting = true;
@@ -41,9 +52,7 @@ export class UpdateClientComponent implements OnInit {
 
     
     this.clientService.updateClient(this.id, this.client).subscribe({
-      next: () => {
-        this.goToClientList();
-      },
+      next: () => this.goToClientList(),
       error: err => {
         this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
         this.isSubmitting = false;

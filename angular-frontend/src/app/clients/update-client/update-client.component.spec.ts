@@ -6,7 +6,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { UpdateClientComponent } from './update-client.component';
 import { ClientService } from '../client.service';
-import { Client } from '../client';
+import { ClientResponse } from '../models/client-reponse';
+import { UpdateClientRequest } from '../models/update-client-request';
 
 
 
@@ -16,13 +17,18 @@ describe('UpdateClientComponent', () => {
   let clientService: ClientService;
   let router: Router;
 
-  const mockClient: Client = {
+  const mockClientResponse: ClientResponse = {
     id: 1,
     cpf: '12345678901',
-    clientFirstName: 'Renan',
-    clientLastName: 'Reginato',
+    firstName: 'Renan',
+    lastName: 'Reginato',
     active: true
   }
+
+  const mockUpdateClientRequest: UpdateClientRequest = {
+    clientFirstName: 'Renan',
+    clientLastName: 'Reginato'
+  };
 
   beforeEach(async() => {
     await TestBed.configureTestingModule({
@@ -70,31 +76,31 @@ describe('UpdateClientComponent', () => {
 
   // S - tier
   it('should load client by id on init', () => {
-    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClient))
+    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClientResponse))
     
     fixture.detectChanges();
 
     expect(clientService.getClientById).toHaveBeenCalledWith(1);
-    expect(component.client).toEqual(mockClient);
+    expect(component.client).toEqual(mockUpdateClientRequest);
   });
 
   // S - tier
   it('should call service and navigate on update', () => {
-    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClient));
+    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClientResponse));
     (clientService.updateClient as jasmine.Spy).and.returnValue(of({}))
 
     fixture.detectChanges();
 
     component.onSubmit();
 
-    expect(clientService.updateClient).toHaveBeenCalledWith(1, mockClient);
+    expect(clientService.updateClient).toHaveBeenCalledWith(1, mockUpdateClientRequest);
     expect(router.navigate).toHaveBeenCalledWith(['/clients']);
     expect(component.isSubmitting).toBe(true);
   });
 
   // S - tier
   it('should show http error message on update fails', () => {
-    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClient));
+    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClientResponse));
     
     const errorResponse = new HttpErrorResponse({
       error: { message: 'Update failed' },
@@ -113,7 +119,7 @@ describe('UpdateClientComponent', () => {
 
   // B - tier
   it('should disable submit while submitting', () => {
-    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClient));
+    (clientService.getClientById as jasmine.Spy).and.returnValue(of(mockClientResponse));
     component.isSubmitting = true;
     fixture.detectChanges();
 

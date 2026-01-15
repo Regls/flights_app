@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { Client } from './client';
 import { Observable } from 'rxjs';
+import { ClientResponse } from './models/client-reponse';
+import { UpdateClientRequest } from './models/update-client-request';
+import { CreateClientRequest } from './models/create-client-request';
 
 @Injectable({
     providedIn: 'root'
@@ -13,19 +15,19 @@ export class ClientService {
     constructor(private http: HttpClient) {}
 
     getClients() {
-        return this.http.get<Client[]>(`${this.baseUrl}`);
+        return this.http.get<ClientResponse[]>(`${this.baseUrl}`);
     }
 
     getClientById(id: number) {
-        return this.http.get<Client>(`${this.baseUrl}/${id}`);
+        return this.http.get<ClientResponse>(`${this.baseUrl}/${id}`);
     }
 
-    createClient(client: Client): Observable<Object> {
-        return this.http.post(`${this.baseUrl}`, client);
+    createClient(request: CreateClientRequest): Observable<Object> {
+        return this.http.post(`${this.baseUrl}`, request);
     }
 
-    updateClient(id: number, client: Client) {
-        return this.http.put(`${this.baseUrl}/${id}/name`, client);
+    updateClient(id: number, request: UpdateClientRequest) {
+        return this.http.put(`${this.baseUrl}/${id}/name`, request);
     }
 
     activateClient(id: number) {

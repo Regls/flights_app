@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Client } from '../client';
+import { ClientResponse } from '../models/client-reponse';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClientService } from '../client.service';
 
@@ -10,7 +10,7 @@ import { ClientService } from '../client.service';
 })
 export class ClientDetailsComponent implements OnInit {
   
-  client!: Client
+  client!: ClientResponse
   errorMessage: string | null = null
   constructor(
     private clientService: ClientService,
