@@ -28,7 +28,7 @@
             <td> {{ airport.airportName }} </td>
             <td> {{ airport.city }} </td>
             <td>
-                <span [ngclass]="airport.operational ? 'text-sucess' : 'text-danger'">
+                <span [ngClass]="airport.operational ? 'text-success' : 'text-danger'">
                     {{ airport.operational ? 'Open' : 'Closed' }}
                 </span>
             </td>

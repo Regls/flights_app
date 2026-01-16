@@ -4,9 +4,16 @@
     {{ errorMessage }}
 </div>
 
-<table class = "table table-striped">
+<div class="d-flex gap-3 mt-2">
+    <a routerLink="/create-airline" class="btn btn-primary">
+        + Add Airline
+    </a>
+</div>
+
+<table class = "table table-striped mt-4">
     <thead>
         <tr>
+            <th> ID </th>
             <th> IATA Code </th>
             <th> Airline Name </th>
             <th> Status </th>
@@ -15,16 +22,19 @@
     </thead>
     <tbody>
         <tr *ngFor = "let airline of airlines" >
+            <td> {{ airline.id }} </td>
             <td> {{ airline.iataCode }} </td>
             <td> {{ airline.airlineName }} </td>
             <td>
-                <span [ngclass]="airline.operational ? 'text-sucess' : 'text-danger'">
-                    {{ airline.operational ? 'Active' : 'Suspended' }}
+                <span [ngClass]="airline.status ? 'text-success' : 'text-danger'">
+                    {{ airline.status ? 'Active' : 'Suspended' }}
                 </span>
             </td>
             <td>
                 <button (click) = "airlineDetails(airline.id)" class = "btn btn-info details-btn"> View</button>
                 <button (click) = "updateAirline(airline.id)" class = "btn btn-info update-btn" style="margin-left: 10px"> Update</button>
+                <button *ngIf="airline.status" (click)="suspendAirline(airline.id)" class="btn btn-warning" style="margin-left: 10px">Suspend</button>
+                <button *ngIf="!airline.status" (click)="activateAirline(airline.id)" class="btn btn-success" style="margin-left: 10px">Activate</button>
                 <button (click) = "deleteAirline(airline.id)" class = "btn btn-danger delete-btn" style="margin-left: 10px"> Delete</button>
             </td>
         </tr>

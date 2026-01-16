@@ -1,18 +1,14 @@
 <h3> View Airline Details</h3>
-<div * ngIf="airline; else errorTpl">
+<ng-template #errorTpl>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+        {{ errorMessage }}
+    </div>
+</ng-template>
+<div *ngIf="airline; else errorTpl">
     <div>
         <label> <b> IATA Code: </b></label> {{airline.iataCode}}
     </div>
     <div>
         <label> <b> Airline Name: </b></label> {{airline.airlineName}}
     </div>
-    <div>
-        <label> <b> City: </b></label> {{airline.city}}
-    </div>
-
-    <ng-tempate #errorTpl>
-        <div *ngIf="errorMessage" class="alert alert-danger mt-2">
-            {{ errorMessage }}
-        </div>
-    </ng-tempate>
 </div>

@@ -27,6 +27,7 @@ export class AirlineListComponent implements OnInit {
     this.airlineService.getAirlines().subscribe({
       next: data => {
         this.airlines = data;
+        this.sortAirlines();
       },
       error: err => {
         this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
@@ -42,6 +43,28 @@ export class AirlineListComponent implements OnInit {
     this.router.navigate(['update-airline', id]);
   }
 
+  activateAirline(id: number) {
+    this.airlineService.activateAirline(id).subscribe({
+      next: () => {
+        this.getAirlines();
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+      }
+    });
+  }
+
+  suspendAirline(id: number) {
+    this.airlineService.suspendAirline(id).subscribe({
+      next: () => {
+        this.getAirlines();
+      },
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+      }
+    });
+  }
+
   deleteAirline(id: number) {
     this.airlineService.deleteAirline(id).subscribe({
       next: () => this.getAirlines(),
@@ -50,4 +73,13 @@ export class AirlineListComponent implements OnInit {
       }
     });
   }
+
+  private sortAirlines() {
+    this.airlines.sort((a, b) => {
+      if (a.status === b.status) {
+        return a.id - b.id;
+      }
+      return a.status ? -1 : 1;
+    });
+  };
 }

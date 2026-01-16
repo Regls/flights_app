@@ -9,7 +9,7 @@ public class ClientResponse {
     public String cpf;
     public String firstName;
     public String lastName;
-    public boolean active;
+    public boolean status;
 
     private ClientResponse(){        
     }
@@ -20,7 +20,7 @@ public class ClientResponse {
         response.cpf = client.hasCpf();
         response.firstName = client.hasFirstName();
         response.lastName = client.hasLastName();
-        response.active = client.isActive();
+        response.status = client.isActive();
         return response;
     }
 }

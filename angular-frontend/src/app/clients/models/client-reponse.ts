@@ -3,5 +3,5 @@ export interface ClientResponse {
     cpf: string;
     firstName: string;
     lastName: string;
-    active: boolean;
+    status: boolean;
 }

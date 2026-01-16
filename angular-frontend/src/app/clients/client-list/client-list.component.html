@@ -28,15 +28,15 @@
             <td> {{ client.firstName }} </td>
             <td> {{ client.lastName }} </td>
             <td>
-                <span [ngClass]="client.active ? 'text-success' : 'text-danger'">
-                    {{ client.active ? 'Active' : 'Inactive' }}
+                <span [ngClass]="client.status ? 'text-success' : 'text-danger'">
+                    {{ client.status ? 'Active' : 'Inactive' }}
                 </span>
             </td>
             <td>
                 <button (click) = "clientDetails(client.id)" class = "btn btn-info details-btn"> View Details</button>
                 <button (click) = "updateClient(client.id)" class = "btn btn-info update-btn" style="margin-left: 10px"> Update</button>
-                <button *ngIf="client.active" (click)="deactivateClient(client.id)" class="btn btn-warning" style="margin-left: 10px">Deactivate</button>
-                <button *ngIf="!client.active" (click)="activateClient(client.id)" class="btn btn-success" style="margin-left: 10px">Activate</button>
+                <button *ngIf="client.status" (click)="deactivateClient(client.id)" class="btn btn-warning" style="margin-left: 10px">Deactivate</button>
+                <button *ngIf="!client.status" (click)="activateClient(client.id)" class="btn btn-success" style="margin-left: 10px">Activate</button>
                 <button (click) = "deleteClient(client.id)" class = "btn btn-danger delete-btn" style="margin-left: 10px"> Delete</button>
             </td>
         </tr>

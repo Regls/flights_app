@@ -8,7 +8,7 @@ public class AirlineResponse {
     public Long id;
     public String iataCode;
     public String airlineName;
-    public boolean active;
+    public boolean status;
 
     private AirlineResponse(){
     }
@@ -18,7 +18,7 @@ public class AirlineResponse {
         response.id = airline.hasId();
         response.iataCode = airline.hasIataCode();
         response.airlineName = airline.hasName();
-        response.active = airline.isActive();
+        response.status = airline.isActive();
         return response;
     }
 }

@@ -76,10 +76,10 @@ export class ClientListComponent implements OnInit {
 
   private sortClients() {
     this.clients.sort((a, b) => {
-      if (a.active === b.active) {
+      if (a.status === b.status) {
         return a.id - b.id;
       }
-      return a.active ? -1 : 1;
+      return a.status ? -1 : 1;
     });
   };
 }

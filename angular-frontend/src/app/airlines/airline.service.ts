@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class AirlineService {
     
-    private baseUrl = 'http://localhost:8080/airlines'
+    private baseUrl = 'http://localhost:8080/api/v1/airlines'
 
     constructor(private http: HttpClient) {}
 
@@ -25,7 +25,15 @@ export class AirlineService {
     }
 
     updateAirline(id: number, airline: Airline) {
-        return this.http.put(`${this.baseUrl}/${id}`, airline);
+        return this.http.put(`${this.baseUrl}/${id}/name`, airline);
+    }
+
+    activateAirline(id: number) {
+        return this.http.put(`${this.baseUrl}/${id}/activate`, {});
+    }
+
+    suspendAirline(id: number) {
+        return this.http.put(`${this.baseUrl}/${id}/suspend`, {});
     }
 
     deleteAirline(id: number) {
