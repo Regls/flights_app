@@ -14,21 +14,42 @@
         </div>
 
         <div class="form-group">
-            <label> Airline ID</label>
-            <input type="number" class ="form-control" id = "airlineId"
+            <label> Airline</label>
+            <select class ="form-control" id="airlineId"
                 [(ngModel)] = "flight.airlineId" name = "airlineId" required>
+            <option value="" disabled selected>
+                Select an airline
+            </option>
+            <option *ngFor="let airline of airlines" [value]="airline.id">
+                {{ airline.iataCode }} - {{ airline.airlineName }}
+            </option>
+            </select>
         </div>
     
         <div class="form-group">
-            <label> Departure Airport ID</label>
-            <input type="number" class ="form-control" id = "departureAirportId"
+            <label> Departure Airport</label>
+            <select class ="form-control" id = "departureAirportId"
                 [(ngModel)] = "flight.departureAirportId" name = "departureAirportId" required>
+            <option value="" disabled>
+                Select an airport
+            </option>
+            <option *ngFor="let airport of getDepartureAirports()" [ngValue]="airport.id">
+                {{ airport.iataCode }} - {{ airport.airportName }}
+            </option>
+            </select>
         </div>
 
         <div class="form-group">
-            <label> Arrival Airport ID</label>
-            <input type="number" class ="form-control" id = "arrivalAirportId"
+            <label> Arrival Airport</label>
+            <select class ="form-control" id = "arrivalAirportId"
                 [(ngModel)] = "flight.arrivalAirportId" name = "arrivalAirportId" required>
+            <option value="" disabled>
+                Select an airport
+            </option>
+            <option *ngFor="let airport of getArrivalAirports()" [ngValue]="airport.id">
+                {{ airport.iataCode }} - {{ airport.airportName }}
+            </option>
+            </select>
         </div>
 
         <div class="form-group">
@@ -49,5 +70,5 @@
     
         <button class = "btn btn-success" type ="submit" [disabled]="isSubmitting">Submit</button>
     
-    </form>
+        </form>
 </div>
