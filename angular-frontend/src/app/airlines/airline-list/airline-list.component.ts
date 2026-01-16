@@ -65,15 +65,6 @@ export class AirlineListComponent implements OnInit {
     });
   }
 
-  deleteAirline(id: number) {
-    this.airlineService.deleteAirline(id).subscribe({
-      next: () => this.getAirlines(),
-      error: err => {
-        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
-      }
-    });
-  }
-
   private sortAirlines() {
     this.airlines.sort((a, b) => {
       if (a.status === b.status) {

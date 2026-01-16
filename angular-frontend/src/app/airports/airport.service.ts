@@ -35,8 +35,4 @@ export class AirportService {
     closeAirport(id:number) {
         return this.http.put(`${this.baseUrl}/${id}/close`, {});
     }
-
-    deleteAirport(id: number) {
-        return this.http.delete(`${this.baseUrl}/${id}`);
-    }
 }

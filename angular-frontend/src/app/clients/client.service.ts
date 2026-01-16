@@ -37,8 +37,4 @@ export class ClientService {
     deactivateClient(id: number) {
         return this.http.put(`${this.baseUrl}/${id}/deactivate`, {});
     }
-
-    deleteClient(id: number) {
-        return this.http.delete(`${this.baseUrl}/${id}`);
-    }
 }

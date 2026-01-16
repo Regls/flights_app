@@ -65,15 +65,6 @@ export class AirportListComponent implements OnInit {
     })
   }
 
-  deleteAirport(id: number) {
-    this.airportService.deleteAirport(id).subscribe({
-      next: () => this.getAirports(),
-      error: err => {
-        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
-      }
-    });
-  }
-
   private sortAirports() {
     this.airports.sort((a, b) => {
       if (a.operational === b.operational) {

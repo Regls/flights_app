@@ -65,15 +65,6 @@ export class ClientListComponent implements OnInit {
     });
   }
 
-  deleteClient(id: number) {
-    this.clientService.deleteClient(id).subscribe({
-      next: () => this.getClients(),
-      error: err => {
-        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
-      }
-    });
-  }
-
   private sortClients() {
     this.clients.sort((a, b) => {
       if (a.status === b.status) {

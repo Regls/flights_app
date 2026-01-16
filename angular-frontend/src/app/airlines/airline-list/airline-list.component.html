@@ -35,7 +35,6 @@
                 <button (click) = "updateAirline(airline.id)" class = "btn btn-info update-btn" style="margin-left: 10px"> Update</button>
                 <button *ngIf="airline.status" (click)="suspendAirline(airline.id)" class="btn btn-warning" style="margin-left: 10px">Suspend</button>
                 <button *ngIf="!airline.status" (click)="activateAirline(airline.id)" class="btn btn-success" style="margin-left: 10px">Activate</button>
-                <button (click) = "deleteAirline(airline.id)" class = "btn btn-danger delete-btn" style="margin-left: 10px"> Delete</button>
             </td>
         </tr>
     </tbody>

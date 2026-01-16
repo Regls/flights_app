@@ -35,8 +35,4 @@ export class AirlineService {
     suspendAirline(id: number) {
         return this.http.put(`${this.baseUrl}/${id}/suspend`, {});
     }
-
-    deleteAirline(id: number) {
-        return this.http.delete(`${this.baseUrl}/${id}`);
-    }
 }

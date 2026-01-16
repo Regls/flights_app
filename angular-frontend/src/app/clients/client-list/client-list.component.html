@@ -37,8 +37,6 @@
                 <button (click) = "updateClient(client.id)" class = "btn btn-info update-btn" style="margin-left: 10px"> Update</button>
                 <button *ngIf="client.status" (click)="deactivateClient(client.id)" class="btn btn-warning" style="margin-left: 10px">Deactivate</button>
                 <button *ngIf="!client.status" (click)="activateClient(client.id)" class="btn btn-success" style="margin-left: 10px">Activate</button>
-                <button (click) = "deleteClient(client.id)" class = "btn btn-danger delete-btn" style="margin-left: 10px"> Delete</button>
-            </td>
         </tr>
     </tbody>
 </table>
