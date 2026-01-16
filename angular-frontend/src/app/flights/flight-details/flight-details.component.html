@@ -1,0 +1,26 @@
+<h3> View Flight Details</h3>
+<ng-template #errorTpl>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+        {{ errorMessage }}
+    </div>
+</ng-template>
+<div *ngIf="flight; else errorTpl">
+    <div>
+        <label> <b> Flight Number: </b></label> {{flight.flightNumber}}
+    </div>
+    <div>
+        <label> <b> Airline: </b></label> {{flight.airline.iataCode}} - {{ flight.airline.airlineName }}
+    </div>
+    <div>
+        <label> <b> Departure Airport: </b></label> {{flight.departureAirport.iataCode}} - {{ flight.departureAirport.airportName }}
+    </div>
+    <div>
+        <label> <b> Arrival Airport: </b></label> {{flight.arrivalAirport.iataCode}} - {{ flight.arrivalAirport.airportName }}
+    </div>
+    <div>
+        <label> <b> Departure Time: </b></label> {{flight.departureTime}}
+    </div>
+    <div>
+        <label> <b> Arrival Time: </b></label> {{flight.arrivalTime}}
+    </div>
+</div>

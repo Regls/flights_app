@@ -15,6 +15,7 @@ import { UpdateAirlineComponent } from './airlines/update-airline/update-airline
 import { AirlineDetailsComponent } from './airlines/airline-details/airline-details.component';
 import { FlightListComponent } from './flights/flight-list/flight-list.component';
 import { CreateFlightComponent } from './flights/create-flight/create-flight.component';
+import { FlightDetailsComponent } from './flights/flight-details/flight-details.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'flightapp', pathMatch: 'full'},
@@ -37,6 +38,7 @@ const routes: Routes = [
 
   {path: 'flights', component: FlightListComponent},
   {path: 'create-flight', component: CreateFlightComponent},
+  {path: 'flight-details/:id', component: FlightDetailsComponent},
 
 
   {path: '**', redirectTo: 'flightapp'}

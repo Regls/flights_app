@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { ClientDetailsComponent } from './client-details.component';
+import { ClientDetailsComponent } from './flight-details.component';
 import { ClientService } from '../flight.service';
 import { ClientResponse } from '../models/flight-reponse';
 
