@@ -16,6 +16,8 @@ import { AirlineListComponent } from './airlines/airline-list/airline-list.compo
 import { CreateAirlineComponent } from './airlines/create-airline/create-airline.component';
 import { UpdateAirlineComponent } from './airlines/update-airline/update-airline.component';
 import { AirlineDetailsComponent } from './airlines/airline-details/airline-details.component';
+import { FlightListComponent } from './flights/flight-list/flight-list.component';
+import { CreateFlightComponent } from './flights/create-flight/create-flight.component';
 
 import { FormsModule} from '@angular/forms';
 
@@ -35,7 +37,9 @@ import { FormsModule} from '@angular/forms';
     AirlineListComponent,
     CreateAirlineComponent,
     UpdateAirlineComponent,
-    AirlineDetailsComponent
+    AirlineDetailsComponent,
+    FlightListComponent,
+    CreateFlightComponent
 
   ],
   imports: [

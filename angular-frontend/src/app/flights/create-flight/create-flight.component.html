@@ -1,0 +1,53 @@
+<div class="col-md-6 offset-md-3">
+    <h3> Create Flight </h3>
+    <form (ngSubmit) = "onSubmit()">
+    
+        <div class="form-group">
+            <label> Flight Number (must start with Airline IATA)</label>
+            <input type="text" class ="form-control" id = "flightNumber"
+                [(ngModel)] = "flight.flightNumber" name = "flightNumber" required 
+                pattern="^[A-Z0-9]{2}[0-9]{1,4}$" maxlength="6" #flightNumber="ngModel">
+
+            <div *ngIf="flightNumber.invalid && flightNumber.touched" class="text-danger mt-1">
+                Flight Number must follow format: AA1234 (Airline IATA + 1-4 digits)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label> Airline ID</label>
+            <input type="number" class ="form-control" id = "airlineId"
+                [(ngModel)] = "flight.airlineId" name = "airlineId" required>
+        </div>
+    
+        <div class="form-group">
+            <label> Departure Airport ID</label>
+            <input type="number" class ="form-control" id = "departureAirportId"
+                [(ngModel)] = "flight.departureAirportId" name = "departureAirportId" required>
+        </div>
+
+        <div class="form-group">
+            <label> Arrival Airport ID</label>
+            <input type="number" class ="form-control" id = "arrivalAirportId"
+                [(ngModel)] = "flight.arrivalAirportId" name = "arrivalAirportId" required>
+        </div>
+
+        <div class="form-group">
+            <label> Departure Time</label>
+            <input type="datetime-local" class ="form-control" id = "departureTime"
+                [(ngModel)] = "flight.departureTime" name = "departureTime" required>
+        </div>
+
+        <div class="form-group">
+            <label> Arrival Time</label>
+            <input type="datetime-local" class ="form-control" id = "arrivalTime"
+                [(ngModel)] = "flight.arrivalTime" name = "arrivalTime" required>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+            {{ errorMessage }}
+        </div>
+    
+        <button class = "btn btn-success" type ="submit" [disabled]="isSubmitting">Submit</button>
+    
+    </form>
+</div>

@@ -13,6 +13,8 @@ import { AirlineListComponent } from './airlines/airline-list/airline-list.compo
 import { CreateAirlineComponent } from './airlines/create-airline/create-airline.component';
 import { UpdateAirlineComponent } from './airlines/update-airline/update-airline.component';
 import { AirlineDetailsComponent } from './airlines/airline-details/airline-details.component';
+import { FlightListComponent } from './flights/flight-list/flight-list.component';
+import { CreateFlightComponent } from './flights/create-flight/create-flight.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'flightapp', pathMatch: 'full'},
@@ -32,6 +34,10 @@ const routes: Routes = [
   {path: 'create-airline', component: CreateAirlineComponent},
   {path: 'update-airline/:id', component: UpdateAirlineComponent},
   {path: 'airline-details/:id', component: AirlineDetailsComponent},
+
+  {path: 'flights', component: FlightListComponent},
+  {path: 'create-flight', component: CreateFlightComponent},
+
 
   {path: '**', redirectTo: 'flightapp'}
 ];

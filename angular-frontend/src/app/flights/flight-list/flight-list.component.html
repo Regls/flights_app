@@ -1,0 +1,48 @@
+<h2> Flight List</h2>
+
+<div *ngIf="errorMessage" class="alert alert-danger mt-2">
+    {{ errorMessage }}
+</div>
+
+<div class="d-flex gap-3 mt-2">
+    <a routerLink="/create-flight" class="btn btn-primary">
+        + Add Flight
+    </a>
+</div>
+
+<table class = "table table-striped mt-4">
+    <thead>
+        <tr>
+            <th> ID </th>
+            <th> Flight Number </th>
+            <th> Airline </th>
+            <th> Dep Airport </th>
+            <th> Arr Airport </th>
+            <th> Dep Time </th>
+            <th> Arr Time </th>
+            <th> Status </th>
+            <th> Actions </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let flight of flights" >
+            <td> {{ flight.id }} </td>
+            <td> {{ flight.flightNumber }} </td>
+            <td> {{ flight.airline.iataCode }} - {{ flight.airline.airlineName }} </td>
+            <td> {{ flight.departureAirport.iataCode }} - {{ flight.departureAirport.airportName }} </td>
+            <td> {{ flight.arrivalAirport.iataCode }} - {{ flight.arrivalAirport.airportName }} </td>
+            <td> {{ flight.departureTime }} </td>
+            <td> {{ flight.arrivalTime }} </td>
+            <td>
+                <span [ngClass]="getStatusClass(flight.status)">
+                    {{ flight.status }}
+                </span>
+            </td>
+            <td>
+                <button (click) = "flightDetails(flight.id)" class = "btn btn-info details-btn"> View Details</button>
+                <button *ngIf="flight.status === FlightStatus.SCHEDULED" (click)="departFlight(flight.id)" class="btn btn-warning" style="margin-left: 10px">Depart</button>
+                <button *ngIf="flight.status === FlightStatus.IN_FLIGHT" (click)="arriveFlight(flight.id)" class="btn btn-success" style="margin-left: 10px">Arrive</button>
+                <button *ngIf="flight.status === FlightStatus.SCHEDULED" (click)="cancelFlight(flight.id)" class="btn btn-danger" style="margin-left: 10px">Cancel</button>
+        </tr>
+    </tbody>
+</table>
