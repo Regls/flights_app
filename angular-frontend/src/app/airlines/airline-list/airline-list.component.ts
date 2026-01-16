@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Airline } from '../airline'
-import { AirlineService } from '../airline.service'
 import { Router } from '@angular/router';
+
+import { AirlineService } from '../airline.service'
+import { AirlineResponse } from '../models/airline-response'
+
+
 @Component({
   selector: 'app-airline-list',
   templateUrl: './airline-list.component.html',
@@ -9,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class AirlineListComponent implements OnInit {
 
-  airlines: Airline[] = [];
+  airlines: AirlineResponse[] = [];
   errorMessage: string | null = null;
 
   constructor(
@@ -25,8 +28,8 @@ export class AirlineListComponent implements OnInit {
     this.errorMessage = null;
 
     this.airlineService.getAirlines().subscribe({
-      next: data => {
-        this.airlines = data;
+      next: response => {
+        this.airlines = response;
         this.sortAirlines();
       },
       error: err => {

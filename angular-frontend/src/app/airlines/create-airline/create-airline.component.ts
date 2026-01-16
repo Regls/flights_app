@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Airline } from '../airline';
-import { AirlineService } from '../airline.service';
 import { Router } from '@angular/router';
+
+import { AirlineService } from '../airline.service';
+import { CreateAirlineRequest } from '../models/create-airline-request';
+
 
 @Component({
   selector: 'app-create-airline',
@@ -10,7 +12,11 @@ import { Router } from '@angular/router';
 })
 export class CreateAirlineComponent implements OnInit {
 
-  airline: Airline = new Airline();
+  airline: CreateAirlineRequest = {
+    iataCode: '',
+    airlineName: ''
+  };
+
   errorMessage: string | null = null;
   isSubmitting = false;
 

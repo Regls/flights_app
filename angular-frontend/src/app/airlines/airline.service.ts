@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { Airline } from './airline';
 import { Observable } from 'rxjs';
+
+import { AirlineResponse } from './models/airline-response';
+import { CreateAirlineRequest } from './models/create-airline-request';
+import { UpdateAirlineRequest } from './models/update-airline-request';
+
 
 @Injectable({
     providedIn: 'root'
@@ -13,19 +17,19 @@ export class AirlineService {
     constructor(private http: HttpClient) {}
 
     getAirlines() {
-        return this.http.get<Airline[]>(`${this.baseUrl}`);
+        return this.http.get<AirlineResponse[]>(`${this.baseUrl}`);
     }
 
     getAirlineById(id: number) {
-        return this.http.get<Airline>(`${this.baseUrl}/${id}`);
+        return this.http.get<AirlineResponse>(`${this.baseUrl}/${id}`);
     }
 
-    createAirline(airline: Airline): Observable<Object> {
-        return this.http.post(`${this.baseUrl}`, airline);
+    createAirline(request: CreateAirlineRequest): Observable<Object> {
+        return this.http.post(`${this.baseUrl}`, request);
     }
 
-    updateAirline(id: number, airline: Airline) {
-        return this.http.put(`${this.baseUrl}/${id}/name`, airline);
+    updateAirline(id: number, request: UpdateAirlineRequest) {
+        return this.http.put(`${this.baseUrl}/${id}/name`, request);
     }
 
     activateAirline(id: number) {

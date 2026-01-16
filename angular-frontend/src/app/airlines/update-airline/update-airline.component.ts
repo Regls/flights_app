@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AirlineService } from '../airline.service';
-import { Airline } from '../airline';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { AirlineService } from '../airline.service';
+import { AirlineResponse } from '../models/airline-response';
+import { UpdateAirlineRequest } from '../models/update-airline-request';
+
 
 @Component({
   selector: 'app-update-airline',
@@ -11,7 +14,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class UpdateAirlineComponent implements OnInit {
 
   id: number;
-  airline: Airline = new Airline();
+  airline: UpdateAirlineRequest = {
+    airlineName: ''
+  };
+
+  airlineResponse: AirlineResponse;
+
   errorMessage: string | null = null;
   isSubmitting = false;
 
@@ -25,8 +33,9 @@ export class UpdateAirlineComponent implements OnInit {
     this.id = Number(this.route.snapshot.paramMap.get('id'));
 
     this.airlineService.getAirlineById(this.id).subscribe({
-      next: data => {
-          this.airline = data;
+      next: response => {
+          this.airline = response;
+          this.airline.airlineName = response.airlineName
       },
       error: err => {
         this.errorMessage = err.error?.message || err?.message ||'Unexpected error';

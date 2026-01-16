@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Airline } from '../airline';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { AirlineService } from '../airline.service';
+import { AirlineResponse } from '../models/airline-response';
 
 @Component({
   selector: 'app-airline-details',
@@ -10,7 +11,7 @@ import { AirlineService } from '../airline.service';
 })
 export class AirlineDetailsComponent implements OnInit {
   
-  airline!: Airline
+  airline!: AirlineResponse;
   errorMessage: string | null = null
   constructor(
     private airlineService: AirlineService,
