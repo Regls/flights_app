@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 
 import { FlightService } from '../flight.service';
 import { CreateFlightRequest } from '../models/create-flight-request';
-import { FlightResponse } from '../models/flight-reponse';
 
 import { AirlineService } from '../../airlines/airline.service';
 import { AirportService } from '../../airports/airport.service';
@@ -30,7 +29,6 @@ export class CreateFlightComponent implements OnInit {
   airlines: AirlineSummaryResponse[];
   airports: AirportSummaryResponse[];
 
-  flightResponse: FlightResponse;
   errorMessage: string | null = null;
   isSubmitting = false;
 

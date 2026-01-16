@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientResponse } from '../models/client-reponse';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { ClientService } from '../client.service';
+import { ClientResponse } from '../models/client-reponse';
+
 
 @Component({
   selector: 'app-client-details',
@@ -10,8 +12,9 @@ import { ClientService } from '../client.service';
 })
 export class ClientDetailsComponent implements OnInit {
   
-  client!: ClientResponse
+  client!: ClientResponse;
   errorMessage: string | null = null
+  
   constructor(
     private clientService: ClientService,
     private route: ActivatedRoute,

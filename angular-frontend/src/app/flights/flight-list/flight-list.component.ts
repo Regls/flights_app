@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FlightResponse } from '../models/flight-reponse'
-import { FlightService } from '../flight.service'
 import { Router } from '@angular/router';
+
+import { FlightService } from '../flight.service'
+import { FlightResponse } from '../models/flight-reponse'
 import { FlightStatus } from '../models/flight-status.enum';
+
+
 @Component({
   selector: 'app-flight-list',
   templateUrl: './flight-list.component.html',

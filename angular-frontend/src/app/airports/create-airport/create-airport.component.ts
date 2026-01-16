@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Airport } from '../airport';
-import { AirportService } from '../airport.service';
 import { Router } from '@angular/router';
+
+import { AirportService } from '../airport.service';
+import { CreateAirportRequest } from '../models/create-airport-request';
+
 
 @Component({
   selector: 'app-create-airport',
@@ -10,7 +12,12 @@ import { Router } from '@angular/router';
 })
 export class CreateAirportComponent implements OnInit {
 
-  airport: Airport = new Airport();
+  airport: CreateAirportRequest = {
+    iataCode: '',
+    airportName: '',
+    city: ''
+  };
+
   errorMessage: string | null = null;
   isSubmitting = false;
 

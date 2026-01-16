@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ClientService } from '../client.service';
-import { UpdateClientRequest } from '../models/update-client-request';
 import { ClientResponse } from '../models/client-reponse';
+import { UpdateClientRequest } from '../models/update-client-request';
 
 
 @Component({

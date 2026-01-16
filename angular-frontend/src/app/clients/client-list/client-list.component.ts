@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientResponse } from '../models/client-reponse'
-import { ClientService } from '../client.service'
 import { Router } from '@angular/router';
+
+import { ClientService } from '../client.service'
+import { ClientResponse } from '../models/client-reponse'
+
+
 @Component({
   selector: 'app-client-list',
   templateUrl: './client-list.component.html',

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Airport } from '../airport'
-import { AirportService } from '../airport.service'
 import { Router } from '@angular/router';
+
+import { AirportService } from '../airport.service'
+import { AirportResponse } from '../models/airport-response'
+
+
 @Component({
   selector: 'app-airport-list',
   templateUrl: './airport-list.component.html',
@@ -9,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class AirportListComponent implements OnInit {
 
-  airports: Airport[] = [];
+  airports: AirportResponse[] = [];
   errorMessage: string | null = null;
 
   constructor(
@@ -25,8 +28,8 @@ export class AirportListComponent implements OnInit {
     this.errorMessage = null;
 
     this.airportService.getAirports().subscribe({
-      next: data => {
-        this.airports = data;
+      next: response => {
+        this.airports = response;
         this.sortAirports();
       },
       error: err => {

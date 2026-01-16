@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AirportService } from '../airport.service';
-import { Airport } from '../airport';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { AirportService } from '../airport.service';
+import { AirportResponse } from '../models/airport-response';
+import { UpdateAirportRequest } from '../models/update-airport-request';
+
 
 @Component({
   selector: 'app-update-airport',
@@ -11,7 +14,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class UpdateAirportComponent implements OnInit {
 
   id: number;
-  airport: Airport = new Airport();
+  airport: UpdateAirportRequest ={
+    airportName: ''
+  };
+
+  airportResponse: AirportResponse;
+
   errorMessage: string | null = null;
   isSubmitting = false;
 
@@ -25,8 +33,9 @@ export class UpdateAirportComponent implements OnInit {
     this.id = Number(this.route.snapshot.paramMap.get('id'));
 
     this.airportService.getAirportById(this.id).subscribe({
-      next: data => {
-          this.airport = data;
+      next: response => {
+          this.airportResponse = response;
+          this.airport.airportName = response.airportName;
       },
       error: err => {
         this.errorMessage = err.error?.message || err?.message ||'Unexpected error';

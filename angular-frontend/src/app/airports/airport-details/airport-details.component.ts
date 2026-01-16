@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Airport } from '../airport';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { AirportService } from '../airport.service';
+import { AirportResponse } from '../models/airport-response';
+
 
 @Component({
   selector: 'app-airport-details',
@@ -10,8 +12,9 @@ import { AirportService } from '../airport.service';
 })
 export class AirportDetailsComponent implements OnInit {
   
-  airport!: Airport
+  airport!: AirportResponse;
   errorMessage: string | null = null
+  
   constructor(
     private airportService: AirportService,
     private route: ActivatedRoute,

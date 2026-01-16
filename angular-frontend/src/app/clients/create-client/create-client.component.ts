@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 
 import { ClientService } from '../client.service';
 import { CreateClientRequest } from '../models/create-client-request';
-import { ClientResponse } from '../models/client-reponse';
 
 
 @Component({
@@ -17,9 +16,8 @@ export class CreateClientComponent implements OnInit {
     cpf: '',
     clientFirstName: '',
     clientLastName: ''
-  }
+  };
 
-  clientResponse: ClientResponse;
   errorMessage: string | null = null;
   isSubmitting = false;
 
