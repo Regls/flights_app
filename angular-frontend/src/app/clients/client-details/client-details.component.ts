@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ClientService } from '../client.service';
 import { ClientResponse } from '../models/client-reponse';
-import { BookingResponse } from 'src/app/bookings/models/booking-response';
+import { BookingResponse } from '../../bookings/models/booking-response';
 
 
 @Component({

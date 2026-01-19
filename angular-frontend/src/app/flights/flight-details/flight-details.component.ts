@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { FlightService } from '../flight.service';
 import { FlightResponse } from '../models/flight-response';
+import { BookingResponse } from '../../bookings/models/booking-response';
 
 
 @Component({
@@ -13,7 +14,10 @@ import { FlightResponse } from '../models/flight-response';
 export class FlightDetailsComponent implements OnInit {
   
   flight!: FlightResponse;
+  bookings: BookingResponse[] = []
+
   errorMessage: string | null = null
+
   constructor(
     private flightService: FlightService,
     private route: ActivatedRoute,
@@ -23,8 +27,22 @@ export class FlightDetailsComponent implements OnInit {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
+    this.loadFlight(id);
+    this.loadBookings(id);
+  }
+
+  private loadFlight(id: number) {
     this.flightService.getFlightById(id).subscribe({
-      next: data => (this.flight = data),
+      next: data => this.flight = data,
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+      }
+    });
+  }
+
+  private loadBookings(id: number) {
+    this.flightService.getFlightBookings(id).subscribe({
+      next: data => this.bookings = data,
       error: err => {
         this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
       }

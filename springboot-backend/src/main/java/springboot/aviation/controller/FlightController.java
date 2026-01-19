@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import springboot.aviation.dto.request.CreateFlightRequest;
+import springboot.aviation.dto.response.BookingResponse;
 import springboot.aviation.dto.response.FlightResponse;
 import springboot.aviation.dto.response.MessageResponse;
 import springboot.aviation.model.Flight;
+import springboot.aviation.service.BookingService;
 import springboot.aviation.service.FlightService;
+
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -25,8 +28,11 @@ public class FlightController {
     
     private final FlightService flightService;
 
-    public FlightController(FlightService flightService) {
+    private final BookingService bookingService;
+
+    public FlightController(FlightService flightService, BookingService bookingService) {
         this.flightService = flightService;
+        this.bookingService = bookingService;
     }
 
     @GetMapping
@@ -44,6 +50,11 @@ public class FlightController {
         Flight flight = flightService.findById(id);
 
         return ResponseEntity.ok(FlightResponse.from(flight));
+    }
+
+    @GetMapping("/{id}/bookings")
+    public List<BookingResponse> bookingsByFlight(@PathVariable Long id) {
+        return bookingService.findByFlightId(id);
     }
 
     @PostMapping

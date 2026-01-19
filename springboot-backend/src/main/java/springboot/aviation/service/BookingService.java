@@ -46,6 +46,13 @@ public class BookingService {
                 .toList();
     }
 
+    public List<BookingResponse> findByFlightId(Long flightId) {
+        return bookingRepository.findByFlightId(flightId)
+                .stream()
+                .map(BookingResponse::from)
+                .toList();
+    }
+
     public Booking createBooking(CreateBookingRequest request) {
 
         Client client = clientRepository.findById(request.clientId)

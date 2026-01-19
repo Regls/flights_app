@@ -1,4 +1,4 @@
-<h3> View Flight Details</h3>
+<h2> View Flight Details</h2>
 <ng-template #errorTpl>
     <div *ngIf="errorMessage" class="alert alert-danger mt-2">
         {{ errorMessage }}
@@ -23,4 +23,31 @@
     <div>
         <label> <b> Arrival Time: </b></label> {{flight.arrivalTime}}
     </div>
+</div>
+
+<h3 class="mt-4">Bookings</h3>
+
+<table class="table table-striped" *ngIf="bookings.length > 0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Client</th>
+      <th>CPF</th>
+      <th>Status</th>
+      <th>Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let booking of bookings">
+      <td>{{ booking.id }}</td>
+      <td>{{ booking.client.firstName }}</td>
+      <td>{{ booking.client.cpf }}</td>
+      <td>{{ booking.status }}</td>
+      <td>{{ booking.createdAt | date:'short' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="bookings.length === 0" class="text-muted">
+  No bookings found for this flight.
 </div>
