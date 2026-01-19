@@ -26,10 +26,10 @@ import springboot.aviation.service.FlightService;
 @RestController
 @RequestMapping("/api/v1/airlines")
 public class AirlineController {
-
-    private final FlightService flightService;
     
     private final AirlineService airlineService;
+
+    private final FlightService flightService;
 
     public AirlineController(AirlineService airlineService, FlightService flightService) {
         this.airlineService = airlineService;

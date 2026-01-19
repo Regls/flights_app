@@ -1,6 +1,7 @@
 package springboot.aviation.service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,20 @@ public class FlightService {
     public List<FlightResponse> findByAirlineId(Long airlineId) {
         return flightRepository.findByAirlineId(airlineId)
                 .stream()
+                .map(FlightResponse::from)
+                .toList();
+    }
+
+    public List<FlightResponse> findByAirportId(Long airportId) {
+
+        List<Flight> departures =
+            flightRepository.findByDepartureAirportId(airportId);
+
+        List<Flight> arrivals =
+            flightRepository.findByArrivalAirportId(airportId);
+
+         return Stream.concat(departures.stream(), arrivals.stream())
+                .distinct()
                 .map(FlightResponse::from)
                 .toList();
     }

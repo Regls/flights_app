@@ -20,5 +20,9 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
     List<Flight> findByDepartureAirportOrArrivalAirportAndStatus(Airport departureAirport, Airport arrivalAirport, FlightStatus status);
 
-    List<Flight> findByAirlineId(Long id);
+    List<Flight> findByAirlineId(Long airlineId);
+
+    List<Flight> findByDepartureAirportId(Long airportId);
+    
+    List<Flight> findByArrivalAirportId(Long airportId);
 }

@@ -1,4 +1,4 @@
-<h3> View Airport Details</h3>
+<h2> View Airport Details</h2>
 <ng-template #errorTpl>
     <div *ngIf="errorMessage" class="alert alert-danger mt-2">
         {{ errorMessage }}
@@ -14,4 +14,37 @@
     <div>
         <label> <b> City: </b></label> {{airport.city}}
     </div>
+</div>
+
+<h3 class="mt-4">Flights</h3>
+
+<table class="table table-striped" *ngIf="flights.length > 0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Flight Number</th>
+      <th>Airline</th>
+      <th>Dep Airport</th>
+      <th>Arr Airport</th>
+      <th>Dep Time</th>
+      <th>Arr Time</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let flight of flights">
+      <td>{{ flight.id }}</td>
+      <td>{{ flight.flightNumber }}</td>
+      <td>{{ flight.airline.iataCode }}</td>
+      <td>{{ flight.departureAirport.airportName }}</td>
+      <td>{{ flight.arrivalAirport.airportName }}</td>
+      <td>{{ flight.departureTime | date:'short' }}</td>
+      <td>{{ flight.departureTime | date:'short' }}</td>
+      <td>{{ flight.status }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="flights.length === 0" class="text-muted">
+  No flights found for this airline.
 </div>

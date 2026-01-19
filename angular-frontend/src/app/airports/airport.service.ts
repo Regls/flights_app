@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AirportResponse } from './models/airport-response';
 import { CreateAirportRequest } from './models/create-airport-request';
 import { UpdateAirportRequest } from './models/update-airport-request';
+import { FlightResponse } from '../flights/models/flight-response';
 
 
 @Injectable({
@@ -22,6 +23,10 @@ export class AirportService {
 
     getAirportById(id: number) {
         return this.http.get<AirportResponse>(`${this.baseUrl}/${id}`);
+    }
+
+    getAirportFlights(id: number) {
+        return this.http.get<FlightResponse[]>(`${this.baseUrl}/${id}/flights`);
     }
 
     createAirport(request: CreateAirportRequest): Observable<Object> {

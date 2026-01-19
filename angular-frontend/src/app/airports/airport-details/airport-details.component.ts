@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AirportService } from '../airport.service';
 import { AirportResponse } from '../models/airport-response';
+import { FlightResponse } from '../../flights/models/flight-response';
 
 
 @Component({
@@ -13,6 +14,8 @@ import { AirportResponse } from '../models/airport-response';
 export class AirportDetailsComponent implements OnInit {
   
   airport!: AirportResponse;
+  flights: FlightResponse[] = []
+
   errorMessage: string | null = null
   
   constructor(
@@ -24,8 +27,22 @@ export class AirportDetailsComponent implements OnInit {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
+    this.loadAirport(id);
+    this.loadFlights(id);
+  }
+
+  private loadAirport(id: number) {
     this.airportService.getAirportById(id).subscribe({
-      next: data => (this.airport = data),
+      next: data => this.airport = data,
+      error: err => {
+        this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
+      }
+    });
+  }
+
+  private loadFlights(id: number) {
+    this.airportService.getAirportFlights(id).subscribe({
+      next: data => this.flights = data,
       error: err => {
         this.errorMessage = err.error?.message || err?.message ||'Unexpected error';
       }

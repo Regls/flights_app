@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AirlineService } from '../airline.service';
 import { AirlineResponse } from '../models/airline-response';
-import { FlightResponse } from 'src/app/flights/models/flight-response';
+import { FlightResponse } from '../../flights/models/flight-response';
 
 @Component({
   selector: 'app-airline-details',
