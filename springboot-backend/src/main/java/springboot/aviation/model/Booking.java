@@ -49,7 +49,9 @@ public class Booking {
 
     //domain
     public static Booking createBooking(Client client, Flight flight) {
-        return new Booking(client, flight);
+        Booking booking = new Booking(client, flight);
+        flight.addBooking(booking);
+        return booking;
     }
 
     private void validateCreationRules(Client client, Flight flight) {

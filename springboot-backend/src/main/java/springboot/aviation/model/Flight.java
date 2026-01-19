@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import springboot.aviation.exception.BusinessException;
-import springboot.aviation.messages.BookingMessages;
 import springboot.aviation.messages.FlightMessages;
 
 
@@ -43,8 +42,12 @@ public class Flight {
     @Column(name = "status", nullable = false)
     private FlightStatus status = FlightStatus.SCHEDULED;
 
-    @OneToMany(mappedBy = "flight")
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings = new ArrayList<>();
+
+    public void addBooking(Booking booking) {
+        bookings.add(booking);
+    }
 
     private static final String FLIGHT_NUMBER_PATTERN = "^[A-Z0-9]{2}\\d{1,4}$";
 

@@ -18,6 +18,10 @@ import springboot.aviation.messages.FlightMessages;
 public class FlightTest {
 
     //support methods
+    private Client validClient() {
+        return Client.createClient("12345678901", "Valid", "Client");
+    }
+
     private Airline activateAirline() {
         return Airline.createAirline("G3", "Gol Airlines");
     }
@@ -50,6 +54,12 @@ public class FlightTest {
                 depDateTime(),
                 arrDateTime()
         );
+    }
+
+    private Booking validBooking(Flight Flight) {
+        Client client = validClient();
+        Booking booking = Booking.createBooking(client, Flight);
+        return booking;
     }
 
     //tests
@@ -341,4 +351,15 @@ public class FlightTest {
         flight.arrive();
         assertFalse(flight.isActive());
     }
+
+    @Test
+    void shouldCancelBookingWhenFlightIsCancelled() {
+        Flight flight = validFlight();
+        Booking booking = validBooking(flight);
+
+        flight.cancel();
+
+        assertTrue(booking.isCancelled());
+    }
+
 }
