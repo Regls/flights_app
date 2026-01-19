@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import springboot.aviation.dto.request.CreateBookingRequest;
+import springboot.aviation.dto.response.BookingResponse;
 import springboot.aviation.exception.BusinessException;
 import springboot.aviation.exception.ResourceNotFoundException;
 import springboot.aviation.model.Booking;
@@ -36,6 +37,13 @@ public class BookingService {
     public Booking findById(Long bookingId) {
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+    }
+
+    public List<BookingResponse> findByClientId(Long clientId) {
+        return bookingRepository.findByClientId(clientId)
+                .stream()
+                .map(BookingResponse::from)
+                .toList();
     }
 
     public Booking createBooking(CreateBookingRequest request) {

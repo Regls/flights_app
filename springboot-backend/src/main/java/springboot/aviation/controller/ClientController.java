@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springboot.aviation.dto.request.ChangeClientRequest;
 import springboot.aviation.dto.request.CreateClientRequest;
+import springboot.aviation.dto.response.BookingResponse;
 import springboot.aviation.dto.response.ClientResponse;
 import springboot.aviation.dto.response.MessageResponse;
 import springboot.aviation.model.Client;
 import springboot.aviation.service.ClientService;
+import springboot.aviation.service.BookingService;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -26,9 +28,12 @@ import springboot.aviation.service.ClientService;
 public class ClientController {
 
     private final ClientService clientService;
+
+    private final BookingService bookingService;
     
-    public ClientController(ClientService clientService) {
+    public ClientController(ClientService clientService, BookingService bookingService) {
         this.clientService = clientService;
+        this.bookingService = bookingService;
     }
 
     @GetMapping
@@ -46,6 +51,11 @@ public class ClientController {
         Client client = clientService.findById(id);
 
         return ResponseEntity.ok(ClientResponse.from(client));
+    }
+
+    @GetMapping("/{id}/bookings")
+    public List<BookingResponse> bookingsByClient(@PathVariable Long id) {
+        return bookingService.findByClientId(id);
     }
 
     @PostMapping

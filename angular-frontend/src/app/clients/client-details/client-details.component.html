@@ -1,4 +1,4 @@
-<h3> View Client Details</h3>
+<h2> View Client Details</h2>
 <ng-template #errorTpl>
     <div *ngIf="errorMessage" class="alert alert-danger mt-2">
         {{ errorMessage }}
@@ -6,7 +6,7 @@
 </ng-template>
 <div *ngIf="client; else errorTpl">
     <div>
-        <label> <b> CPF: </b></label> {{client.cpf}}
+        <label> <b> CPFa: </b></label> {{client.cpf}}
     </div>
     <div>
         <label> <b> First Name: </b></label> {{client.firstName}}
@@ -14,4 +14,29 @@
     <div>
         <label> <b> Last Name: </b></label> {{client.lastName}}
     </div>
+</div>
+
+<h3 class="mt-4">Bookings</h3>
+
+<table class="table table-striped" *ngIf="bookings.length > 0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Flight</th>
+      <th>Status</th>
+      <th>Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let booking of bookings">
+      <td>{{ booking.id }}</td>
+      <td>{{ booking.flight.flightNumber }}</td>
+      <td>{{ booking.status }}</td>
+      <td>{{ booking.createdAt | date:'short' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="bookings.length === 0" class="text-muted">
+  No bookings found for this client.
 </div>

@@ -6,6 +6,8 @@ import { ClientResponse } from './models/client-reponse';
 import { CreateClientRequest } from './models/create-client-request';
 import { UpdateClientRequest } from './models/update-client-request';
 
+import { BookingResponse } from '../bookings/models/booking-response';
+
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +24,10 @@ export class ClientService {
 
     getClientById(id: number) {
         return this.http.get<ClientResponse>(`${this.baseUrl}/${id}`);
+    }
+
+    getClientBookings(id: number) {
+        return this.http.get<BookingResponse[]>(`${this.baseUrl}/${id}/bookings`);
     }
 
     createClient(request: CreateClientRequest): Observable<Object> {
