@@ -18,6 +18,7 @@ import { CreateFlightComponent } from './flights/create-flight/create-flight.com
 import { FlightDetailsComponent } from './flights/flight-details/flight-details.component';
 import { BookingListComponent } from './bookings/booking-list/booking-list.component';
 import { CreateBookingComponent } from './bookings/create-booking/create-booking.component';
+import { BookingDetailsComponent } from './bookings/booking-details/booking-details.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'flightapp', pathMatch: 'full'},
@@ -44,7 +45,7 @@ const routes: Routes = [
 
   {path: 'bookings', component: BookingListComponent},
   {path: 'create-booking', component: CreateBookingComponent},
-
+  {path: 'booking-details/:id', component: BookingDetailsComponent},
 
   {path: '**', redirectTo: 'flightapp'}
 ];

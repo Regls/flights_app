@@ -1,0 +1,17 @@
+<h3> View Booking Details</h3>
+<ng-template #errorTpl>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+        {{ errorMessage }}
+    </div>
+</ng-template>
+<div *ngIf="booking; else errorTpl">
+    <div>
+        <label> <b> Client: </b></label> {{ booking.client.firstName}} - {{booking.client.cpf}}
+    </div>
+    <div>
+        <label> <b> Flight: </b></label> {{booking.flight.flightNumber}}
+    </div>
+    <div>
+        <label> <b> Created At: </b></label> {{ booking.createdAt }}
+    </div>
+</div>
