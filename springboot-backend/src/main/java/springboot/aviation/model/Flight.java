@@ -2,8 +2,11 @@ package springboot.aviation.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import springboot.aviation.exception.BusinessException;
+import springboot.aviation.messages.BookingMessages;
 import springboot.aviation.messages.FlightMessages;
 
 
@@ -39,6 +42,9 @@ public class Flight {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private FlightStatus status = FlightStatus.SCHEDULED;
+
+    @OneToMany(mappedBy = "flight")
+    private List<Booking> bookings = new ArrayList<>();
 
     private static final String FLIGHT_NUMBER_PATTERN = "^[A-Z0-9]{2}\\d{1,4}$";
 
@@ -175,6 +181,12 @@ public class Flight {
             throw new BusinessException(FlightMessages.CANCEL_ONLY_SCHEDULED);
         }
         this.status = FlightStatus.CANCELLED;
+
+        for (Booking booking : bookings) {
+            if (!booking.isCancelled()) {
+                booking.cancelDueFlightCancel();
+            }
+        }
     }
 
     public boolean isScheduled() {

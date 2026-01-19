@@ -122,6 +122,12 @@ public class Booking {
         this.status = BookingStatus.CANCELLED;
     }
 
+    public void cancelDueFlightCancel() {
+        if (this.status == BookingStatus.CANCELLED) return;
+        
+        this.status = BookingStatus.CANCELLED;
+    }
+
     public boolean isCreated() {
         return this.status == BookingStatus.CREATED;
     }

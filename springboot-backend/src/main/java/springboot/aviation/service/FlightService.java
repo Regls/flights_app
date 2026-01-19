@@ -10,13 +10,10 @@ import springboot.aviation.exception.BusinessException;
 import springboot.aviation.exception.ResourceNotFoundException;
 import springboot.aviation.model.Airline;
 import springboot.aviation.model.Airport;
-import springboot.aviation.model.Booking;
-import springboot.aviation.model.BookingStatus;
 import springboot.aviation.model.Flight;
 import springboot.aviation.repository.AirlineRepository;
 import springboot.aviation.repository.AirportRepository;
 import springboot.aviation.repository.FlightRepository;
-import springboot.aviation.repository.BookingRepository;
 
 
 @Service
@@ -25,13 +22,11 @@ public class FlightService {
     private final FlightRepository flightRepository;
     private final AirlineRepository airlineRepository;
     private final AirportRepository airportRepository;
-    private final BookingRepository bookingRepository;
 
-    public FlightService(FlightRepository flightRepository, AirlineRepository airlineRepository, AirportRepository airportRepository, BookingRepository bookingRepository) {
+    public FlightService(FlightRepository flightRepository, AirlineRepository airlineRepository, AirportRepository airportRepository) {
         this.flightRepository = flightRepository;
         this.airlineRepository = airlineRepository;
         this.airportRepository = airportRepository;
-        this.bookingRepository = bookingRepository;
     }
 
     public List<Flight> findAll() {
@@ -95,17 +90,8 @@ public class FlightService {
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight not found"));
 
-        if(!flight.isScheduled()) throw new BusinessException("Only scheduled flights can be cancelled");
-
-        List<Booking> bookings = bookingRepository.findByFlightAndStatusIn(flight, List.of(BookingStatus.CREATED, BookingStatus.CONFIRMED));
-
-        for (Booking booking : bookings) {
-                booking.cancel();
-        }
-
         flight.cancel();
 
-        bookingRepository.saveAll(bookings);
         flightRepository.save(flight);
     }
 }
