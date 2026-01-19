@@ -1,0 +1,38 @@
+<div class="col-md-6 offset-md-3">
+    <h3> Create Booking </h3>
+    <form (ngSubmit) = "onSubmit()">
+
+        <div class="form-group">
+            <label> Client</label>
+            <select class ="form-control" id="clientId"
+                [(ngModel)] = "booking.clientId" name = "clientId" required>
+            <option value="" disabled selected>
+                Select an client
+            </option>
+            <option *ngFor="let client of activeClients" [value]="client.id">
+                {{ client.firstName }} - {{ client.cpf }}
+            </option>
+            </select>
+        </div>
+    
+        <div class="form-group">
+            <label> Flight </label>
+            <select class ="form-control" id = "flightId"
+                [(ngModel)] = "booking.flightId" name = "flightId" required>
+            <option value="" disabled>
+                Select an flight
+            </option>
+            <option *ngFor="let flight of scheduledFlights" [ngValue]="flight.id">
+                {{ flight.flightNumber }}
+            </option>
+            </select>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-2">
+            {{ errorMessage }}
+        </div>
+    
+        <button class = "btn btn-success" type ="submit" [disabled]="isSubmitting">Submit</button>
+    
+        </form>
+</div>

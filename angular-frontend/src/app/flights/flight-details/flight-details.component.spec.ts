@@ -5,7 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { ClientDetailsComponent } from './flight-details.component';
 import { ClientService } from '../flight.service';
-import { ClientResponse } from '../models/flight-reponse';
+import { ClientResponse } from '../models/flight-response';
 
 
 describe('ClientDetailsComponent', () => {

@@ -19,6 +19,8 @@ import { AirlineDetailsComponent } from './airlines/airline-details/airline-deta
 import { FlightListComponent } from './flights/flight-list/flight-list.component';
 import { CreateFlightComponent } from './flights/create-flight/create-flight.component';
 import { FlightDetailsComponent } from './flights/flight-details/flight-details.component';
+import { BookingListComponent } from './bookings/booking-list/booking-list.component';
+import { CreateBookingComponent } from './bookings/create-booking/create-booking.component';
 
 import { FormsModule} from '@angular/forms';
 
@@ -41,7 +43,9 @@ import { FormsModule} from '@angular/forms';
     AirlineDetailsComponent,
     FlightListComponent,
     CreateFlightComponent,
-    FlightDetailsComponent
+    FlightDetailsComponent,
+    BookingListComponent,
+    CreateBookingComponent
 
   ],
   imports: [

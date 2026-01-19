@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FlightService } from '../flight.service'
-import { FlightResponse } from '../models/flight-reponse'
+import { FlightResponse } from '../models/flight-response'
 import { FlightStatus } from '../models/flight-status.enum';
 
 

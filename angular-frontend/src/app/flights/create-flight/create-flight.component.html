@@ -20,7 +20,7 @@
             <option value="" disabled selected>
                 Select an airline
             </option>
-            <option *ngFor="let airline of airlines" [value]="airline.id">
+            <option *ngFor="let airline of activeAirlines" [value]="airline.id">
                 {{ airline.iataCode }} - {{ airline.airlineName }}
             </option>
             </select>

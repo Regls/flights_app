@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs';
 
-import { FlightResponse } from './models/flight-reponse';
+import { FlightResponse } from './models/flight-response';
 import { CreateFlightRequest } from './models/create-flight-request';
 
 

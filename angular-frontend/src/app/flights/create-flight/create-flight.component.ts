@@ -19,15 +19,15 @@ export class CreateFlightComponent implements OnInit {
 
   flight: CreateFlightRequest = {
     flightNumber: '',
-    airlineId: null,
-    departureAirportId: null,
-    arrivalAirportId: null,
+    airlineId: 0,
+    departureAirportId: 0,
+    arrivalAirportId: 0,
     departureTime: '',
     arrivalTime: '',
   };
 
-  airlines: AirlineSummaryResponse[];
-  airports: AirportSummaryResponse[];
+  activeAirlines: AirlineSummaryResponse[] = [];
+  operationalAirports: AirportSummaryResponse[] = [];
 
   errorMessage: string | null = null;
   isSubmitting = false;
@@ -40,8 +40,8 @@ export class CreateFlightComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadAirlines();
-    this.loadAirports();
+    this.loadActiveAirlines();
+    this.loadOperationalAirports();
   }
 
   saveFlight(){
@@ -67,26 +67,30 @@ export class CreateFlightComponent implements OnInit {
     this.saveFlight();
   }
 
-  private loadAirlines(): void {
+  private loadActiveAirlines(): void {
     this.airlineService.getAirlines().subscribe({
-      next: data => this.airlines = data
+      next: data => {
+        this.activeAirlines = data.filter(airline => airline.status);
+      }
     });
   }
 
-  private loadAirports(): void {
+  private loadOperationalAirports(): void {
     this.airportService.getAirports().subscribe({
-      next: data => this.airports = data
+      next: data => {
+        this.operationalAirports = data.filter(airport => airport.operational);
+      }
     });
   }
 
   getDepartureAirports() {
-    return this.airports.filter(
+    return this.operationalAirports.filter(
       airport => airport.id !== this.flight.arrivalAirportId
     );
   }
 
   getArrivalAirports() {
-    return this.airports.filter(
+    return this.operationalAirports.filter(
       airport => airport.id !== this.flight.departureAirportId
     );
   }

@@ -1,0 +1,42 @@
+<h2> Booking List</h2>
+
+<div *ngIf="errorMessage" class="alert alert-danger mt-2">
+    {{ errorMessage }}
+</div>
+
+<div class="d-flex gap-3 mt-2">
+    <a routerLink="/create-booking" class="btn btn-primary">
+        + Add Booking
+    </a>
+</div>
+
+<table class = "table table-striped mt-4">
+    <thead>
+        <tr>
+            <th> ID </th>
+            <th> Client </th>
+            <th> Flight </th>
+            <th> Created At </th>
+            <th> Status </th>
+            <th> Actions </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let booking of bookings" >
+            <td> {{ booking.id }} </td>
+            <td> {{ booking.client.firstName }} - {{ booking.client.cpf }}</td>
+            <td> {{ booking.flight.flightNumber }}</td>
+            <td> {{ booking.createdAt }} </td>
+            <td>
+                <span [ngClass]="getStatusClass(booking.status)">
+                    {{ booking.status }}
+                </span>
+            </td>
+            <td>
+                <button (click) = "bookingDetails(booking.id)" class = "btn btn-info details-btn"> View Details</button>
+                <button *ngIf="booking.status === BookingStatus.CREATED" (click)="confirmBooking(booking.id)" class="btn btn-warning" style="margin-left: 10px">Confirm</button>
+                <button *ngIf="booking.status === BookingStatus.CONFIRMED" (click)="cancelBooking(booking.id)" class="btn btn-danger" style="margin-left: 10px">Cancel</button>
+                <button *ngIf="booking.status === BookingStatus.CREATED" (click)="cancelBooking(booking.id)" class="btn btn-danger" style="margin-left: 10px">Cancel</button>
+        </tr>
+    </tbody>
+</table>
