@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AirlineResponse } from './models/airline-response';
 import { CreateAirlineRequest } from './models/create-airline-request';
 import { UpdateAirlineRequest } from './models/update-airline-request';
+import { FlightResponse } from '../flights/models/flight-response';
 
 
 @Injectable({
@@ -22,6 +23,10 @@ export class AirlineService {
 
     getAirlineById(id: number) {
         return this.http.get<AirlineResponse>(`${this.baseUrl}/${id}`);
+    }
+
+    getAirlineFlights(id: number) {
+        return this.http.get<FlightResponse[]>(`${this.baseUrl}/${id}/flights`);
     }
 
     createAirline(request: CreateAirlineRequest): Observable<Object> {

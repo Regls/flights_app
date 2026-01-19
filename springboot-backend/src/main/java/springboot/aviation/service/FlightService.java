@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import springboot.aviation.dto.request.CreateFlightRequest;
+import springboot.aviation.dto.response.FlightResponse;
 import springboot.aviation.exception.BusinessException;
 import springboot.aviation.exception.ResourceNotFoundException;
 import springboot.aviation.model.Airline;
@@ -36,6 +37,13 @@ public class FlightService {
     public Flight findById(Long flightId) {
         return flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight not found"));
+    }
+
+    public List<FlightResponse> findByAirlineId(Long airlineId) {
+        return flightRepository.findByAirlineId(airlineId)
+                .stream()
+                .map(FlightResponse::from)
+                .toList();
     }
 
     public Flight createFlight(CreateFlightRequest request) {

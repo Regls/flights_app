@@ -15,20 +15,25 @@ import org.springframework.web.bind.annotation.RestController;
 import springboot.aviation.dto.request.ChangeAirlineRequest;
 import springboot.aviation.dto.request.CreateAirlineRequest;
 import springboot.aviation.dto.response.AirlineResponse;
+import springboot.aviation.dto.response.FlightResponse;
 import springboot.aviation.dto.response.MessageResponse;
 import springboot.aviation.model.Airline;
 import springboot.aviation.service.AirlineService;
+import springboot.aviation.service.FlightService;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/airlines")
 public class AirlineController {
+
+    private final FlightService flightService;
     
     private final AirlineService airlineService;
 
-    public AirlineController(AirlineService airlineService) {
+    public AirlineController(AirlineService airlineService, FlightService flightService) {
         this.airlineService = airlineService;
+        this.flightService = flightService;
     }
 
     @GetMapping
@@ -46,6 +51,11 @@ public class AirlineController {
         Airline airline = airlineService.findById(id);
 
         return ResponseEntity.ok(AirlineResponse.from(airline));
+    }
+
+    @GetMapping("/{id}/flights")
+    public List<FlightResponse> flightsByAirline(@PathVariable Long id) {
+        return flightService.findByAirlineId(id);
     }
 
     @PostMapping
