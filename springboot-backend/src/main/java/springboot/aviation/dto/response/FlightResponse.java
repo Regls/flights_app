@@ -1,9 +1,9 @@
 package springboot.aviation.dto.response;
 
-import java.time.LocalDateTime;
-
 import springboot.aviation.model.FlightStatus;
 import springboot.aviation.model.Flight;
+
+import static springboot.aviation.dto.utils.FormatUtils.formatDateTime;
 
 
 public class FlightResponse {
@@ -13,8 +13,8 @@ public class FlightResponse {
     public AirlineSummaryResponse airline;
     public AirportSummaryResponse departureAirport;
     public AirportSummaryResponse arrivalAirport;
-    public LocalDateTime departureTime;
-    public LocalDateTime arrivalTime;
+    public String departureTime;
+    public String arrivalTime;
     public FlightStatus status;
 
     private FlightResponse() {
@@ -27,8 +27,8 @@ public class FlightResponse {
         response.airline = AirlineSummaryResponse.from(flight.hasAirline());
         response.departureAirport = AirportSummaryResponse.from(flight.hasDepartureAirport());
         response.arrivalAirport = AirportSummaryResponse.from(flight.hasArrivalAirport());
-        response.departureTime = flight.hasDepartureTime();
-        response.arrivalTime = flight.hasArrivalTime();
+        response.departureTime = formatDateTime(flight.hasDepartureTime());
+        response.arrivalTime = formatDateTime(flight.hasArrivalTime());
         response.status = flight.hasStatus();
         return response;
     }

@@ -17,7 +17,7 @@ A full-stack application for managing clients, airports, airlines, flights, and 
 - **Client Management**: Create, update, activate/deactivate clients
 - **Airport Management**: Manage airports with open/close status
 - **Airline Management**: Handle airlines with activate/suspend functionality
-- **Flight Management**: Create flights and manage their status (scheduled, departed, arrived, cancelled)
+- **Flight Management**: Create flights and manage their status (scheduled, in_flight, arrived, cancelled)
 - **Booking System**: Create and manage flight bookings with confirmation/cancellation
 
 ## 🏃‍♂️ Quick Start

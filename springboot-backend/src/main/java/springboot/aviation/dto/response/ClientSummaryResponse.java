@@ -2,6 +2,7 @@ package springboot.aviation.dto.response;
 
 import springboot.aviation.model.Client;
 
+import static springboot.aviation.dto.utils.FormatUtils.formatCpf;
 
 public class ClientSummaryResponse {
     
@@ -13,7 +14,7 @@ public class ClientSummaryResponse {
 
     public static ClientSummaryResponse from(Client client) {
         ClientSummaryResponse response = new ClientSummaryResponse();
-        response.cpf = client.hasCpf();
+        response.cpf = formatCpf(client.hasCpf());
         response.firstName = client.hasFirstName();
         return response;
     }
