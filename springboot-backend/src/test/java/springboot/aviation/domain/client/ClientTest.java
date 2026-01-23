@@ -1,4 +1,4 @@
-package springboot.aviation.model;
+package springboot.aviation.domain.client;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -6,18 +6,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import springboot.aviation.exception.BusinessException;
 import springboot.aviation.messages.ClientMessages;
+import springboot.aviation.domain.client.Client;
 
-@ExtendWith(MockitoExtension.class)
+
 public class ClientTest {
     
     //support methods
     private Client validClient() {
-        return Client.createClient("12345678900", "New", "Client");
+        return Client.create("12345678900", "New", "Client");
     }
 
     //tests
@@ -25,16 +24,16 @@ public class ClientTest {
     void shouldCreateClientSucessfully(){
         Client client = validClient();
 
-        assertTrue(client.hasCpf("12345678900"));
-        assertTrue(client.hasFirstName("New"));
-        assertTrue(client.hasLastName("Client"));
+        assertEquals("12345678900", client.getCpf());
+        assertEquals("New", client.getFirstName());
+        assertEquals("Client", client.getLastName());
         assertTrue(client.isActive());
     }
 
     @Test
     void shouldNotCreateClientIfCpfIsNull(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Client.createClient(null, "New", "Client"));
+            () -> Client.create(null, "New", "Client"));
 
         assertEquals(ClientMessages.CPF_REQUIRED, exception.getMessage());
     }
@@ -42,7 +41,7 @@ public class ClientTest {
     @Test
     void shouldNotCreateClientIfCpfIsMissing(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Client.createClient("", "New", "Client"));
+            () -> Client.create("", "New", "Client"));
 
         assertEquals(ClientMessages.CPF_REQUIRED, exception.getMessage());
     }
@@ -50,7 +49,7 @@ public class ClientTest {
     @Test
     void shouldNotCreateClientIfCpfIsNotElevenDigits(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Client.createClient("123456789", "New", "Client"));
+            () -> Client.create("123456789", "New", "Client"));
 
         assertEquals(ClientMessages.CPF_11_DIGITS, exception.getMessage());
     }
@@ -58,7 +57,7 @@ public class ClientTest {
     @Test
     void shouldNotCreateClientIfCpfIsNotNumeric(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Client.createClient("123456789aa", "New", "Client"));
+            () -> Client.create("123456789aa", "New", "Client"));
 
         assertEquals(ClientMessages.CPF_ONLY_DIGITS, exception.getMessage());
     }
@@ -66,7 +65,7 @@ public class ClientTest {
     @Test
     void shouldNotCreateClientIfClientFirstNameIsNull(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Client.createClient("12345678900", null, "Client"));
+            () -> Client.create("12345678900", null, "Client"));
 
         assertEquals(ClientMessages.FIRST_NAME_REQUIRED, exception.getMessage());
     }
@@ -74,7 +73,7 @@ public class ClientTest {
     @Test
     void shouldNotCreateClientIfClientFirstNameIsMissing(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Client.createClient("12345678900", "", "Client"));
+            () -> Client.create("12345678900", "", "Client"));
 
         assertEquals(ClientMessages.FIRST_NAME_REQUIRED, exception.getMessage());
     }
@@ -82,7 +81,7 @@ public class ClientTest {
     @Test
     void shouldNotCreateClientIfClientLastNameIsNull(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Client.createClient("12345678900", "New", null));
+            () -> Client.create("12345678900", "New", null));
 
         assertEquals(ClientMessages.LAST_NAME_REQUIRED, exception.getMessage());
     }
@@ -90,7 +89,7 @@ public class ClientTest {
     @Test
     void shouldNotCreateClientIfClientLastNameIsMissing(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Client.createClient("12345678900", "New", ""));
+            () -> Client.create("12345678900", "New", ""));
 
         assertEquals(ClientMessages.LAST_NAME_REQUIRED, exception.getMessage());
     }
@@ -98,7 +97,7 @@ public class ClientTest {
     @Test
     void shouldNotCreateClientIfClientFirstNameIsNotLetters(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Client.createClient("12345678900", "New1", "Client"));
+            () -> Client.create("12345678900", "New1", "Client"));
 
         assertEquals(ClientMessages.NAME_ONLY_LETTERS, exception.getMessage());
     }
@@ -106,7 +105,7 @@ public class ClientTest {
     @Test
     void shouldNotCreateClientIfClientLastNameIsNotLetters(){
         BusinessException exception = assertThrows(BusinessException.class,
-            () -> Client.createClient("12345678900", "New", "Client1"));
+            () -> Client.create("12345678900", "New", "Client1"));
 
         assertEquals(ClientMessages.NAME_ONLY_LETTERS, exception.getMessage());
     }
@@ -117,8 +116,8 @@ public class ClientTest {
 
         client.changeName("ChangeNew", "ChangeClient");
 
-        assertTrue(client.hasFirstName("ChangeNew"));
-        assertTrue(client.hasLastName("ChangeClient"));
+        assertEquals("ChangeNew", client.getFirstName());
+        assertEquals("ChangeClient", client.getLastName());
         assertTrue(client.isActive());
     }
 
