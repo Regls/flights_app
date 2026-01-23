@@ -1,28 +1,24 @@
 package springboot.aviation.dto.response;
 
-import springboot.aviation.model.Client;
+import springboot.aviation.domain.client.Client;
 
 import static springboot.aviation.dto.utils.FormatUtils.formatCpf;
 
 
-public class ClientResponse {
-
-    public Long id;
-    public String cpf;
-    public String firstName;
-    public String lastName;
-    public boolean status;
-
-    private ClientResponse(){        
-    }
-
-    public static ClientResponse from(Client client) {
-        ClientResponse response = new ClientResponse();
-        response.id = client.hasId();
-        response.cpf = formatCpf(client.hasCpf());
-        response.firstName = client.hasFirstName();
-        response.lastName = client.hasLastName();
-        response.status = client.isActive();
-        return response;
+public record ClientResponse(
+    Long id,
+    String cpf,
+    String firstName,
+    String lastName,
+    boolean status
+){
+    public static ClientResponse fromDomain(Client client) {
+        return new ClientResponse(
+        client.getId(),
+        formatCpf(client.getCpf()),
+        client.getFirstName(),
+        client.getLastName(),
+        client.isActive()
+        );
     }
 }
