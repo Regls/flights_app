@@ -1,10 +1,9 @@
 package springboot.aviation.application.client.usecase;
 
-import springboot.aviation.domain.client.ClientRepository;
-
 import org.springframework.stereotype.Service;
 
 import springboot.aviation.domain.client.Client;
+import springboot.aviation.domain.client.ClientRepository;
 
 
 @Service

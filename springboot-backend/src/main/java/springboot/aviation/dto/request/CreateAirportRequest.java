@@ -1,7 +1,7 @@
 package springboot.aviation.dto.request;
 
-public class CreateAirportRequest {
-    public String iataCode;
-    public String airportName;
-    public String city;
-}
+public record CreateAirportRequest(
+    String iataCode,
+    String airportName,
+    String city
+) {}

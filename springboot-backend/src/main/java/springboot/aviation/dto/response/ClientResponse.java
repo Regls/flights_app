@@ -10,7 +10,7 @@ public record ClientResponse(
     String cpf,
     String firstName,
     String lastName,
-    boolean status
+    String status
 ){
     public static ClientResponse fromDomain(Client client) {
         return new ClientResponse(
@@ -18,7 +18,7 @@ public record ClientResponse(
         formatCpf(client.getCpf()),
         client.getFirstName(),
         client.getLastName(),
-        client.isActive()
+        client.getStatus().name()
         );
     }
 }

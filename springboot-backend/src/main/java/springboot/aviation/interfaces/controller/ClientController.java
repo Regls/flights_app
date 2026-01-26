@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import springboot.aviation.application.client.service.ClientQueryService;
 import springboot.aviation.application.client.usecase.*;
 import springboot.aviation.domain.client.Client;
-import springboot.aviation.dto.request.ChangeClientRequest;
 import springboot.aviation.dto.request.CreateClientRequest;
+import springboot.aviation.dto.request.ChangeClientRequest;
 import springboot.aviation.dto.response.ClientResponse;
 
 
@@ -48,6 +48,12 @@ public class ClientController {
     @GetMapping("/{id}")
     public ClientResponse findById(@PathVariable Long id) {
         Client client = clientQueryService.findById(id);
+        return ClientResponse.fromDomain(client);
+    }
+    
+    @GetMapping("/cpf/{cpf}")
+    public ClientResponse findByCpf(@PathVariable String cpf) {
+        Client client = clientQueryService.findByCpf(cpf);
         return ClientResponse.fromDomain(client);
     }
 

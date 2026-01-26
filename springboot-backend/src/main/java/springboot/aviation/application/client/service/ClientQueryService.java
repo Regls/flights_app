@@ -26,4 +26,9 @@ public class ClientQueryService {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
     }
+
+    public Client findByCpf(String cpf) {
+        return clientRepository.findByCpf(cpf)
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
+    }
 }

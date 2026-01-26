@@ -85,5 +85,6 @@ public class Client {
     public String getCpf() { return cpf; }
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
+    public ClientStatus getStatus() { return status; }
     public boolean isActive() {return this.status == ClientStatus.ACTIVE;}
 }

@@ -11,6 +11,7 @@ import jakarta.persistence.UniqueConstraint;
 import springboot.aviation.domain.client.ClientStatus;
 import jakarta.persistence.GenerationType;
 
+
 @Entity
 @Table(name = "clients", uniqueConstraints = @UniqueConstraint(columnNames = "cpf"))
 public class ClientEntity {

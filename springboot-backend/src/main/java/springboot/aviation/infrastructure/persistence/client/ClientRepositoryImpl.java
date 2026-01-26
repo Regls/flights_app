@@ -9,6 +9,7 @@ import springboot.aviation.domain.client.Client;
 import springboot.aviation.infrastructure.mapper.ClientMapper;
 import springboot.aviation.domain.client.ClientRepository;
 
+
 @Repository
 public class ClientRepositoryImpl implements ClientRepository {
     
@@ -29,6 +30,12 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public Optional<Client> findById(Long id) {
         return jpaRepositoy.findById(id)
+                .map(ClientMapper::toDomain);
+    }
+
+    @Override
+    public Optional<Client> findByCpf(String cpf) {
+        return jpaRepositoy.findByCpf(cpf)
                 .map(ClientMapper::toDomain);
     }
 

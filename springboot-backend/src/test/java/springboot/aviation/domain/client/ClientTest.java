@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import springboot.aviation.exception.BusinessException;
 import springboot.aviation.messages.ClientMessages;
-import springboot.aviation.domain.client.Client;
 
 
 public class ClientTest {
