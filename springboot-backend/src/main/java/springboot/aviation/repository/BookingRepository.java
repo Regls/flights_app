@@ -1,4 +1,4 @@
-package springboot.aviation.repository;
+/* package springboot.aviation.repository;
 
 import java.util.List;
 
@@ -29,3 +29,4 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByFlightId(Long flightId);
     
 }
+ */

@@ -1,4 +1,4 @@
-package springboot.aviation.service;
+/* package springboot.aviation.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -368,3 +368,4 @@ public class FlightServiceTest {
         verify(flightRepository).save(flight);
     }
 }
+ */

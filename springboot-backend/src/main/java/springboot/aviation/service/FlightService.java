@@ -1,4 +1,4 @@
-package springboot.aviation.service;
+/* package springboot.aviation.service;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -118,3 +118,4 @@ public class FlightService {
         flightRepository.save(flight);
     }
 }
+ */

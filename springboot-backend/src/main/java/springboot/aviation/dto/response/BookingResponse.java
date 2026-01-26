@@ -1,4 +1,4 @@
-package springboot.aviation.dto.response;
+/* package springboot.aviation.dto.response;
 
 import springboot.aviation.model.BookingStatus;
 import springboot.aviation.model.Booking;
@@ -27,3 +27,4 @@ public class BookingResponse {
         return response;
     }
 }
+ */

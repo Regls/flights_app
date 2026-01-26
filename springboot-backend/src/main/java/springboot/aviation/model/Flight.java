@@ -1,4 +1,4 @@
-package springboot.aviation.model;
+/* package springboot.aviation.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -206,3 +206,4 @@ public class Flight {
     }
 
 }
+ */

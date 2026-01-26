@@ -26,11 +26,11 @@ public class Airport {
 
     public static Airport create(String iataCode, String airportName, String city) {
         validateCreationRules(iataCode, airportName, city);
-        return new Airport(null, iataCode, airportName, city, AirportStatus.OPEN);
+        return new Airport(null, iataCode.toUpperCase(), airportName, city, AirportStatus.OPEN);
     }
 
     public static Airport restore(Long id, String iataCode, String airportName, String city, AirportStatus status) {
-        return new Airport(id, iataCode, airportName, city, status);
+        return new Airport(id, iataCode.toUpperCase(), airportName, city, status);
     }
 
     public static void validateCreationRules(String iataCode, String airportName, String city){

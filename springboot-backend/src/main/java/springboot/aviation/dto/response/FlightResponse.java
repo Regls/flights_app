@@ -1,4 +1,4 @@
-package springboot.aviation.dto.response;
+/* package springboot.aviation.dto.response;
 
 import springboot.aviation.model.FlightStatus;
 import springboot.aviation.model.Flight;
@@ -33,3 +33,4 @@ public class FlightResponse {
         return response;
     }
 }
+ */

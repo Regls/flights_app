@@ -5,6 +5,9 @@ target/
 !**/src/test/**/target/
 .env
 
+# TEMP - LIQUIBASE
+springboot-backend/src/main/resources/db/changelog
+
 ### STS ###
 .apt_generated
 .classpath

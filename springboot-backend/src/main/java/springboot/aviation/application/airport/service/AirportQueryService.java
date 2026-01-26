@@ -28,7 +28,7 @@ public class AirportQueryService {
     }
 
     public Airport findByIataCode(String iataCode) {
-        return airportRepository.findByIataCode(iataCode)
+        return airportRepository.findByIataCode(iataCode.toUpperCase())
                 .orElseThrow(() -> new ResourceNotFoundException("Airport not found"));
     }
 }

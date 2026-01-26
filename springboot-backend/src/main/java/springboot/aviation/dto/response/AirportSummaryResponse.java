@@ -1,4 +1,4 @@
-package springboot.aviation.dto.response;
+/* package springboot.aviation.dto.response;
 
 import springboot.aviation.model.Airport;
 
@@ -18,3 +18,4 @@ public class AirportSummaryResponse {
         return response;
     }
 }
+ */
