@@ -1,4 +1,5 @@
-/* package springboot.aviation.dto.response;
+/* package springboot.aviation.dto.response.summary;
+
 
 import springboot.aviation.model.Flight;
 

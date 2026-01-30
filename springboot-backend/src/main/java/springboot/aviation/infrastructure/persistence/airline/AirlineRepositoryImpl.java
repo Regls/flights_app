@@ -9,6 +9,7 @@ import springboot.aviation.domain.airline.Airline;
 import springboot.aviation.infrastructure.mapper.AirlineMapper;
 import springboot.aviation.domain.airline.AirlineRepository;
 
+
 @Repository
 public class AirlineRepositoryImpl implements AirlineRepository{
     
@@ -39,8 +40,8 @@ public class AirlineRepositoryImpl implements AirlineRepository{
     }
 
     @Override
-    public Airline save(Airline airport) {
-        AirlineEntity entity = AirlineMapper.toEntity(airport);
+    public Airline save(Airline airline) {
+        AirlineEntity entity = AirlineMapper.toEntity(airline);
         AirlineEntity saved = jpaRepository.save(entity);
         return AirlineMapper.toDomain(saved);
     }

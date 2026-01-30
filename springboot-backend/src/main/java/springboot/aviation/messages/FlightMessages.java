@@ -15,7 +15,7 @@ public final class FlightMessages {
     public static final String TIME_DEPARTURE_BEFORE = "Departure time must be before arrival time";
     public static final String TIME_NOT_EQUALS = "Departure and arrival times cannot be the same";
     public static final String AIRPORT_NOT_EQUALS = "Departure and arrival airports cannot be the same";
-    public static final String AIRPORT_ACTIVE = "Cannot use closed airport";
+    public static final String AIRPORT_CLOSED = "Cannot use closed airport";
     public static final String DEPART_ONLY_SCHEDULED = "Only scheduled flights can depart";
     public static final String ARRIVE_ONLY_IN_FLIGHT = "Only in-flight flights can arrive";
     public static final String CANCEL_ONLY_SCHEDULED = "Only scheduled flights can be cancelled";

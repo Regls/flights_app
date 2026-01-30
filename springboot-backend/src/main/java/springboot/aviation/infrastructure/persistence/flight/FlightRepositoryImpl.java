@@ -1,0 +1,74 @@
+package springboot.aviation.infrastructure.persistence.flight;
+
+import java.util.Optional;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import springboot.aviation.domain.flight.Flight;
+import springboot.aviation.infrastructure.mapper.FlightMapper;
+import springboot.aviation.infrastructure.persistence.airline.AirlineEntity;
+import springboot.aviation.infrastructure.persistence.airline.AirlineJpaRepository;
+import springboot.aviation.infrastructure.persistence.airport.AirportEntity;
+import springboot.aviation.infrastructure.persistence.airport.AirportJpaRepository;
+import springboot.aviation.domain.flight.FlightRepository;
+
+
+@Repository
+public class FlightRepositoryImpl implements FlightRepository{
+
+    private final FlightJpaRepository flightJpaRepository;
+    private final AirlineJpaRepository airlineJpaRepository;
+    private final AirportJpaRepository airportJpaRepository;
+
+    public FlightRepositoryImpl(FlightJpaRepository flightJpaRepository,
+            AirlineJpaRepository airlineJpaRepository,
+            AirportJpaRepository airportJpaRepository
+    ) {
+        this.flightJpaRepository = flightJpaRepository;
+        this.airlineJpaRepository = airlineJpaRepository;
+        this.airportJpaRepository = airportJpaRepository;
+    }
+    
+    @Override
+    public List<Flight> findAll() {
+        return flightJpaRepository.findAll()
+                .stream()
+                .map(FlightMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public Optional<Flight> findById(Long id) {
+        return flightJpaRepository.findById(id)
+                .map(FlightMapper::toDomain);
+    }
+
+    @Override
+    public Optional<Flight> findByFlightNumber(String flightNumber) {
+        return flightJpaRepository.findByFlightNumber(flightNumber)
+                .map(FlightMapper::toDomain);
+    }
+
+    @Override
+    public Flight save(Flight flight) {
+
+        AirlineEntity airlineEntity =
+            airlineJpaRepository.getReferenceById(flight.getAirline().getId());
+
+        AirportEntity departureAirportEntity =
+                airportJpaRepository.getReferenceById(flight.getDepartureAirport().getId());
+
+        AirportEntity arrivalAirportEntity =
+                airportJpaRepository.getReferenceById(flight.getArrivalAirport().getId());
+        
+        FlightEntity entity = FlightMapper.toEntity(flight, airlineEntity, departureAirportEntity, arrivalAirportEntity);
+        FlightEntity saved = flightJpaRepository.save(entity);
+        return FlightMapper.toDomain(saved);
+    }
+
+    @Override
+    public boolean existsByFlightNumber(String flightNumber) {
+        return flightJpaRepository.existsByFlightNumber(flightNumber);
+    }
+}

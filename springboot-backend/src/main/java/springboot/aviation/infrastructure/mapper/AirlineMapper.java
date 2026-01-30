@@ -3,6 +3,7 @@ package springboot.aviation.infrastructure.mapper;
 import springboot.aviation.domain.airline.Airline;
 import springboot.aviation.infrastructure.persistence.airline.AirlineEntity;
 
+
 public class AirlineMapper {
     
     public static Airline toDomain(AirlineEntity entity) {

@@ -11,6 +11,7 @@ import jakarta.persistence.UniqueConstraint;
 import springboot.aviation.domain.airline.AirlineStatus;
 import jakarta.persistence.GenerationType;
 
+
 @Entity
 @Table(name = "airlines", uniqueConstraints = @UniqueConstraint(columnNames = "iata_code"))
 public class AirlineEntity {

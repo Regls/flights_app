@@ -77,4 +77,10 @@ public class Airline {
     public AirlineStatus getStatus() { return status; }
     public boolean isActive() {return this.status == AirlineStatus.ACTIVE;}
 
+    public boolean matchesFlightNumber(String flightNumber) {
+        if (flightNumber == null || flightNumber.length() < 2) {
+            return false;
+        }
+        return flightNumber.startsWith(this.iataCode);
+    }
 }
