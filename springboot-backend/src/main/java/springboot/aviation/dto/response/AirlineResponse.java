@@ -1,24 +1,20 @@
 package springboot.aviation.dto.response;
 
-import springboot.aviation.model.Airline;
+import springboot.aviation.domain.airline.Airline;
 
 
-public class AirlineResponse {
-    
-    public Long id;
-    public String iataCode;
-    public String airlineName;
-    public boolean status;
-
-    private AirlineResponse(){
-    }
-
-    public static AirlineResponse from(Airline airline) {
-        AirlineResponse response = new AirlineResponse();
-        response.id = airline.hasId();
-        response.iataCode = airline.hasIataCode();
-        response.airlineName = airline.hasName();
-        response.status = airline.isActive();
-        return response;
+public record AirlineResponse(
+    Long id,
+    String iataCode,
+    String airlineName,
+    String status
+) {
+    public static AirlineResponse fromDomain(Airline airline) {
+        return new AirlineResponse(
+        airline.getId(),
+        airline.getIataCode(),
+        airline.getAirlineName(),
+        airline.getStatus().name()
+        );
     }
 }

@@ -19,7 +19,7 @@ import springboot.aviation.dto.response.AirportResponse;
 public class AirportController {
     
     private final AirportQueryService airportQueryService;
-     private final CreateAirportUseCase createAirportUseCase;
+    private final CreateAirportUseCase createAirportUseCase;
     private final OpenAirportUseCase openAirportUseCase;
     private final CloseAirportUseCase closeAirportUseCase;
     private final ChangeAirportNameUseCase changeClientNameUseCase;
