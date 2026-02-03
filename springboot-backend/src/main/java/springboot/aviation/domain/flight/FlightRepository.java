@@ -14,6 +14,8 @@ public interface FlightRepository {
 
     List<Flight> findScheduledFlightsByAirports(Long airportId);
 
+    List<Flight> findScheduledFlightsByAirline(Long airlineId);
+
     Flight save(Flight flight);
 
     boolean existsByFlightNumber(String flightNumber);

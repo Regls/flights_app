@@ -62,6 +62,14 @@ public class FlightRepositoryImpl implements FlightRepository{
     }
 
     @Override
+    public List<Flight> findScheduledFlightsByAirline(Long airlineId) {
+        return flightJpaRepository.findByAirlineIdAndStatus(airlineId, FlightStatus.SCHEDULED)
+                .stream()
+                .map(FlightMapper::toDomain)
+                .toList();
+    }
+
+    @Override
     public Flight save(Flight flight) {
 
         FlightEntity entity = FlightMapper.toEntity(flight,
