@@ -12,5 +12,6 @@ import springboot.aviation.infrastructure.persistence.flight.FlightEntity;
 public interface BookingJpaRepository extends JpaRepository<BookingEntity, Long>{
     boolean existsByBookingCode(String bookingCode);
     boolean existsByClientAndFlightAndStatusIn(ClientEntity client, FlightEntity flight, List<BookingStatus> statuses);
+    List<BookingEntity> findActiveByFlight(FlightEntity flight);
     Optional<BookingEntity> findByBookingCode(String bookingCode);
 }

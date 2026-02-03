@@ -2,6 +2,7 @@ package springboot.aviation.infrastructure.persistence.flight;
 
 import java.util.Optional;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +11,7 @@ import springboot.aviation.infrastructure.mapper.FlightMapper;
 import springboot.aviation.infrastructure.persistence.airline.AirlineJpaRepository;
 import springboot.aviation.infrastructure.persistence.airport.AirportJpaRepository;
 import springboot.aviation.domain.flight.FlightRepository;
+import springboot.aviation.domain.flight.FlightStatus;
 
 
 @Repository
@@ -46,6 +48,17 @@ public class FlightRepositoryImpl implements FlightRepository{
     public Optional<Flight> findByFlightNumber(String flightNumber) {
         return flightJpaRepository.findByFlightNumber(flightNumber)
                 .map(FlightMapper::toDomain);
+    }
+
+    @Override
+    public List<Flight> findScheduledFlightsByAirports(Long airportId) {
+        List<FlightEntity> departureFlights = flightJpaRepository.findByDepartureAirportIdAndStatus(airportId, FlightStatus.SCHEDULED);
+        List<FlightEntity> arrivalFlights = flightJpaRepository.findByArrivalAirportIdAndStatus(airportId, FlightStatus.SCHEDULED);
+        
+        return Stream.concat(departureFlights.stream(), arrivalFlights.stream())
+                .distinct()
+                .map(FlightMapper::toDomain)
+                .toList();
     }
 
     @Override

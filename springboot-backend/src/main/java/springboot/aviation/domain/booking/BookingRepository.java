@@ -15,6 +15,8 @@ public interface BookingRepository {
 
     Optional<Booking> findByBookingCode(String bookingCode);
 
+    List<Booking> findActiveByFlight(Long flightId);
+
     Booking save(Booking booking);
 
     boolean existsByBookingCode(String bookingCode);

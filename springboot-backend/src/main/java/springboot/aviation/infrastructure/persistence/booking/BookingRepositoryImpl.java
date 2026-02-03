@@ -54,6 +54,15 @@ public class BookingRepositoryImpl implements BookingRepository{
     }
 
     @Override
+    public List<Booking> findActiveByFlight(Long flightId) {
+        FlightEntity flightEntity = flightJpaRepository.getReferenceById(flightId);
+        return bookingJpaRepository.findActiveByFlight(flightEntity)
+                .stream()
+                .map(BookingMapper::toDomain)
+                .toList();
+    }
+
+    @Override
     public Booking save(Booking booking) {
 
         BookingEntity entity = BookingMapper.toEntity(booking, 

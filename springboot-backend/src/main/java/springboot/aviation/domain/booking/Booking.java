@@ -78,6 +78,12 @@ public class Booking {
         this.status = BookingStatus.CANCELLED;
     }
 
+    public void cancelDueFlightCancel() {
+        if (this.status == BookingStatus.CANCELLED) return;
+        
+        this.status = BookingStatus.CANCELLED;
+    }
+
     public Long getId() { return id; }
     public Client getClient() { return client; }
     public Flight getFlight() { return flight; }

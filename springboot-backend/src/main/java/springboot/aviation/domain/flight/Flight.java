@@ -1,8 +1,6 @@
 package springboot.aviation.domain.flight;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import springboot.aviation.domain.airline.Airline;
 import springboot.aviation.domain.airport.Airport;
@@ -20,7 +18,6 @@ public class Flight {
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
     private FlightStatus status;
-    // private List<Booking> bookings = new ArrayList<>();
 
     private static final String FLIGHT_NUMBER_PATTERN = "^[A-Z0-9]{2}\\d{1,4}$";
 
@@ -119,4 +116,5 @@ public class Flight {
     public FlightStatus getStatus() { return status; }
     public boolean isScheduled() {return this.status == FlightStatus.SCHEDULED;}
     public boolean isInFlight() {return this.status == FlightStatus.IN_FLIGHT;}
+    public boolean isCancelled() {return this.status == FlightStatus.CANCELLED;}
 }
