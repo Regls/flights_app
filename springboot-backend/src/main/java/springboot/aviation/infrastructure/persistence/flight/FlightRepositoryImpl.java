@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import springboot.aviation.domain.flight.Flight;
 import springboot.aviation.infrastructure.mapper.FlightMapper;
-import springboot.aviation.infrastructure.persistence.airline.AirlineEntity;
 import springboot.aviation.infrastructure.persistence.airline.AirlineJpaRepository;
-import springboot.aviation.infrastructure.persistence.airport.AirportEntity;
 import springboot.aviation.infrastructure.persistence.airport.AirportJpaRepository;
 import springboot.aviation.domain.flight.FlightRepository;
 
@@ -53,16 +51,11 @@ public class FlightRepositoryImpl implements FlightRepository{
     @Override
     public Flight save(Flight flight) {
 
-        AirlineEntity airlineEntity =
-            airlineJpaRepository.getReferenceById(flight.getAirline().getId());
-
-        AirportEntity departureAirportEntity =
-                airportJpaRepository.getReferenceById(flight.getDepartureAirport().getId());
-
-        AirportEntity arrivalAirportEntity =
-                airportJpaRepository.getReferenceById(flight.getArrivalAirport().getId());
-        
-        FlightEntity entity = FlightMapper.toEntity(flight, airlineEntity, departureAirportEntity, arrivalAirportEntity);
+        FlightEntity entity = FlightMapper.toEntity(flight,
+            airlineJpaRepository.getReferenceById(flight.getAirline().getId()),
+            airportJpaRepository.getReferenceById(flight.getDepartureAirport().getId()),
+            airportJpaRepository.getReferenceById(flight.getArrivalAirport().getId())
+        );
         FlightEntity saved = flightJpaRepository.save(entity);
         return FlightMapper.toDomain(saved);
     }

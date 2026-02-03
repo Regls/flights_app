@@ -1,22 +1,18 @@
-/* package springboot.aviation.dto.response.summary;
+package springboot.aviation.dto.response.summary;
 
-import springboot.aviation.model.Client;
+import springboot.aviation.domain.client.Client;
 
 import static springboot.aviation.dto.utils.FormatUtils.formatCpf;
 
-public class ClientSummaryResponse {
-    
-    public String cpf;
-    public String firstName;
 
-    private ClientSummaryResponse() {
-    }
-
-    public static ClientSummaryResponse from(Client client) {
-        ClientSummaryResponse response = new ClientSummaryResponse();
-        response.cpf = formatCpf(client.hasCpf());
-        response.firstName = client.hasFirstName();
-        return response;
+public record ClientSummaryResponse(
+    String cpf,
+    String firstName
+) {
+    public static ClientSummaryResponse fromDomain(Client client) {
+        return new ClientSummaryResponse(
+            formatCpf(client.getCpf()),
+            client.getFirstName()
+        );
     }
 }
- */

@@ -1,19 +1,14 @@
-/* package springboot.aviation.dto.response.summary;
+package springboot.aviation.dto.response.summary;
+
+import springboot.aviation.domain.flight.Flight;
 
 
-import springboot.aviation.model.Flight;
-
-public class FlightSummaryResponse {
-    
-    public String flightNumber;
-
-    private FlightSummaryResponse() {
-    }
-
-    public static FlightSummaryResponse from(Flight flight) {
-        FlightSummaryResponse response = new FlightSummaryResponse();
-        response.flightNumber = flight.hasFlightNumber();
-        return response;
+public record FlightSummaryResponse(
+    String flightNumber
+) {
+    public static FlightSummaryResponse fromDomain(Flight flight) {
+        return new FlightSummaryResponse(
+            flight.getFlightNumber()
+        );
     }
 }
- */

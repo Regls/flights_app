@@ -1,4 +1,4 @@
-/* package springboot.aviation.model;
+/* package springboot.aviation.domain.flight;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,30 +8,32 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+
+import springboot.aviation.domain.client.Client;
+import springboot.aviation.domain.airline.Airline;
+import springboot.aviation.domain.airport.Airport;
 
 import springboot.aviation.exception.BusinessException;
 import springboot.aviation.messages.FlightMessages;
 
-@ExtendWith(MockitoExtension.class)
+
 public class FlightTest {
 
     //support methods
     private Client validClient() {
-        return Client.createClient("12345678901", "Valid", "Client");
+        return Client.create("12345678901", "Valid", "Client");
     }
 
     private Airline activateAirline() {
-        return Airline.createAirline("G3", "Gol Airlines");
+        return Airline.create("G3", "Gol Airlines");
     }
 
     private Airport openDepAirport() {
-        return Airport.createAirport("DPT", "Dep Airport", "Departure City");
+        return Airport.create("DPT", "Dep Airport", "Departure City");
     }
 
     private Airport openArrAirport() {
-        return Airport.createAirport("ARR", "Arr Airport", "Arrival City");
+        return Airport.create("ARR", "Arr Airport", "Arrival City");
     }
 
     private LocalDateTime depDateTime(){
@@ -46,7 +48,7 @@ public class FlightTest {
         Airline airline = activateAirline();
         Airport departure = openDepAirport();
         Airport arrival = openArrAirport();
-        return Flight.createFlight(
+        return Flight.create(
                 "G39206",
                 airline,
                 departure,
@@ -362,5 +364,4 @@ public class FlightTest {
         assertTrue(booking.isCancelled());
     }
 
-}
- */
+} */
