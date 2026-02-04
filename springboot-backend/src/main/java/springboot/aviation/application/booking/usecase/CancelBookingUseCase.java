@@ -17,7 +17,7 @@ public class CancelBookingUseCase {
 
     public Booking execute(Long id) {
         Booking booking = bookingRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Booking not found"));
+            .orElseThrow();
         
         booking.cancel();
         return bookingRepository.save(booking);

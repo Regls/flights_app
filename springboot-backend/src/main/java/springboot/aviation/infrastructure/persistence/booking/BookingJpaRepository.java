@@ -13,5 +13,6 @@ public interface BookingJpaRepository extends JpaRepository<BookingEntity, Long>
     boolean existsByBookingCode(String bookingCode);
     boolean existsByClientAndFlightAndStatusIn(ClientEntity client, FlightEntity flight, List<BookingStatus> statuses);
     List<BookingEntity> findActiveByFlight(FlightEntity flight);
+    List<BookingEntity> findActiveByClient(ClientEntity client);
     Optional<BookingEntity> findByBookingCode(String bookingCode);
 }

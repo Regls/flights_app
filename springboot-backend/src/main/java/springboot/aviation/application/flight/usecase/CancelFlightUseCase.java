@@ -27,7 +27,7 @@ public class CancelFlightUseCase {
     @Transactional
     public Flight execute(Long id) {
         Flight flight = flightRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Flight not found"));
+                .orElseThrow();
 
         if(!flight.isScheduled()) throw new BusinessException("Only scheduled flights can be cancelled");
 

@@ -29,13 +29,13 @@ public class SuspendAirlineUseCase {
     }
 
     @Transactional
-    public Airline execute(Long airlineId) {
-        Airline airline = airlineRepository.findById(airlineId)
+    public Airline execute(Long id) {
+        Airline airline = airlineRepository.findById(id)
             .orElseThrow();
 
         if(!airline.isActive()) throw new BusinessException("Airline is already suspended");
 
-        List<Flight> scheduledFlights = flightRepository.findScheduledFlightsByAirline(airlineId);
+        List<Flight> scheduledFlights = flightRepository.findScheduledFlightsByAirline(id);
         
         for (Flight flight : scheduledFlights) {
             flight.cancel();

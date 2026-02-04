@@ -29,13 +29,13 @@ public class CloseAirportUseCase {
     }
 
     @Transactional
-    public void execute(Long airportId) {
-        Airport airport = airportRepository.findById(airportId)
+    public void execute(Long id) {
+        Airport airport = airportRepository.findById(id)
             .orElseThrow();
         
         if(!airport.isOpen()) throw new BusinessException("Airport is already closed");
 
-        List<Flight> scheduledFlights = flightRepository.findScheduledFlightsByAirports(airportId);
+        List<Flight> scheduledFlights = flightRepository.findScheduledFlightsByAirports(id);
         
         for (Flight flight : scheduledFlights) {
             flight.cancel();
