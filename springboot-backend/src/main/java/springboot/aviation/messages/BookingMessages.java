@@ -12,7 +12,6 @@ public final class BookingMessages {
     public static final String FLIGHT_SCHEDULED = "Can only book flights that are scheduled";
     public static final String CONFIRM_ONLY_CREATED = "Only created bookings can be confirmed";
     public static final String CONFIRM_ONLY_FLIGHT_SCHEDULED = "Cannot confirm booking for a flight that is not scheduled";
-    public static final String CANCELLED_CANNOT_CHANGE = "Cancelled bookings cannot be changed";
     public static final String CANCEL_ONLY_CREATED_OR_CONFIRMED = "Only created or confirmed bookings can be cancelled";
     public static final String CANCEL_ONLY_FLIGHT_SCHEDULED = "Cannot cancel booking for a flight that is not scheduled";
 }
