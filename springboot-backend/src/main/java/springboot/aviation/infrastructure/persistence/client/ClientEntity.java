@@ -23,10 +23,10 @@ public class ClientEntity {
     @Column(nullable = false, length = 11, unique = true)
     private String cpf;
 
-    @Column(name = "client_first_name")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "client_last_name")
+    @Column(name = "last_name")
     private String lastName;
 
     @Enumerated(EnumType.STRING)
