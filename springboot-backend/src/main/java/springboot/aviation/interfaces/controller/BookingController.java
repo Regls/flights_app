@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import springboot.aviation.application.booking.service.BookingQueryService;
 import springboot.aviation.application.booking.usecase.*;
 import springboot.aviation.domain.booking.Booking;
-import springboot.aviation.dto.request.CreateBookingRequest;
+import springboot.aviation.dto.request.booking.CreateBookingRequest;
 import springboot.aviation.dto.response.booking.BookingResponse;
 
 import org.springframework.web.bind.annotation.RestController;

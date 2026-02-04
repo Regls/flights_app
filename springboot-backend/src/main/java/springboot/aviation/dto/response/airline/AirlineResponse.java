@@ -1,4 +1,4 @@
-package springboot.aviation.dto.response;
+package springboot.aviation.dto.response.airline;
 
 import springboot.aviation.domain.airline.Airline;
 

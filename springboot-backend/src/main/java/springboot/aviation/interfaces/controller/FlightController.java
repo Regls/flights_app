@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import springboot.aviation.application.flight.service.FlightQueryService;
 import springboot.aviation.application.flight.usecase.*;
 import springboot.aviation.domain.flight.Flight;
-import springboot.aviation.dto.request.CreateFlightRequest;
+import springboot.aviation.dto.request.flight.CreateFlightRequest;
 import springboot.aviation.dto.response.flight.FlightResponse;
 
 import org.springframework.web.bind.annotation.RestController;

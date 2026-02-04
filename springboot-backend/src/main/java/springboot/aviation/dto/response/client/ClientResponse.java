@@ -1,4 +1,4 @@
-package springboot.aviation.dto.response;
+package springboot.aviation.dto.response.client;
 
 import springboot.aviation.domain.client.Client;
 

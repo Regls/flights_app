@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import springboot.aviation.application.airline.service.AirlineQueryService;
 import springboot.aviation.application.airline.usecase.*;
 import springboot.aviation.domain.airline.Airline;
-import springboot.aviation.dto.request.CreateAirlineRequest;
-import springboot.aviation.dto.request.ChangeAirlineRequest;
-import springboot.aviation.dto.response.AirlineResponse;
+import springboot.aviation.dto.request.airline.ChangeAirlineRequest;
+import springboot.aviation.dto.request.airline.CreateAirlineRequest;
+import springboot.aviation.dto.response.airline.AirlineResponse;
 
 
 @CrossOrigin(origins = "http://localhost:4200")

@@ -1,4 +1,4 @@
-package springboot.aviation.dto.request;
+package springboot.aviation.dto.request.airport;
 
 public record ChangeAirportRequest(
     String airportName

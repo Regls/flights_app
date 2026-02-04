@@ -1,6 +1,6 @@
 package springboot.aviation.messages;
 
-import static springboot.aviation.messages.CommonMessages.*;
+import static springboot.aviation.messages.common.CommonMessages.*;
 
 
 public final class AirportMessages {

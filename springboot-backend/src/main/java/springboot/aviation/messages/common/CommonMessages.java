@@ -1,4 +1,4 @@
-package springboot.aviation.messages;
+package springboot.aviation.messages.common;
 
 
 public final class CommonMessages {
