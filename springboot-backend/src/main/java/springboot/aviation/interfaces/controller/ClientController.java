@@ -10,10 +10,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import springboot.aviation.application.client.service.ClientQueryService;
+import springboot.aviation.application.booking.service.BookingQueryService;
 import springboot.aviation.application.client.usecase.*;
 import springboot.aviation.domain.client.Client;
 import springboot.aviation.interfaces.dto.request.client.ChangeClientRequest;
 import springboot.aviation.interfaces.dto.request.client.CreateClientRequest;
+import springboot.aviation.interfaces.dto.response.booking.BookingResponse;
 import springboot.aviation.interfaces.dto.response.client.ClientResponse;
 
 @Tag(name = "Clients", description = "Client management endpoints")
@@ -23,6 +25,7 @@ import springboot.aviation.interfaces.dto.response.client.ClientResponse;
 public class ClientController {
     
     private final ClientQueryService clientQueryService;
+    private final BookingQueryService bookingQueryService;
     private final CreateClientUseCase createClientUseCase;
     private final ActivateClientUseCase activateClientUseCase;
     private final DeactivateClientUseCase deactivateClientUseCase;
@@ -30,12 +33,14 @@ public class ClientController {
 
     public ClientController(
             ClientQueryService clientQueryService,
+            BookingQueryService bookingQueryService,
             CreateClientUseCase createClientUseCase,
             ActivateClientUseCase activateClientUseCase,
             DeactivateClientUseCase deactivateClientUseCase,
             ChangeClientNameUseCase changeClientNameUseCase
     ){
         this.clientQueryService = clientQueryService;
+        this.bookingQueryService = bookingQueryService;
         this.createClientUseCase = createClientUseCase;
         this.activateClientUseCase = activateClientUseCase;
         this.deactivateClientUseCase = deactivateClientUseCase;
@@ -70,6 +75,13 @@ public class ClientController {
     public ClientResponse findByCpf(@PathVariable String cpf) {
         Client client = clientQueryService.findByCpf(cpf);
         return ClientResponse.fromDomain(client);
+    }
+
+    @Operation(summary = "Get all bookings from a client")
+    @GetMapping("/{id}/bookings")
+    public List<BookingResponse> findBookings(@PathVariable Long id) {
+        return bookingQueryService.findActiveByClient(id)
+                .stream().map(BookingResponse::fromDomain).toList();
     }
 
     @Operation(summary = "Create a new client")

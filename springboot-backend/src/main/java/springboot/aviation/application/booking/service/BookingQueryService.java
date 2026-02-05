@@ -31,4 +31,8 @@ public class BookingQueryService {
         return bookingRepository.findByBookingCode(bookingCode.toUpperCase())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
     }
+
+    public List<Booking> findActiveByClient(Long clientId) {
+        return bookingRepository.findActiveByClient(clientId);
+    }
 }
