@@ -12,7 +12,7 @@ public class Airport {
     private String city;
     private AirportStatus status;
 
-    private static final String ONLY_LETTERS = "^[a-zA-Z ]+$";
+    private static final String ONLY_LETTERS = "^[a-zA-Z]+$";
 
     private static final String ONLY_LETTERS_AND_SINGLE_SPACES = "^[A-Za-zÀ-ÖØ-öø-ÿ]+( [A-Za-zÀ-ÖØ-öø-ÿ]+)*$";
 

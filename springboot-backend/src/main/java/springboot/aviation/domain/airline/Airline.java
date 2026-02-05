@@ -13,7 +13,7 @@ public class Airline {
 
     private static final String ONLY_LETTERS_AND_SINGLE_SPACES = "^[A-Za-zÀ-ÖØ-öø-ÿ]+( [A-Za-zÀ-ÖØ-öø-ÿ]+)*$";
 
-    private static final String IATA_CODE_PATTERN = "^[A-Z0-9]{2}$";
+    private static final String IATA_CODE_PATTERN = "^[A-Za-z0-9]{2}$";
 
     public Airline(Long id, String iataCode, String airlineName, AirlineStatus status) {
         this.id = id;

@@ -12,9 +12,15 @@ import springboot.aviation.interfaces.dto.request.booking.CreateBookingRequest;
 import springboot.aviation.interfaces.dto.response.booking.BookingResponse;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
+@Tag(name = "Bookings", description = "Booking management endpoints")
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/bookings")
@@ -37,6 +43,7 @@ public class BookingController {
         this.cancelBookingUseCase = cancelBookingUseCase;
     }
 
+    @Operation(summary = "Get all bookings")
     @GetMapping
     public List<BookingResponse> findAll() {
         return bookingQueryService.findAll().stream()
@@ -44,18 +51,33 @@ public class BookingController {
                 .toList();
     }
 
+    @Operation(summary = "Get booking by id")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Booking found"),
+        @ApiResponse(responseCode = "404", description = "Booking not found")
+    })
     @GetMapping("/{id}")
     public BookingResponse findById(@PathVariable Long id) {
         Booking booking = bookingQueryService.findById(id);
         return BookingResponse.fromDomain(booking);
     }
 
+    @Operation(summary = "Get booking by booking code")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Booking found"),
+        @ApiResponse(responseCode = "404", description = "Booking not found")
+    })
     @GetMapping("/booking-code/{bookingCode}")
     public BookingResponse findByBookingCode(@PathVariable String bookingCode) {
         Booking booking = bookingQueryService.findByBookingCode(bookingCode);
         return BookingResponse.fromDomain(booking);
     }
 
+    @Operation(summary = "Create a new booking")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Booking created" ),
+        @ApiResponse(responseCode = "400", description = "Invalid Data" )
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookingResponse create(@RequestBody CreateBookingRequest request) {
@@ -66,12 +88,24 @@ public class BookingController {
         return BookingResponse.fromDomain(booking);
     }
 
+    @Operation(summary = "Confirm booking")
+    @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Booking confirmed"),
+        @ApiResponse(responseCode = "404", description = "Booking not found"),
+        @ApiResponse(responseCode = "400", description = "Booking already confirmed or canceled")
+    })
     @PutMapping("/{id}/confirm")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void confirm(@PathVariable Long id) {
         confirmBookingUseCase.execute(id);
     }
 
+    @Operation(summary = "Cancel booking")
+    @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Booking canceled"),
+        @ApiResponse(responseCode = "404", description = "Booking not found"),
+        @ApiResponse(responseCode = "400", description = "Booking already canceled")
+    })
     @PutMapping("/{id}/cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancel(@PathVariable Long id) {
