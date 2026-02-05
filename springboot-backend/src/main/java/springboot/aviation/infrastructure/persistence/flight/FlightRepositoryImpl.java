@@ -49,6 +49,17 @@ public class FlightRepositoryImpl implements FlightRepository{
         return flightJpaRepository.findByFlightNumber(flightNumber)
                 .map(FlightMapper::toDomain);
     }
+    
+    @Override
+    public List<Flight> findAllFlightsByAirports(Long airportId) {
+        List<FlightEntity> departureFlights = flightJpaRepository.findByDepartureAirportId(airportId);
+        List<FlightEntity> arrivalFlights = flightJpaRepository.findByArrivalAirportId(airportId);
+
+        return Stream.concat(departureFlights.stream(), arrivalFlights.stream())
+                .distinct()
+                .map(FlightMapper::toDomain)
+                .toList();
+    }
 
     @Override
     public List<Flight> findScheduledFlightsByAirports(Long airportId) {
@@ -57,6 +68,14 @@ public class FlightRepositoryImpl implements FlightRepository{
         
         return Stream.concat(departureFlights.stream(), arrivalFlights.stream())
                 .distinct()
+                .map(FlightMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<Flight> findAllFlightsByAirline(Long airlineId) {
+        return flightJpaRepository.findByAirlineId(airlineId)
+                .stream()
                 .map(FlightMapper::toDomain)
                 .toList();
     }

@@ -49,4 +49,9 @@ public class AirportRepositoryImpl implements AirportRepository{
     public boolean existsByIataCode(String iataCode) {
         return jpaRepository.existsByIataCode(iataCode);
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return jpaRepository.existsById(id);
+    }
 }

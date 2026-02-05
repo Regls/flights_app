@@ -9,12 +9,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import springboot.aviation.application.flight.service.FlightQueryService;
 import springboot.aviation.application.airport.service.AirportQueryService;
 import springboot.aviation.application.airport.usecase.*;
 import springboot.aviation.domain.airport.Airport;
 import springboot.aviation.interfaces.dto.request.airport.ChangeAirportRequest;
 import springboot.aviation.interfaces.dto.request.airport.CreateAirportRequest;
 import springboot.aviation.interfaces.dto.response.airport.AirportResponse;
+import springboot.aviation.interfaces.dto.response.flight.FlightResponse;
 
 @Tag(name = "Airports", description = "Airport management endpoints")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -23,19 +25,22 @@ import springboot.aviation.interfaces.dto.response.airport.AirportResponse;
 public class AirportController {
     
     private final AirportQueryService airportQueryService;
+    private final FlightQueryService flightQueryService;
     private final CreateAirportUseCase createAirportUseCase;
     private final OpenAirportUseCase openAirportUseCase;
     private final CloseAirportUseCase closeAirportUseCase;
     private final ChangeAirportNameUseCase changeClientNameUseCase;
 
     public AirportController(
-        AirportQueryService airportQueryService, 
+        AirportQueryService airportQueryService,
+        FlightQueryService flightQueryService,
         CreateAirportUseCase createAirportUseCase,
         OpenAirportUseCase openAirportUseCase,
         CloseAirportUseCase closeAirportUseCase,
         ChangeAirportNameUseCase changeClientNameUseCase
     ){
         this.airportQueryService = airportQueryService;
+        this.flightQueryService = flightQueryService;
         this.createAirportUseCase = createAirportUseCase;
         this.openAirportUseCase = openAirportUseCase;
         this.closeAirportUseCase = closeAirportUseCase;
@@ -70,6 +75,18 @@ public class AirportController {
     public AirportResponse findByIataCode(@PathVariable String iataCode) {
         Airport airport = airportQueryService.findByIataCode(iataCode);
         return AirportResponse.fromDomain(airport);
+    }
+
+    @Operation(summary = "Get all flights from a airport")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Flights found"),
+        @ApiResponse(responseCode = "404", description = "Airline not found")
+    })
+    @GetMapping("/{id}/flights")
+    public List<FlightResponse> findFlights(@PathVariable Long id) {
+        return flightQueryService.findAllFlightsByAirports(id).stream()
+                .map(FlightResponse::fromDomain)
+                .toList();
     }
 
     @Operation(summary = "Create a new airport")

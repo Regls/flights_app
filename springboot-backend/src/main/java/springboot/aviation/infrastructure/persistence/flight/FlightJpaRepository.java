@@ -9,9 +9,11 @@ import springboot.aviation.domain.flight.FlightStatus;
 
 public interface FlightJpaRepository extends JpaRepository<FlightEntity, Long>{
     boolean existsByFlightNumber(String flightNumber);
-    
+    List<FlightEntity> findByAirlineId(Long airlineId);
+    List<FlightEntity> findByDepartureAirportId(Long airportId);
+    List<FlightEntity> findByArrivalAirportId(Long airportId);
+    List<FlightEntity> findByAirlineIdAndStatus(Long airlineId, FlightStatus status);
     List<FlightEntity> findByDepartureAirportIdAndStatus(Long airportId, FlightStatus status);
     List<FlightEntity> findByArrivalAirportIdAndStatus(Long airportId, FlightStatus status);
-    List<FlightEntity> findByAirlineIdAndStatus(Long airlineId, FlightStatus status);
     Optional<FlightEntity> findByFlightNumber(String flightNumber);
 }

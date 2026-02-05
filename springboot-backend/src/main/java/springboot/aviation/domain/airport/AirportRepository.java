@@ -15,4 +15,6 @@ public interface AirportRepository {
     Airport save(Airport airport);
 
     boolean existsByIataCode(String iataCode);
+
+    boolean existsById(Long id);
 }

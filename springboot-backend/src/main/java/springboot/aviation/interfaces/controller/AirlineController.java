@@ -11,10 +11,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import springboot.aviation.application.airline.service.AirlineQueryService;
 import springboot.aviation.application.airline.usecase.*;
+import springboot.aviation.application.flight.service.FlightQueryService;
 import springboot.aviation.domain.airline.Airline;
 import springboot.aviation.interfaces.dto.request.airline.ChangeAirlineRequest;
 import springboot.aviation.interfaces.dto.request.airline.CreateAirlineRequest;
 import springboot.aviation.interfaces.dto.response.airline.AirlineResponse;
+import springboot.aviation.interfaces.dto.response.flight.FlightResponse;
 
 @Tag(name="Airlines", description = "Airline management endpoints")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -23,6 +25,7 @@ import springboot.aviation.interfaces.dto.response.airline.AirlineResponse;
 public class AirlineController {
     
     private final AirlineQueryService airlineQueryService;
+    private final FlightQueryService flightQueryService;
     private final CreateAirlineUseCase createAirlineUseCase;
     private final ActivateAirlineUseCase activateAirlineUseCase;
     private final SuspendAirlineUseCase suspendAirlineUseCase;
@@ -30,12 +33,14 @@ public class AirlineController {
 
     public AirlineController(
         AirlineQueryService airlineQueryService,
+        FlightQueryService flightQueryService,
         CreateAirlineUseCase createAirlineUseCase,
         ActivateAirlineUseCase activateAirlineUseCase,
         SuspendAirlineUseCase suspendAirlineUseCase,
         ChangeAirlineNameUseCase changeAirlineNameUseCase
     ){
         this.airlineQueryService = airlineQueryService;
+        this.flightQueryService = flightQueryService;
         this.createAirlineUseCase = createAirlineUseCase;
         this.activateAirlineUseCase = activateAirlineUseCase;
         this.suspendAirlineUseCase = suspendAirlineUseCase;
@@ -70,6 +75,18 @@ public class AirlineController {
     public AirlineResponse findByIataCode(@PathVariable String iataCode) {
         Airline airline = airlineQueryService.findByIataCode(iataCode);
         return AirlineResponse.fromDomain(airline);
+    }
+
+    @Operation(summary = "Get all flights from a airline")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Flights found"),
+        @ApiResponse(responseCode = "404", description = "Airline not found")
+    })
+    @GetMapping("/{id}/flights")
+    public List<FlightResponse> findFlights(@PathVariable Long id) {
+        return flightQueryService.findAllFlightsByAirline(id).stream()
+                .map(FlightResponse::fromDomain)
+                .toList();
     }
 
     @Operation(summary = "Create a new airline")

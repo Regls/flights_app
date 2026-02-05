@@ -12,6 +12,10 @@ public interface FlightRepository {
 
     Optional<Flight> findByFlightNumber(String flightNumber);
 
+    List<Flight> findAllFlightsByAirports(Long airportId);
+
+    List<Flight> findAllFlightsByAirline(Long airlineId);
+
     List<Flight> findScheduledFlightsByAirports(Long airportId);
 
     List<Flight> findScheduledFlightsByAirline(Long airlineId);

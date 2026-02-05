@@ -15,4 +15,6 @@ public interface AirlineRepository {
     Airline save(Airline airline);
 
     boolean existsByIataCode(String iataCode);
+
+    boolean existsById(Long id);
 }
