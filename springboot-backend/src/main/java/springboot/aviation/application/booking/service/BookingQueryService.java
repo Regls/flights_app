@@ -35,4 +35,8 @@ public class BookingQueryService {
     public List<Booking> findActiveByClient(Long clientId) {
         return bookingRepository.findActiveByClient(clientId);
     }
+
+    public List<Booking> findActiveByFlight(Long flightId) {
+        return bookingRepository.findActiveByFlight(flightId);
+    }
 }

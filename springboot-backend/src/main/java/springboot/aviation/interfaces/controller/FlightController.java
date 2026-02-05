@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import springboot.aviation.application.booking.service.BookingQueryService;
 import springboot.aviation.application.flight.service.FlightQueryService;
 import springboot.aviation.application.flight.usecase.*;
 import springboot.aviation.domain.flight.Flight;
 import springboot.aviation.interfaces.dto.request.flight.CreateFlightRequest;
+import springboot.aviation.interfaces.dto.response.booking.BookingResponse;
 import springboot.aviation.interfaces.dto.response.flight.FlightResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,6 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class FlightController {
     
     private final FlightQueryService flightQueryService;
+    private final BookingQueryService bookingQueryService;
     private final CreateFlightUseCase createFlightUseCase;
     private final CancelFlightUseCase cancelFlightUseCase;
     private final DepartFlightUseCase departFlightUseCase;
@@ -29,12 +32,14 @@ public class FlightController {
 
     public FlightController(
         FlightQueryService flightQueryService,
+        BookingQueryService bookingQueryService,
         CreateFlightUseCase createFlightUseCase,
         CancelFlightUseCase cancelFlightUseCase,
         DepartFlightUseCase departFlightUseCase,
         ArriveFlightUseCase arriveFlightUseCase
     ) {
         this.flightQueryService = flightQueryService;
+        this.bookingQueryService = bookingQueryService;
         this.createFlightUseCase = createFlightUseCase;
         this.cancelFlightUseCase = cancelFlightUseCase;
         this.departFlightUseCase = departFlightUseCase;
@@ -69,6 +74,18 @@ public class FlightController {
     public FlightResponse findByFlightNumber(@PathVariable String flightNumber) {
         Flight flight = flightQueryService.findByFlightNumber(flightNumber);
         return FlightResponse.fromDomain(flight);
+    }
+
+    @Operation(summary = "Get all bookings from a flight")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Bookings found"),
+        @ApiResponse(responseCode = "404", description = "Flight not found")
+    })
+    @GetMapping("/{id}/bookings")
+    public List<BookingResponse> findBookings(@PathVariable Long id) {
+        return bookingQueryService.findActiveByFlight(id).stream()
+                .map(BookingResponse::fromDomain)
+                .toList();
     }
 
     @Operation(summary = "Create a new flight")

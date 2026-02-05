@@ -78,10 +78,15 @@ public class ClientController {
     }
 
     @Operation(summary = "Get all bookings from a client")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Bookings found"),
+        @ApiResponse(responseCode = "404", description = "Client not found")
+    })
     @GetMapping("/{id}/bookings")
     public List<BookingResponse> findBookings(@PathVariable Long id) {
-        return bookingQueryService.findActiveByClient(id)
-                .stream().map(BookingResponse::fromDomain).toList();
+        return bookingQueryService.findActiveByClient(id).stream()
+                .map(BookingResponse::fromDomain)
+                .toList();
     }
 
     @Operation(summary = "Create a new client")
