@@ -10,6 +10,8 @@ A full-stack application for managing clients, airports, airlines, flights, and 
 | Frontend | Angular |
 | Database | PostgreSQL (dev) / H2 (test) |
 | API | REST |
+| Documentation | Swagger/OpenAPI |
+| Architecture | Clean Architecture (Hexagonal) |
 | Testing | JUnit, Jasmine/Karma |
 
 ## 📋 Features
@@ -52,6 +54,7 @@ ng serve
 ### Access
 - **Frontend**: http://localhost:4200
 - **Backend API**: http://localhost:8080/api/v1
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
 
 ## 📚 API Endpoints
 
@@ -60,6 +63,7 @@ ng serve
 |--------|----------|-------------|
 | GET | `/` | List all airlines |
 | GET | `/{id}` | Get airline by ID |
+| GET | `/iata/{iataCode}` | Get airline by IATA Code |
 | GET | `/{id}/flights` | Get flights by airline |
 | POST | `/` | Create new airline |
 | PUT | `/{id}/name` | Update airline name |
@@ -71,6 +75,7 @@ ng serve
 |--------|----------|-------------|
 | GET | `/` | List all airports |
 | GET | `/{id}` | Get airport by ID |
+| GET | `/iata/{iataCode}` | Get airport by IATA Code |
 | GET | `/{id}/flights` | Get flights by airport |
 | POST | `/` | Create new airport |
 | PUT | `/{id}/name` | Update airport name |
@@ -82,6 +87,7 @@ ng serve
 |--------|----------|-------------|
 | GET | `/` | List all clients |
 | GET | `/{id}` | Get client by ID |
+| GET | `/cpf/{cpf}` | Get client by CPF |
 | GET | `/{id}/bookings` | Get bookings by client |
 | POST | `/` | Create new client |
 | PUT | `/{id}/name` | Update client name |
@@ -93,6 +99,7 @@ ng serve
 |--------|----------|-------------|
 | GET | `/` | List all flights |
 | GET | `/{id}` | Get flight by ID |
+| GET | `/flight-number/{flightNumber}` | Get flight by flight number |
 | GET | `/{id}/bookings` | Get bookings by flight |
 | POST | `/` | Create new flight |
 | PUT | `/{id}/depart` | Mark flight as in_flight |
@@ -190,14 +197,72 @@ npm test
 ### Project Structure
 ```
 flights_app/
-├── springboot-backend/     # Spring Boot API
-│   ├── src/main/java/      # Source code
-│   ├── src/test/java/      # Unit tests
-│   └── src/main/resources/ # Configuration
-└── angular-frontend/       # Angular UI
-    ├── src/app/           # Components & services
-    └── src/environments/  # Environment configs
+├── springboot-backend/
+│   └── src/main/java/springboot/aviation/
+│       ├── domain/              # Business entities & rules
+│       │   ├── airline/         # Airline aggregate
+│       │   ├── airport/         # Airport aggregate
+│       │   ├── booking/         # Booking aggregate
+│       │   ├── client/          # Client aggregate
+│       │   └── flight/          # Flight aggregate
+│       ├── application/         # Use cases & services
+│       │   ├── airline/
+│       │   │   ├── usecase/     # Business operations
+│       │   │   └── service/     # Query services
+│       │   ├── airport/
+│       │   ├── booking/
+│       │   │   └── port/        # Interfaces for external dependencies
+│       │   ├── client/
+│       │   └── flight/
+│       ├── infrastructure/       # External implementations
+│       │   ├── persistence/     # Database adapters
+│       │   │   ├── airline/
+│       │   │   ├── airport/
+│       │   │   ├── booking/
+│       │   │   ├── client/
+│       │   │   └── flight/
+│       │   └── mapper/          # Entity ↔ Domain mappers
+│       ├── interfaces/          # API adapters
+│       │   ├── controller/      # REST controllers
+│       │   └── dto/             # Request/Response DTOs
+│       ├── exception/           # Exception handling
+│       └── messages/            # Internationalization
+└── angular-frontend/
+    ├── src/app/
+    │   ├── airlines/
+    │   ├── airports/
+    │   ├── bookings/
+    │   ├── clients/
+    │   ├── flights/
+    │   └── shared/
+    └── src/environments/
 ```
+
+### Clean Architecture Layers
+
+#### 1. Domain Layer (Core)
+- **Entities**: Business objects (Airline, Airport, Client, Flight, Booking)
+- **Repositories**: Interfaces for data access
+- **Value Objects**: Status enums and business rules
+- **No dependencies**: Pure business logic
+
+#### 2. Application Layer
+- **Use Cases**: Business operations (Create, Activate, Suspend, etc.)
+- **Query Services**: Read operations
+- **Ports**: Interfaces for external services
+- **Depends on**: Domain layer only
+
+#### 3. Infrastructure Layer
+- **Persistence**: JPA entities and repository implementations
+- **Mappers**: Convert between domain and persistence models
+- **External Services**: Third-party integrations
+- **Depends on**: Domain and Application layers
+
+#### 4. Interfaces Layer
+- **Controllers**: REST API endpoints
+- **DTOs**: Request/Response objects
+- **Exception Handlers**: Global error handling
+- **Depends on**: Application layer
 
 ### Status Enums
 - **Flight Status**: SCHEDULED, IN_FLIGHT, ARRIVED, CANCELLED
