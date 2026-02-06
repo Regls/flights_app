@@ -50,4 +50,9 @@ public class ClientRepositoryImpl implements ClientRepository {
     public boolean existsByCpf(String cpf) {
         return jpaRepositoy.existsByCpf(cpf);
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return jpaRepositoy.existsById(id);
+    }
 }

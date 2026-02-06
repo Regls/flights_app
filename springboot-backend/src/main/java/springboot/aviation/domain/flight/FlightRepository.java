@@ -23,4 +23,6 @@ public interface FlightRepository {
     Flight save(Flight flight);
 
     boolean existsByFlightNumber(String flightNumber);
+
+    boolean existsById(Long id);
 }

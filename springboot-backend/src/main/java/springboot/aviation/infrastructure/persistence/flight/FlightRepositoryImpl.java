@@ -104,4 +104,9 @@ public class FlightRepositoryImpl implements FlightRepository{
     public boolean existsByFlightNumber(String flightNumber) {
         return flightJpaRepository.existsByFlightNumber(flightNumber);
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return flightJpaRepository.existsById(id);
+    }
 }

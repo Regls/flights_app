@@ -15,4 +15,6 @@ public interface ClientRepository {
     Client save(Client client);
 
     boolean existsByCpf(String cpf);
+
+    boolean existsById(Long id);
 }
