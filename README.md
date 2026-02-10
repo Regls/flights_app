@@ -11,6 +11,7 @@ A full-stack application for managing clients, airports, airlines, flights, and 
 | Database | PostgreSQL (dev) / H2 (test) |
 | API | REST |
 | Documentation | Swagger/OpenAPI |
+| Security | Keycloak (OAuth2/JWT) |
 | Architecture | Clean Architecture (Hexagonal) |
 | Testing | JUnit, Jasmine/Karma |
 
@@ -29,6 +30,7 @@ A full-stack application for managing clients, airports, airlines, flights, and 
 - Node.js 14+
 - PostgreSQL (for development)
 - Maven 3.6+
+- Keycloak 23+ (for authentication)
 
 ### Backend Setup
 ```bash
@@ -55,6 +57,71 @@ ng serve
 - **Frontend**: http://localhost:4200
 - **Backend API**: http://localhost:8080/api/v1
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **Keycloak Admin**: http://localhost:8081
+
+## 🔐 Security & Authentication
+
+The application uses Keycloak for OAuth2/JWT authentication with role-based access control.
+
+### Keycloak Setup
+
+#### 1. Start Keycloak
+```bash
+# Using Docker
+docker run -p 8081:8080 \
+  -e KEYCLOAK_ADMIN=admin \
+  -e KEYCLOAK_ADMIN_PASSWORD=admin \
+  quay.io/keycloak/keycloak:latest start-dev
+```
+
+#### 2. Create Realm
+1. Access Keycloak Admin Console: http://localhost:8081
+2. Login with `admin/admin`
+3. Create a new realm: `flights_app`
+
+#### 3. Create Client
+1. Go to **Clients** → **Create client**
+2. Set **Client ID**: `flights-api`
+3. Enable **Direct access grants**
+4. Save
+
+#### 4. Create Roles
+1. Go to **Realm roles** → **Create role**
+2. Create two roles:
+   - `USER` - Read-only access (GET endpoints)
+   - `ADMIN` - Full access (all endpoints)
+
+#### 5. Create Users
+1. Go to **Users** → **Add user**
+2. Create users and assign roles:
+   - Regular user: assign `USER` role
+   - Admin user: assign `ADMIN` role
+3. Set credentials in **Credentials** tab
+
+### Authorization Rules
+
+| Role | Permissions |
+|------|-------------|
+| **USER** | GET requests only (read-only) |
+| **ADMIN** | All HTTP methods (full access) |
+
+### Getting Access Token
+
+```bash
+curl -X POST http://localhost:8081/realms/flights_app/protocol/openid-connect/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "client_id=flights-api" \
+  -d "grant_type=password" \
+  -d "username=your_username" \
+  -d "password=your_password"
+```
+
+### Using Token in Requests
+
+```bash
+curl -X GET http://localhost:8080/api/v1/airlines \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
 
 ## 📚 API Endpoints
 
@@ -221,7 +288,8 @@ flights_app/
 │       │   │   ├── booking/
 │       │   │   ├── client/
 │       │   │   └── flight/
-│       │   └── mapper/          # Entity ↔ Domain mappers
+│       │   ├── mapper/          # Entity ↔ Domain mappers
+│       │   └── security/        # Authentication & Authorization
 │       ├── interfaces/          # API adapters
 │       │   ├── controller/      # REST controllers
 │       │   └── dto/             # Request/Response DTOs
@@ -255,6 +323,7 @@ flights_app/
 #### 3. Infrastructure Layer
 - **Persistence**: JPA entities and repository implementations
 - **Mappers**: Convert between domain and persistence models
+- **Security**: OAuth2/JWT authentication and authorization
 - **External Services**: Third-party integrations
 - **Depends on**: Domain and Application layers
 
