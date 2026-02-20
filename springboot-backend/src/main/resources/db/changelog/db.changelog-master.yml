@@ -1,15 +1,20 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/001-create-clients-table.yml
+      file: 001-create-clients-table.yml
+      relativeToChangelogFile: true
 
   - include:
-      file: db/changelog/002-create-airports-table.yml
+      file: 002-create-airports-table.yml
+      relativeToChangelogFile: true
 
   - include:
-      file: db/changelog/003-create-airlines-table.yml
+      file: 003-create-airlines-table.yml
+      relativeToChangelogFile: true
 
   - include:
-      file: db/changelog/004-create-flights-table.yml
+      file: 004-create-flights-table.yml
+      relativeToChangelogFile: true
 
   - include:
-      file: db/changelog/005-create-bookings-table.yml
+      file: 005-create-bookings-table.yml
+      relativeToChangelogFile: true
