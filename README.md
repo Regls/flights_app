@@ -8,12 +8,12 @@ A full-stack application for managing clients, airports, airlines, flights, and 
 |-------|------------|
 | Backend | Spring Boot 3.0.4, Hibernate, JPA |
 | Frontend | Angular |
-| Database | PostgreSQL (dev) / H2 (test) |
+| Database | PostgreSQL |
 | API | REST |
 | Documentation | Swagger/OpenAPI |
 | Security | Keycloak (OAuth2/JWT) |
 | Architecture | Clean Architecture (Hexagonal) |
-| Testing | JUnit, Jasmine/Karma |
+| Testing | JUnit, Testcontainers, Jasmine/Karma |
 
 ## 📋 Features
 
@@ -29,6 +29,7 @@ A full-stack application for managing clients, airports, airlines, flights, and 
 - Java 17+
 - Node.js 14+
 - PostgreSQL (for development)
+- Docker (for tests with Testcontainers)
 - Maven 3.6+
 - Keycloak 23+ (for authentication)
 
@@ -248,10 +249,20 @@ The application uses the following main entities:
 ## 🧪 Testing
 
 ### Backend Tests
+The backend uses **Testcontainers** with PostgreSQL for integration tests, ensuring full parity with production environment.
+
 ```bash
 cd springboot-backend
+
+# Make sure Docker is running
 mvn test
 ```
+
+**Note**: Testcontainers will automatically:
+- Start a PostgreSQL container
+- Run migrations with Liquibase
+- Execute tests
+- Stop and clean up the container
 
 ### Frontend Tests
 ```bash
