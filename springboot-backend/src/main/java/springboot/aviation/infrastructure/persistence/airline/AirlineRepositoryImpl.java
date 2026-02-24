@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import springboot.aviation.domain.airline.Airline;
+import springboot.aviation.domain.airline.AirlineStatus;
 import springboot.aviation.infrastructure.mapper.AirlineMapper;
 import springboot.aviation.domain.airline.AirlineRepository;
 
@@ -22,6 +23,22 @@ public class AirlineRepositoryImpl implements AirlineRepository{
     @Override
     public List<Airline> findAll() {
         return jpaRepository.findAll()
+                .stream()
+                .map(AirlineMapper::toDomain)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public List<Airline> findActives() {
+        return jpaRepository.findByStatus(AirlineStatus.ACTIVE)
+                .stream()
+                .map(AirlineMapper::toDomain)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public List<Airline> findSuspended() {
+        return jpaRepository.findByStatus(AirlineStatus.SUSPENDED)
                 .stream()
                 .map(AirlineMapper::toDomain)
                 .collect(java.util.stream.Collectors.toList());

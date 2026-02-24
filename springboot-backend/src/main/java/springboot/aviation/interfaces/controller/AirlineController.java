@@ -55,6 +55,22 @@ public class AirlineController {
                 .toList();
     }
 
+    @Operation(summary = "Get all active airlines")
+    @GetMapping("/active")
+    public List<AirlineResponse> findActives() {
+        return airlineQueryService.findActives().stream()
+                .map(AirlineResponse::fromDomain)
+                .toList();
+    }
+
+    @Operation(summary = "Get all suspended airlines")
+    @GetMapping("/suspended")
+    public List<AirlineResponse> findSuspended() {
+        return airlineQueryService.findSuspended().stream()
+                .map(AirlineResponse::fromDomain)
+                .toList();
+    }
+
     @Operation(summary = "Get airline by id")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Airline found"),

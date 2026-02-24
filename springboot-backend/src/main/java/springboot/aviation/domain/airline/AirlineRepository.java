@@ -7,6 +7,10 @@ import java.util.Optional;
 public interface AirlineRepository {
     
     List<Airline> findAll();
+
+    List<Airline> findActives();
+
+    List<Airline> findSuspended();
     
     Optional<Airline> findById(Long id);
 

@@ -22,6 +22,14 @@ public class AirlineQueryService {
         return airlineRepository.findAll();
     }
 
+    public List<Airline> findActives() {
+        return airlineRepository.findActives();
+    }
+
+    public List<Airline> findSuspended() {
+        return airlineRepository.findSuspended();
+    }
+
     public Airline findById(Long id) {
         return airlineRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Airline not found"));
