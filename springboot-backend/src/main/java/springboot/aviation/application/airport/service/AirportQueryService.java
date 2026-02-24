@@ -22,6 +22,14 @@ public class AirportQueryService {
         return airportRepository.findAll();
     }
 
+    public List<Airport> findOpen() {
+        return airportRepository.findOpen();
+    }
+
+    public List<Airport> findClosed() {
+        return airportRepository.findClosed();
+    }
+
     public Airport findById(Long id) {
         return airportRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Airport not found"));

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import springboot.aviation.domain.airport.Airport;
+import springboot.aviation.domain.airport.AirportStatus;
 import springboot.aviation.infrastructure.mapper.AirportMapper;
 import springboot.aviation.domain.airport.AirportRepository;
 
@@ -21,6 +22,22 @@ public class AirportRepositoryImpl implements AirportRepository{
     @Override
     public List<Airport> findAll() {
         return jpaRepository.findAll()
+                .stream()
+                .map(AirportMapper::toDomain)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public List<Airport> findOpen() {
+        return jpaRepository.findByStatus(AirportStatus.OPEN)
+                .stream()
+                .map(AirportMapper::toDomain)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public List<Airport> findClosed() {
+        return jpaRepository.findByStatus(AirportStatus.CLOSED)
                 .stream()
                 .map(AirportMapper::toDomain)
                 .collect(java.util.stream.Collectors.toList());

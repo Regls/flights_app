@@ -55,6 +55,22 @@ public class AirportController {
                 .toList();
     }
 
+    @Operation(summary = "Get all open airports")
+    @GetMapping("/open")
+    public List<AirportResponse> findOpen() {
+        return airportQueryService.findOpen().stream()
+                .map(AirportResponse::fromDomain)
+                .toList();
+    }
+
+    @Operation(summary = "Get all closed airports")
+    @GetMapping("/closed")
+    public List<AirportResponse> findClosed() {
+        return airportQueryService.findClosed().stream()
+                .map(AirportResponse::fromDomain)
+                .toList();
+    }
+
     @Operation(summary = "Get airport by id")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Airport found"),

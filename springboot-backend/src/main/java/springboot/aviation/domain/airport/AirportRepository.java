@@ -7,6 +7,10 @@ import java.util.Optional;
 public interface AirportRepository {
 
     List<Airport> findAll();
+
+    List<Airport> findOpen();
+
+    List<Airport> findClosed();
     
     Optional<Airport> findById(Long id);
 
