@@ -7,6 +7,10 @@ import java.util.Optional;
 public interface ClientRepository {
 
     List<Client> findAll();
+
+    List<Client> findActives();
+
+    List<Client> findInactives();
     
     Optional<Client> findById(Long id);
 

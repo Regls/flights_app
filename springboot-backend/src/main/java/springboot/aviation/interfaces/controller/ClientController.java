@@ -55,6 +55,22 @@ public class ClientController {
                 .toList();
     }
 
+    @Operation(summary = "Get all actives clients")
+    @GetMapping("/actives")
+    public List<ClientResponse> findActives() {
+        return clientQueryService.findActives().stream()
+                .map(ClientResponse::fromDomain)
+                .toList();
+    }
+
+    @Operation(summary = "Get all inactive clients")
+    @GetMapping("/inactives")
+    public List<ClientResponse> findInactives() {
+        return clientQueryService.findInactives().stream()
+                .map(ClientResponse::fromDomain)
+                .toList();
+    }
+
     @Operation(summary = "Get client by id")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Client found"),

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import springboot.aviation.domain.client.Client;
+import springboot.aviation.domain.client.ClientStatus;
 import springboot.aviation.infrastructure.mapper.ClientMapper;
 import springboot.aviation.domain.client.ClientRepository;
 
@@ -22,6 +23,22 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public List<Client> findAll() {
         return jpaRepositoy.findAll()
+                .stream()
+                .map(ClientMapper::toDomain)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public List<Client> findActives() {
+        return jpaRepositoy.findByStatus(ClientStatus.ACTIVE)
+                .stream()
+                .map(ClientMapper::toDomain)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public List<Client> findInactives() {
+        return jpaRepositoy.findByStatus(ClientStatus.INACTIVE)
                 .stream()
                 .map(ClientMapper::toDomain)
                 .collect(java.util.stream.Collectors.toList());

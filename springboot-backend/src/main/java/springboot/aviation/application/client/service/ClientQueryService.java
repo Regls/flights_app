@@ -22,6 +22,14 @@ public class ClientQueryService {
         return clientRepository.findAll();
     }
 
+    public List<Client> findActives() {
+        return clientRepository.findActives();
+    }
+
+    public List<Client> findInactives() {
+        return clientRepository.findInactives();
+    }
+
     public Client findById(Long id) {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
